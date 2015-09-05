@@ -1,7 +1,11 @@
+from django.http import HttpResponse
+from django.shortcuts import render
 from .models import Move, Spot
 from rest_framework import viewsets
 from .serializers import MoveSerializer, SpotSerializer
 
+def index(request):
+    return render(request, 'moves/index.html', {})
 
 class MoveViewSet(viewsets.ModelViewSet):
     queryset = Move.objects.all().order_by('-updated_at')
