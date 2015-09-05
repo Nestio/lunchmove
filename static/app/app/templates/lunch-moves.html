@@ -1,2 +1,24 @@
-<h1>What's the lunch move?</h1>
-<ul class="list-group"></ul
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+            <h1>What's the lunch move?</h1>
+            <ul class="list-group"></ul>
+            <form class="form-inline">
+                <div class="form-group">
+                    <label>Name</label>
+                    <input type="text" class="form-control" name="name">
+                </div>
+                <div class="form-group">
+                    <label>Spot</label>
+                    <select class="form-control" name="spot">
+                        <option></option>
+                        <% _.each(spots, function(spot){ %>
+                            <option value="<% spot.id %>"><% spot.name %></option>
+                        <% }) %>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-success">Submit!</button>
+            </form>
+        </div>
+    </div>
+</div>

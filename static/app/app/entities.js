@@ -3,7 +3,10 @@ var Move = Backbone.Model.extend({
 });
 
 var Moves = Backbone.Collection.extend({
-    url: '/json/moves'
+    url: '/json/moves',
+    parse: function(response){
+        return response.results;
+    }
 });
 
 var Spot = Backbone.Model.extend({
@@ -11,10 +14,14 @@ var Spot = Backbone.Model.extend({
 });
 
 var Spots = Backbone.Collection.extend({
-    url: '/json/spots'
+    url: '/json/spots',
+    parse: function(response){
+        return response.results;
+    }
 });
 
 module.exports = {
     Spots: Spots,
-    Moves: Moves
+    Moves: Moves,
+    Move: Move
 }
