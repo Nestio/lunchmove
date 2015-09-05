@@ -28,11 +28,11 @@ var LunchMovesView = Marionette.CompositeView.extend({
     template: _.template(LunchMovesTpl),
     submitMove: function(e){
         var spot = this.ui.form.find('[name="spot"]').val();
-        var name = this.ui.form.find('[name="name"]').val();
+        var user = this.ui.form.find('[name="user"]').val();
 
         this.model.save({
             spot: spot,
-            name: name
+            user: user
         }, {
             success: _.bind(function(){
                 this.ui.form.hide();
