@@ -22,6 +22,6 @@ var LunchMovesView = Marionette.CompositeView.extend({
 
 });
 
-module.export = {
+module.exports = {
     LunchMovesView: LunchMovesView
 }
