@@ -1,0 +1,10 @@
+{
+    "description": "Application specific configuration for Archer, and so the Browserify symlink applies these options",
+    "repository": {
+        "type": "git",
+        "url": "http://github.com/bnjmnhndrsn/lunchmove.git"
+    },
+    "browserify": {
+        "transform": [ "brfs" ]
+    }
+}
