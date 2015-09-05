@@ -3,10 +3,17 @@ var EmptyTpl = fs.readFileSync(__dirname + '/templates/empty-moves.html', 'utf8'
 var LunchMoveTpl = fs.readFileSync(__dirname + '/templates/lunch-move.html', 'utf8');
 var LunchMovesTpl = fs.readFileSync(__dirname + '/templates/lunch-moves.html', 'utf8');
 
+var channel = Backbone.Radio.channel('global');
+
 var LunchMoveView = Marionette.ItemView.extend({
     tagName: 'li',
     className: 'list-group-item',
-    template: _.template(LunchMoveTpl)
+    template: _.template(LunchMoveTpl),
+    templateHelpers: {
+        spotName: function(){
+            return channel.request('entities:spots').get(this.spot).get('name');
+        }
+    }
 });
 
 var EmptyView = Marionette.ItemView.extend({
@@ -42,8 +49,10 @@ var LunchMovesView = Marionette.CompositeView.extend({
         e.preventDefault();
     },
     templateHelpers: function(){
+        var spots = channel.request('entities:spots');
+
         return {
-            spots: this.getOption('spots').toJSON()
+            spots: spots.toJSON()
         }
     }
 });
