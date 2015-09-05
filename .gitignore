@@ -8,6 +8,9 @@
 *.pyc
 
 # Ignore all logfiles and tempfiles.
-/log/*
-!/log/.keep
-/tmp
+*.log
+
+# Ignore javascript dependencies
+static/app/bower_components/*
+static/app/node_modules/*
+static/app/public/*
