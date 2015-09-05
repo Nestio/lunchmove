@@ -101,6 +101,10 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+STATICFILES_DIRS = (
+    "./static",
+)
+
 REST_FRAMEWORK = {
     'PAGE_SIZE': 10
 }
