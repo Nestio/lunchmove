@@ -61,12 +61,15 @@ var ModalView = Marionette.ItemView.extend({
 var LunchMovesView = Marionette.CompositeView.extend({
     ui: {
         'form': 'form',
-        'addSpot': '[data-ui="addSpot"]'
+        'spot': '[name="spot"]',
+        'addSpot': '[data-ui="addSpot"]',
+        'submit': '[type="submit"]'
     },
     events: {
         'typeahead:select @ui.form': 'onTypeaheadSelect',
         'submit @ui.form': 'submitMove',
-        'click @ui.addSpot': 'addSpot'
+        'click @ui.addSpot': 'addSpot',
+        'change @ui.spot': 'onSpotChange'
     },
     emptyView: EmptyView,
     childView: LunchMoveView,
@@ -94,6 +97,9 @@ var LunchMovesView = Marionette.CompositeView.extend({
     },
     onShow: function(){
         this.ui.form.find('[name="spot"]').select2()
+    },
+    onSpotChange: function(){
+        this.ui.submit.toggleClass('hidden', !this.ui.spot.val())
     },
     submitMove: function(e){
         var spot = this.ui.form.find('[name="spot"]').val();
