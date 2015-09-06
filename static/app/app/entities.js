@@ -23,5 +23,6 @@ var Spots = Backbone.Collection.extend({
 module.exports = {
     Spots: Spots,
     Moves: Moves,
-    Move: Move
+    Move: Move,
+    Spot: Spot
 }

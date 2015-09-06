@@ -3,6 +3,7 @@ var EmptyTpl = fs.readFileSync(__dirname + '/templates/empty-moves.html', 'utf8'
 var LunchMoveTpl = fs.readFileSync(__dirname + '/templates/lunch-move.html', 'utf8');
 var LunchMovesTpl = fs.readFileSync(__dirname + '/templates/lunch-moves.html', 'utf8');
 var ModalTpl = fs.readFileSync(__dirname + '/templates/modal.html', 'utf8');
+var Spot = require('app/entities').Spot;
 
 var channel = Backbone.Radio.channel('global');
 
@@ -28,15 +29,32 @@ var ModalView = Marionette.ItemView.extend({
     className: 'modal',
 
     ui: {
-        closeModal: '[data-ui="closeModal"]'
+        closeModal: '[data-ui="closeModal"]',
+        form: 'form'
     },
 
     events: {
-        'click @ui.closeModal': 'closeModal'
+        'click @ui.closeModal': 'closeModal',
+        'submit form': 'onSubmit'
     },
 
     closeModal: function(){
         this.$el.modal('hide');
+    },
+
+    onSubmit: function(e){
+        e.preventDefault();
+        var name = this.ui.form.find('[name="name"]').val();
+
+        if (!name) {
+            return;
+        }
+
+        this.model.save({
+            name: name
+        }, {
+            success: this.closeModal.bind(this)
+        });
     }
 });
 
@@ -56,8 +74,21 @@ var LunchMovesView = Marionette.CompositeView.extend({
     template: _.template(LunchMovesTpl),
     addSpot: function(e){
         e.preventDefault();
-        var view = new ModalView();
+        var spot = new Spot();
+        var view = new ModalView({
+            model: spot
+        });
+
         channel.command('show:modal', view);
+
+        this.listenTo(spot, 'sync', function(){
+            channel.request('entities:spots').add(spot);
+            var $select = this.ui.form.find('[name="spot"]')
+            $select.append(
+                $('<option>').prop('value', spot.id).text(spot.get('name'))
+            );
+            $select.val(spot.id).change();
+        });
 
         return false;
     },
