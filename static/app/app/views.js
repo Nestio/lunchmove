@@ -34,33 +34,12 @@ var LunchMovesView = Marionette.CompositeView.extend({
     childView: LunchMoveView,
     childViewContainer: 'ul',
     template: _.template(LunchMovesTpl),
-    onTypeaheadSelect: function(e, obj){
-        this.ui.form.find('[name="spot_id"]').val(obj.id);
-    },
     onShow: function(){
-        var spots = new Bloodhound({
-            datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
-            queryTokenizer: Bloodhound.tokenizers.whitespace,
-            local: channel.request('entities:spots').toJSON()
-        });
-
-        this.ui.form.find('[name="spot"]').typeahead({
-            hint: true,
-            highlight: true,
-            minLength: 1
-        },
-        {
-            display: 'name',
-            name: 'spots',
-            source: spots
-        });
+        this.ui.form.find('[name="spot"]').select2()
     },
     submitMove: function(e){
-        var spotName = this.ui.form.find('[name="spot"]').val();
-        var spotId = this.ui.form.find('[name="spot_id"]').val();
+        var spot = this.ui.form.find('[name="spot"]').val();
         var user = this.ui.form.find('[name="user"]').val();
-
-        var spot = spotId ? spotId : {name: spotName};
 
         this.model.save({
             spot: spot,
@@ -72,6 +51,11 @@ var LunchMovesView = Marionette.CompositeView.extend({
         });
 
         e.preventDefault();
+    },
+    templateHelpers: function(){
+        return {
+            spots: channel.request('entities:spots').toJSON()
+        }
     }
 });
 
