@@ -63,13 +63,14 @@ var LunchMovesView = Marionette.CompositeView.extend({
     ui: {
         'form': 'form',
         'spot': '[name="spot"]',
-        'submit': '[type="submit"]'
+        'submit': '[type="submit"]',
+        'user': '[name="user"]'
     },
     events: {
         'typeahead:select @ui.form': 'onTypeaheadSelect',
         'submit @ui.form': 'submitMove',
         'click @ui.addSpot': 'addSpot',
-        'change @ui.spot': 'onSpotChange'
+        'change @ui.form': 'onFormChange'
     },
     emptyView: EmptyView,
     childView: LunchMoveView,
@@ -90,12 +91,13 @@ var LunchMovesView = Marionette.CompositeView.extend({
 
         $('body').on('click', '[data-action="addSpot"]', this.addSpot.bind(this));
     },
-    onSpotChange: function(){
-        this.ui.submit.toggleClass('hidden', !this.ui.spot.val())
+    onFormChange: function(){
+        var isComplete = !!this.ui.spot.val() && !!this.ui.user.val();
+        this.ui.submit.toggleClass('hidden', !isComplete);
     },
     submitMove: function(e){
-        var spot = this.ui.form.find('[name="spot"]').val();
-        var user = this.ui.form.find('[name="user"]').val();
+        var spot = this.ui.spot.val();
+        var user = this.ui.user.val();
 
         this.model.save({
             spot: spot,
