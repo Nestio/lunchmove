@@ -27,19 +27,23 @@ var LunchMovesView = Marionette.CompositeView.extend({
         'form': 'form'
     },
     events: {
+        'typeahead:select @ui.form': 'onTypeaheadSelect',
         'submit @ui.form': 'submitMove'
     },
     emptyView: EmptyView,
     childView: LunchMoveView,
     childViewContainer: 'ul',
     template: _.template(LunchMovesTpl),
+    onTypeaheadSelect: function(e, obj){
+        this.ui.form.find('[name="spot_id"]').val(obj.id);
+    },
     onShow: function(){
         var spots = new Bloodhound({
             datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
             queryTokenizer: Bloodhound.tokenizers.whitespace,
             local: channel.request('entities:spots').toJSON()
         });
-        debugger;
+
         this.ui.form.find('[name="spot"]').typeahead({
             hint: true,
             highlight: true,
@@ -52,8 +56,11 @@ var LunchMovesView = Marionette.CompositeView.extend({
         });
     },
     submitMove: function(e){
-        var spot = this.ui.form.find('[name="spot"]').val();
+        var spotName = this.ui.form.find('[name="spot"]').val();
+        var spotId = this.ui.form.find('[name="spot_id"]').val();
         var user = this.ui.form.find('[name="user"]').val();
+
+        var spot = spotId ? spotId : {name: spotName};
 
         this.model.save({
             spot: spot,
