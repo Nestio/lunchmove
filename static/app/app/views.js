@@ -4,6 +4,7 @@ var LunchMoveTpl = fs.readFileSync(__dirname + '/templates/lunch-move.html', 'ut
 var LunchMovesTpl = fs.readFileSync(__dirname + '/templates/lunch-moves.html', 'utf8');
 var ModalTpl = fs.readFileSync(__dirname + '/templates/modal.html', 'utf8');
 var Spot = require('app/entities').Spot;
+var SpotResults = require('app/utils').SpotResults;
 
 var channel = Backbone.Radio.channel('global');
 
@@ -62,7 +63,6 @@ var LunchMovesView = Marionette.CompositeView.extend({
     ui: {
         'form': 'form',
         'spot': '[name="spot"]',
-        'addSpot': '[data-ui="addSpot"]',
         'submit': '[type="submit"]'
     },
     events: {
@@ -75,28 +75,20 @@ var LunchMovesView = Marionette.CompositeView.extend({
     childView: LunchMoveView,
     childViewContainer: 'ul',
     template: _.template(LunchMovesTpl),
-    addSpot: function(e){
-        e.preventDefault();
-        var spot = new Spot();
-        var view = new ModalView({
-            model: spot
-        });
-
-        channel.command('show:modal', view);
-
-        this.listenTo(spot, 'sync', function(){
-            channel.request('entities:spots').add(spot);
-            var $select = this.ui.form.find('[name="spot"]')
-            $select.append(
-                $('<option>').prop('value', spot.id).text(spot.get('name'))
-            );
-            $select.val(spot.id).change();
-        });
-
-        return false;
+    addSpot: function(spot){
+        var $option = $('<option>').prop('value', spot.id).text(spot.get('name'));
+        this.ui.spot.append($option);
+        this.ui.spot.val(spot.id).change();
+    },
+    initialize: function(){
+        this.listenTo(channel.request('entities:spots'), 'add', this.addSpot);
     },
     onShow: function(){
-        this.ui.form.find('[name="spot"]').select2()
+        this.ui.spot.select2({
+            resultsAdapter: SpotResults
+        });
+
+        $('body').on('click', '[data-action="addSpot"]', this.addSpot.bind(this));
     },
     onSpotChange: function(){
         this.ui.submit.toggleClass('hidden', !this.ui.spot.val())
@@ -124,5 +116,6 @@ var LunchMovesView = Marionette.CompositeView.extend({
 });
 
 module.exports = {
-    LunchMovesView: LunchMovesView
+    LunchMovesView: LunchMovesView,
+    ModalView: ModalView
 }

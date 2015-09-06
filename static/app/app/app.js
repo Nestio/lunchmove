@@ -2,6 +2,8 @@ var LunchMovesView = require('app/views').LunchMovesView;
 var Move = require('app/entities').Move;
 var Moves = require('app/entities').Moves;
 var Spots = require('app/entities').Spots;
+var Spot = require('app/entities').Spot;
+var ModalView = require('app/views').ModalView;
 
 var channel = Backbone.Radio.channel('global');
 
@@ -27,6 +29,19 @@ channel.comply('show:modal', function(view){
 
     view.$el.on('hidden.bs.modal', function(){
         modalRegion.empty();
+    });
+});
+
+channel.comply('show:modal:spot', function(){
+    var spot = new Spot();
+    var view = new ModalView({
+        model: spot
+    });
+
+    channel.command('show:modal', view);
+
+    spot.on('sync', function(){
+        channel.request('entities:spots').add(spot);
     });
 });
 
