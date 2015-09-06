@@ -1,4 +1,5 @@
 var LunchMovesView = require('app/views').LunchMovesView;
+var MoveFormView = require('app/views').MoveFormView;
 var Move = require('app/entities').Move;
 var Moves = require('app/entities').Moves;
 var Spots = require('app/entities').Spots;
@@ -46,10 +47,19 @@ channel.comply('show:modal:spot', function(){
 });
 
 
-$.when(moves.fetch(), spots.fetch()).done(function(){
-    var view = new LunchMovesView({
-        collection: moves,
-        model: new Move()
+spots.fetch().done(function(){
+    var move = new Move();
+
+    var formView = new MoveFormView({
+        model: move
     });
-    regionManager.get('main').show(view);
+
+    regionManager.get('main').show(formView);
+
+    move.on('sync', function(){
+        moves.fetch().done(function(){
+            var listView = new LunchMovesView({collection: moves});
+            regionManager.get('main').show(listView);
+        });
+    });
 })

@@ -1,7 +1,7 @@
 var fs = require('fs');
 var EmptyTpl = fs.readFileSync(__dirname + '/templates/empty-moves.html', 'utf8');
 var LunchMoveTpl = fs.readFileSync(__dirname + '/templates/lunch-move.html', 'utf8');
-var LunchMovesTpl = fs.readFileSync(__dirname + '/templates/lunch-moves.html', 'utf8');
+var MoveFormTpl = fs.readFileSync(__dirname + '/templates/lunch-move-form.html', 'utf8');
 var ModalTpl = fs.readFileSync(__dirname + '/templates/modal.html', 'utf8');
 var Spot = require('app/entities').Spot;
 var SpotResults = require('app/utils').SpotResults;
@@ -59,7 +59,15 @@ var ModalView = Marionette.ItemView.extend({
     }
 });
 
-var LunchMovesView = Marionette.CompositeView.extend({
+var LunchMovesView = Marionette.CollectionView.extend({
+    emptyView: EmptyView,
+    childView: LunchMoveView,
+    tagName: 'ul',
+    className: 'list-group',
+});
+
+var MoveFormView = Marionette.ItemView.extend({
+    template: _.template(MoveFormTpl),
     ui: {
         'form': 'form',
         'spot': '[name="spot"]',
@@ -72,10 +80,6 @@ var LunchMovesView = Marionette.CompositeView.extend({
         'click @ui.addSpot': 'addSpot',
         'change @ui.form': 'onFormChange'
     },
-    emptyView: EmptyView,
-    childView: LunchMoveView,
-    childViewContainer: 'ul',
-    template: _.template(LunchMovesTpl),
     addSpot: function(spot){
         var $option = $('<option>').prop('value', spot.id).text(spot.get('name'));
         this.ui.spot.append($option);
@@ -119,5 +123,6 @@ var LunchMovesView = Marionette.CompositeView.extend({
 
 module.exports = {
     LunchMovesView: LunchMovesView,
-    ModalView: ModalView
+    ModalView: ModalView,
+    MoveFormView: MoveFormView
 }
