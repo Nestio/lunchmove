@@ -1,0 +1,14 @@
+.lunch-move-form {
+    font-size: 18px;
+    .form-group {
+        .form-control {
+            &.name-field {
+                text-align: center;
+                border: 0px;
+                border-bottom: 2px dotted black;
+                border-radius: 0px;
+                box-shadow: none;
+            }
+        }
+    }
+}
