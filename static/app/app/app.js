@@ -7,7 +7,8 @@ var channel = Backbone.Radio.channel('global');
 
 var regionManager = new Marionette.RegionManager({
     regions: {
-        main: '#app'
+        main: '#app',
+        modal: '#modal'
     }
 });
 
@@ -18,6 +19,16 @@ channel.reply('entities:spots', function(){
     return spots;
 });
 
+channel.comply('show:modal', function(view){
+    var modalRegion = regionManager.get('modal');
+
+    modalRegion.show(view);
+    view.$el.modal();
+
+    view.$el.on('hidden.bs.modal', function(){
+        modalRegion.empty();
+    });
+});
 
 
 $.when(moves.fetch(), spots.fetch()).done(function(){
