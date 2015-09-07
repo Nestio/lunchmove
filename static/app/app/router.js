@@ -16,10 +16,9 @@ var Router = Backbone.Router.extend({
     },
 
     makeMove: function() {
+        var move = channel.request('entities:move');
         var spots = channel.request('entities:spots');
         spots.fetch().done(function(){
-            var move = new Move();
-
             var formView = new MoveFormView({
                 model: move
             });

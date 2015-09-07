@@ -14,7 +14,6 @@ var LunchMoveView = Marionette.ItemView.extend({
     template: _.template(LunchMoveTpl),
     templateHelpers: {
         spotName: function(){
-            console.log(this.spot);
             return channel.request('entities:spots').get(this.spot).get('name');
         }
     }
@@ -65,7 +64,22 @@ var MoveFormView = Marionette.ItemView.extend({
             }, this)
         });
     },
+    deserializeModel: function(){
+        var user = this.model.get('user');
+        if (user) {
+            this.ui.user.val(user);
+        }
+        var spot = this.model.get('spot')
+        if (spot) {
+            var spotName = channel.request('entities:spots').get(spot).get('name');
+            this.ui.spot.typeahead('val', spotName);
+        }
+    },
     onShow: function(){
+        this.renderTypeahead();
+        this.deserializeModel();
+    },
+    renderTypeahead: function(){
         var spots = new Bloodhound({
             datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
             queryTokenizer: Bloodhound.tokenizers.whitespace,
