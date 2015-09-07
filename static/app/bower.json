@@ -18,7 +18,7 @@
     "jquery": "2.1.1",
     "jquery.cookie": "~1.4.1",
     "radio-shim": "https://gist.github.com/7992474cdb1c5672d88b.git",
-    "select2": "https://github.com/select2/select2.git#master",
+    "select2": "4.0.0",
     "underscore": "~1.8.3",
     "typeahead.js": "~0.11.1"
   },
@@ -60,7 +60,7 @@
       }
     },
     "select2": {
-      "main": "dist/js/select2.js",
+      "main": "dist/js/select2.full.js",
       "dependencies": {
         "jquery": true
       }

@@ -4,7 +4,9 @@ var LunchMoveTpl = fs.readFileSync(__dirname + '/templates/lunch-move.html', 'ut
 var MoveFormTpl = fs.readFileSync(__dirname + '/templates/lunch-move-form.html', 'utf8');
 var ModalTpl = fs.readFileSync(__dirname + '/templates/modal.html', 'utf8');
 var Spot = require('app/entities').Spot;
-var SpotResults = require('app/utils').SpotResults;
+var SpotResults = require('app/select2/spot-results');
+var SpotSelection = require('app/select2/spot-selection');
+var SpotDropdown = require('app/select2/spot-dropdown');
 
 var channel = Backbone.Radio.channel('global');
 
@@ -90,7 +92,9 @@ var MoveFormView = Marionette.ItemView.extend({
     },
     onShow: function(){
         this.ui.spot.select2({
-            resultsAdapter: SpotResults
+            resultsAdapter: SpotResults,
+            selectionAdapter: SpotSelection,
+            dropdownAdapter: SpotDropdown
         });
 
         $('body').on('click', '[data-action="addSpot"]', this.addSpot.bind(this));

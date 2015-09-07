@@ -33,6 +33,4 @@ SpotResults.prototype.displayMessage = function (params) {
     });
 };
 
-module.exports = {
-    SpotResults: SpotResults
-};
+module.exports = SpotResults;
