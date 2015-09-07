@@ -39,12 +39,10 @@ var MoveFormView = Marionette.ItemView.extend({
         'form': 'form',
         'spot': '[name="spot"]',
         'spotId': '[name="spot_id"]',
-        'submit': '[type="submit"]',
         'user': '[name="user"]'
     },
     events: {
         'typeahead:select @ui.spot': 'onTypeaheadSelect',
-        'submit @ui.form': 'submitMove',
         'click [data-action="addSpot"]': 'addSpot',
         'change @ui.form': 'onFormChange',
         'blur @ui.spot': 'onSpotBlur',
@@ -89,8 +87,19 @@ var MoveFormView = Marionette.ItemView.extend({
         });
     },
     onFormChange: function(){
-        var isComplete = !!this.ui.spotId.val() && !!this.ui.user.val();
-        this.ui.submit.toggleClass('hidden', !isComplete);
+        var spotId = this.ui.spotId.val();
+        var user = this.ui.user.val();
+
+        if (!!spotId && !!user) {
+            this.model.save({
+                spot: spotId,
+                user: user
+            }, {
+                success: function(){
+                    Backbone.history.navigate('/moves', {trigger: true});
+                }
+            });
+        }
     },
     onSpotBlur: function(){
         var spots = channel.request('entities:spots');
@@ -112,21 +121,6 @@ var MoveFormView = Marionette.ItemView.extend({
     },
     onTypeaheadSelect: function(e, obj){
         this.ui.spotId.val(obj.id).change();
-    },
-    submitMove: function(e){
-        var spot = this.ui.spotId.val();
-        var user = this.ui.user.val();
-
-        this.model.save({
-            spot: spot,
-            user: user
-        }, {
-            success: function(){
-                Backbone.history.navigate('/moves', {trigger: true});
-            }
-        });
-
-        e.preventDefault();
     },
     templateHelpers: function(){
         return {
