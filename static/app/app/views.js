@@ -87,10 +87,16 @@ var MoveFormView = Marionette.ItemView.extend({
         });
     },
     onFormChange: function(){
+        if (this._disableSaving) {
+            return;
+        }
+
         var spotId = this.ui.spotId.val();
         var user = this.ui.user.val();
 
-        if (!!spotId && !!user) {
+        if (spotId && user) {
+            this._disableSaving = true;
+
             this.model.save({
                 spot: spotId,
                 user: user
