@@ -4,9 +4,6 @@ var LunchMoveTpl = fs.readFileSync(__dirname + '/templates/lunch-move.html', 'ut
 var MoveFormTpl = fs.readFileSync(__dirname + '/templates/lunch-move-form.html', 'utf8');
 var ModalTpl = fs.readFileSync(__dirname + '/templates/modal.html', 'utf8');
 var Spot = require('app/entities').Spot;
-var SpotResults = require('app/select2/spot-results');
-var SpotSelection = require('app/select2/spot-selection');
-var SpotDropdown = require('app/select2/spot-dropdown');
 
 var channel = Backbone.Radio.channel('global');
 
@@ -77,7 +74,7 @@ var MoveFormView = Marionette.ItemView.extend({
         'user': '[name="user"]'
     },
     events: {
-        'typeahead:select @ui.form': 'onTypeaheadSelect',
+        // 'typeahead:select @ui.spot': 'onTypeaheadSelect',
         'submit @ui.form': 'submitMove',
         'click @ui.addSpot': 'addSpot',
         'change @ui.form': 'onFormChange'
@@ -91,13 +88,22 @@ var MoveFormView = Marionette.ItemView.extend({
         this.listenTo(channel.request('entities:spots'), 'add', this.addSpot);
     },
     onShow: function(){
-        this.ui.spot.select2({
-            resultsAdapter: SpotResults,
-            selectionAdapter: SpotSelection,
-            dropdownAdapter: SpotDropdown
+        var spots = new Bloodhound({
+            datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
+            queryTokenizer: Bloodhound.tokenizers.whitespace,
+            local: channel.request('entities:spots').toJSON()
         });
 
-        $('body').on('click', '[data-action="addSpot"]', this.addSpot.bind(this));
+        this.ui.spot.typeahead({
+            hint: true,
+            highlight: true,
+            minLength: 1
+        },
+        {
+            display: 'name',
+            name: 'spots',
+            source: spots
+        });
     },
     onFormChange: function(){
         var isComplete = !!this.ui.spot.val() && !!this.ui.user.val();
