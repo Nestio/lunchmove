@@ -2,7 +2,7 @@ var fs = require('fs');
 var EmptyTpl = fs.readFileSync(__dirname + '/templates/empty-moves.html', 'utf8');
 var LunchMoveTpl = fs.readFileSync(__dirname + '/templates/lunch-move.html', 'utf8');
 var MoveFormTpl = fs.readFileSync(__dirname + '/templates/lunch-move-form.html', 'utf8');
-var ModalTpl = fs.readFileSync(__dirname + '/templates/modal.html', 'utf8');
+var EmptyQueryTpl = fs.readFileSync(__dirname + '/templates/empty-query.html', 'utf8');
 var Spot = require('app/entities').Spot;
 
 var channel = Backbone.Radio.channel('global');
@@ -24,40 +24,6 @@ var EmptyView = Marionette.ItemView.extend({
     template: _.template(EmptyTpl)
 });
 
-var ModalView = Marionette.ItemView.extend({
-    template: _.template(ModalTpl),
-    className: 'modal',
-
-    ui: {
-        closeModal: '[data-ui="closeModal"]',
-        form: 'form'
-    },
-
-    events: {
-        'click @ui.closeModal': 'closeModal',
-        'submit form': 'onSubmit'
-    },
-
-    closeModal: function(){
-        this.$el.modal('hide');
-    },
-
-    onSubmit: function(e){
-        e.preventDefault();
-        var name = this.ui.form.find('[name="name"]').val();
-
-        if (!name) {
-            return;
-        }
-
-        this.model.save({
-            name: name
-        }, {
-            success: this.closeModal.bind(this)
-        });
-    }
-});
-
 var LunchMovesView = Marionette.CollectionView.extend({
     emptyView: EmptyView,
     childView: LunchMoveView,
@@ -77,8 +43,7 @@ var MoveFormView = Marionette.ItemView.extend({
     events: {
         'typeahead:select @ui.spot': 'onTypeaheadSelect',
         'submit @ui.form': 'submitMove',
-        'click @ui.addSpot': 'addSpot',
-        'change @ui.spot': 'onSpotChange',
+        'click [data-action="addSpot"]': 'addSpot',
         'change @ui.form': 'onFormChange',
         'blur @ui.spot': 'onSpotBlur',
         'keydown input': function(e){
@@ -88,13 +53,17 @@ var MoveFormView = Marionette.ItemView.extend({
             }
         }
     },
-    addSpot: function(spot){
-        var $option = $('<option>').prop('value', spot.id).text(spot.get('name'));
-        this.ui.spot.append($option);
-        this.ui.spot.val(spot.id).change();
-    },
-    initialize: function(){
-        this.listenTo(channel.request('entities:spots'), 'add', this.addSpot);
+    addSpot: function(){
+        var spot = new Spot({
+            name: this.ui.spot.typeahead('val')
+        });
+
+        spot.save({}, {
+            success: _.bind(function(){
+                channel.request('entities:spots').add(spot);
+                this.ui.spot.typeahead('val', spot.get('name')).blur();
+            }, this)
+        });
     },
     onShow: function(){
         var spots = new Bloodhound({
@@ -111,7 +80,10 @@ var MoveFormView = Marionette.ItemView.extend({
         {
             display: 'name',
             name: 'spots',
-            source: spots
+            source: spots,
+            templates: {
+                empty: _.template(EmptyQueryTpl)
+            }
         });
     },
     onFormChange: function(){
@@ -125,7 +97,6 @@ var MoveFormView = Marionette.ItemView.extend({
         if (!spotId) {
             var spotVal = this.ui.spot.typeahead('val');
             var selectedSpot = spots.find(function(spot){
-                console.log(spot.get('name').toLowerCase(), spotVal.toLowerCase());
                 return spot.get('name').toLowerCase() == spotVal.toLowerCase();
             });
 
@@ -164,6 +135,5 @@ var MoveFormView = Marionette.ItemView.extend({
 
 module.exports = {
     LunchMovesView: LunchMovesView,
-    ModalView: ModalView,
     MoveFormView: MoveFormView
 }

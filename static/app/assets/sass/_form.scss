@@ -44,6 +44,7 @@
         }
 
         .tt-menu {
+            margin-top: -1px;
             position: absolute;
             top: 100%;
             left: 0;
@@ -55,9 +56,10 @@
             list-style: none;
             font-size: 14px;
             background-color: #ffffff;
+            border-top: 1px solid black;
         }
 
-        .tt-suggestion {
+        .tt-suggestion, .tt-empty {
             display: block;
             padding: 3px 20px;
             clear: both;
@@ -65,6 +67,7 @@
             color: #333333;
             border: 1px solid black;
             border-top: 0px;
+            width: 100%;
         }
 
         .tt-suggestion:hover {
@@ -82,15 +85,6 @@
 
         .tt-suggestion p {
             margin: 0;
-        }
-
-        .tt-header,
-        .tt-empty {
-            padding: 10px 20px;
-        }
-
-        .tt-header {
-            background-color: $gray-lighter;
         }
 
         .tt-empty {
