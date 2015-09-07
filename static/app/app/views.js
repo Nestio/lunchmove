@@ -70,14 +70,17 @@ var MoveFormView = Marionette.ItemView.extend({
     ui: {
         'form': 'form',
         'spot': '[name="spot"]',
+        'spotId': '[name="spot_id"]',
         'submit': '[type="submit"]',
         'user': '[name="user"]'
     },
     events: {
-        // 'typeahead:select @ui.spot': 'onTypeaheadSelect',
+        'typeahead:select @ui.spot': 'onTypeaheadSelect',
         'submit @ui.form': 'submitMove',
         'click @ui.addSpot': 'addSpot',
-        'change @ui.form': 'onFormChange'
+        'change @ui.spot': 'onSpotChange',
+        'change @ui.form': 'onFormChange',
+        'blur @ui.spot': 'onSpotBlur'
     },
     addSpot: function(spot){
         var $option = $('<option>').prop('value', spot.id).text(spot.get('name'));
@@ -106,11 +109,19 @@ var MoveFormView = Marionette.ItemView.extend({
         });
     },
     onFormChange: function(){
-        var isComplete = !!this.ui.spot.val() && !!this.ui.user.val();
+        var isComplete = !!this.ui.spotId.val() && !!this.ui.user.val();
         this.ui.submit.toggleClass('hidden', !isComplete);
     },
+    onSpotBlur: function(){
+        var id = this.ui.spotId.val();
+        var val = id ? channel.request('entities:spots').get(+id).get('name') : '';
+        this.ui.spot.typeahead('val', val);
+    },
+    onTypeaheadSelect: function(e, obj){
+        this.ui.spotId.val(obj.id).change();
+    },
     submitMove: function(e){
-        var spot = this.ui.spot.val();
+        var spot = this.ui.spotId.val();
         var user = this.ui.user.val();
 
         this.model.save({
