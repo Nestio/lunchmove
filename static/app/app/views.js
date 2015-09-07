@@ -80,7 +80,13 @@ var MoveFormView = Marionette.ItemView.extend({
         'click @ui.addSpot': 'addSpot',
         'change @ui.spot': 'onSpotChange',
         'change @ui.form': 'onFormChange',
-        'blur @ui.spot': 'onSpotBlur'
+        'blur @ui.spot': 'onSpotBlur',
+        'keydown input': function(e){
+            if (e.keyCode === 13) {
+                e.preventDefault();
+                $(e.currentTarget).blur();
+            }
+        }
     },
     addSpot: function(spot){
         var $option = $('<option>').prop('value', spot.id).text(spot.get('name'));
