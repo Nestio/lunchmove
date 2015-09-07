@@ -13,4 +13,3 @@
 # Ignore javascript dependencies
 static/app/bower_components/*
 static/app/node_modules/*
-static/app/public/*
