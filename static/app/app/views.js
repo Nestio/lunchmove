@@ -113,9 +113,23 @@ var MoveFormView = Marionette.ItemView.extend({
         this.ui.submit.toggleClass('hidden', !isComplete);
     },
     onSpotBlur: function(){
-        var id = this.ui.spotId.val();
-        var val = id ? channel.request('entities:spots').get(+id).get('name') : '';
-        this.ui.spot.typeahead('val', val);
+        var spots = channel.request('entities:spots');
+        var spotId = this.ui.spotId.val();
+
+        if (!spotId) {
+            var spotVal = this.ui.spot.typeahead('val');
+            var selectedSpot = spots.find(function(spot){
+                console.log(spot.get('name').toLowerCase(), spotVal.toLowerCase());
+                return spot.get('name').toLowerCase() == spotVal.toLowerCase();
+            });
+
+            if (selectedSpot) {
+                this.ui.spotId.val(selectedSpot.id).change();
+                spotId = selectedSpot.id;
+            }
+        }
+
+        this.ui.spot.typeahead('val', spotId ? spots.get(+spotId).get('name') : '');
     },
     onTypeaheadSelect: function(e, obj){
         this.ui.spotId.val(obj.id).change();
