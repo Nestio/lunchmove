@@ -1,24 +1,26 @@
-<div class="container">
-    <div class="row">
-        <div class="col-md-12 text-center lunch-move-form">
-            <h1>What's your lunch move?</h1>
-            <form>
-                <div class="form-inline">
-                    <div class="form-group">
-                        <input type="text" class="form-control name-field" name="user" placeholder="You" autocomplete="false">
+<div class="jumbotron lunch-move-form">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <h1>What's your lunch move?</h1>
+                <form>
+                    <div class="form-inline">
+                        <div class="form-group">
+                            <input type="text" class="form-control name-field" name="user" placeholder="You" autocomplete="false">
+                        </div>
+                        <div class="form-group">
+                            <p class="form-control-static">is going to</p>
+                        </div>
+                        <div class="form-group">
+                            <input class="form-control spot-field" type="text" name="spot" placeholder="place">
+                            <input type="hidden" name="spot_id">
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <p class="form-control-static">is going to</p>
+                    <div class="form-inline submit-container">
+                        <button type="submit" class="btn btn-success btn-lg hidden">LUNCH MOVE!</button>
                     </div>
-                    <div class="form-group">
-                        <input class="form-control spot-field" type="text" name="spot" placeholder="place">
-                        <input type="hidden" name="spot_id">
-                    </div>
-                </div>
-                <div class="form-inline submit-container">
-                    <button type="submit" class="btn btn-success hidden">Lunchmove!</button>
-                </div>
-            </form>
+                </form>
+            </div>
         </div>
     </div>
 </div>
