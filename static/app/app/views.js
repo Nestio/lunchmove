@@ -121,9 +121,9 @@ var MoveFormView = Marionette.ItemView.extend({
             spot: spot,
             user: user
         }, {
-            success: _.bind(function(){
-                this.ui.form.hide();
-            }, this)
+            success: function(){
+                Backbone.history.navigate('/moves', {trigger: true});
+            }
         });
 
         e.preventDefault();

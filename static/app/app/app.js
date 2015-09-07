@@ -1,38 +1,19 @@
-var LunchMovesView = require('app/views').LunchMovesView;
-var MoveFormView = require('app/views').MoveFormView;
-var Move = require('app/entities').Move;
-var Moves = require('app/entities').Moves;
+var Router = require('app/router');
 var Spots = require('app/entities').Spots;
-var Spot = require('app/entities').Spot;
-
+var Moves = require('app/entities').Moves;
 var channel = Backbone.Radio.channel('global');
 
-var regionManager = new Marionette.RegionManager({
-    regions: {
-        main: '#app'
-    }
-});
-
-var moves = new Moves();
 var spots = new Spots();
+var moves = new Moves();
 
 channel.reply('entities:spots', function(){
     return spots;
 });
 
-spots.fetch().done(function(){
-    var move = new Move();
+channel.reply('entities:moves', function(){
+    return moves;
+});
 
-    var formView = new MoveFormView({
-        model: move
-    });
+new Router();
 
-    regionManager.get('main').show(formView);
-
-    move.on('sync', function(){
-        moves.fetch().done(function(){
-            var listView = new LunchMovesView({collection: moves});
-            regionManager.get('main').show(listView);
-        });
-    });
-})
+Backbone.history.start();
