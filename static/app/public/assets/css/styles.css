@@ -6011,8 +6011,13 @@ button.close {
 
 .lunch-move-form {
   background-color: white; }
-  .lunch-move-form .submit-container {
-    margin-top: 50px; }
+  .lunch-move-form .question {
+    margin-bottom: 100px; }
+  @media (max-width: 768px) {
+    .lunch-move-form .form-group {
+      display: inline-block;
+      margin-bottom: 0;
+      vertical-align: middle; } }
   .lunch-move-form .form-group .form-control[type=text] {
     text-align: center;
     border: 0px;

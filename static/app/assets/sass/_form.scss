@@ -1,11 +1,18 @@
 .lunch-move-form {
     background-color: white;
 
-    .submit-container {
-        margin-top: 50px;
+    .question {
+        margin-bottom: 100px;
     }
 
     .form-group {
+
+        @media(max-width: 768px) {
+            display: inline-block;
+            margin-bottom: 0;
+            vertical-align: middle;
+        }
+
         .form-control {
             &[type=text] {
                 text-align: center;
