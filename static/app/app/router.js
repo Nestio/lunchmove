@@ -30,8 +30,9 @@ var Router = Backbone.Router.extend({
 
     showMoves: function() {
         var moves = channel.request('entities:moves');
+        var spots = channel.request('entities:spots');
 
-        moves.fetch().done(function(){
+        $.when(moves.fetch(), spots.fetch()).done(function(){
             var listView = new LunchMovesView({collection: moves});
             regionManager.get('main').show(listView);
         });

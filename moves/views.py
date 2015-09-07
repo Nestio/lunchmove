@@ -8,7 +8,7 @@ def index(request):
     return render(request, 'moves/index.html', {})
 
 class MoveViewSet(viewsets.ModelViewSet):
-    queryset = Move.objects.all().order_by('-updated_at')
+    queryset = Move.objects.recent()
     serializer_class = MoveSerializer
 
 

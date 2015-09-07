@@ -16,4 +16,4 @@ channel.reply('entities:moves', function(){
 
 new Router();
 
-Backbone.history.start();
+Backbone.history.start({pushState: true});
