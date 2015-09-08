@@ -1,6 +1,7 @@
 var LunchMovesView = require('app/views').LunchMovesView;
 var MoveFormView = require('app/views').MoveFormView;
 var HeaderView = require('app/views').HeaderView;
+var LoadingView = require('app/views').LoadingView;
 
 var Move = require('app/entities').Move;
 var channel = Backbone.Radio.channel('global');
@@ -20,6 +21,7 @@ var Router = Backbone.Router.extend({
     },
 
     makeMove: function() {
+        regionManager.get('main').show(new LoadingView());
         var move = channel.request('entities:move');
         var spots = channel.request('entities:spots');
 
@@ -35,6 +37,7 @@ var Router = Backbone.Router.extend({
     },
 
     showMoves: function() {
+        regionManager.get('main').show(new LoadingView());
         var move = channel.request('entities:move');
         var moves = channel.request('entities:moves');
         var spots = channel.request('entities:spots');

@@ -1,7 +1,8 @@
 var fs = require('fs');
 var EmptyTpl = fs.readFileSync(__dirname + '/templates/empty-moves.html', 'utf8');
 var LunchMoveTpl = fs.readFileSync(__dirname + '/templates/lunch-move.html', 'utf8');
-var LunchMovesTpl = fs.readFileSync(__dirname + '/templates/lunch-moves.html', 'utf8')
+var LunchMovesTpl = fs.readFileSync(__dirname + '/templates/lunch-moves.html', 'utf8');
+var LoadingTpl = fs.readFileSync(__dirname + '/templates/loading.html', 'utf8');
 var MoveFormTpl = fs.readFileSync(__dirname + '/templates/lunch-move-form.html', 'utf8');
 var EmptyQueryTpl = fs.readFileSync(__dirname + '/templates/empty-query.html', 'utf8');
 var Spot = require('app/entities').Spot;
@@ -177,10 +178,17 @@ var HeaderView = Marionette.ItemView.extend({
         var route = $(e.currentTarget).attr('href').replace('../', '');
         Backbone.history.navigate(route, {trigger: true});
     }
-})
+});
+
+var LoadingView = Marionette.ItemView.extend({
+    template: _.template(LoadingTpl)
+});
+
+
 
 module.exports = {
     LunchMovesView: LunchMovesView,
+    LoadingView: LoadingView,
     MoveFormView: MoveFormView,
     HeaderView: HeaderView
 }

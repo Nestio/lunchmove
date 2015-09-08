@@ -20,7 +20,8 @@
     "radio-shim": "https://gist.github.com/7992474cdb1c5672d88b.git",
     "underscore": "~1.8.3",
     "typeahead.js": "~0.11.1",
-    "moment": "~2.8.3"
+    "moment": "~2.8.3",
+    "spinkit": "~1.0.1"
   },
   "overrides": {
     "backbone": {
@@ -49,6 +50,9 @@
       "dependencies": {
         "backbone.marionette": true
       }
+    },
+    "spinkit": {
+      "ignore": true
     }
   },
   "resolutions": {
