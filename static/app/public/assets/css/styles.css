@@ -6019,6 +6019,7 @@ button.close {
       margin-bottom: 0;
       vertical-align: middle; } }
   .lunch-move-form .form-group .form-control[type=text] {
+    font-size: 21px;
     text-align: center;
     border: 0px;
     border-bottom: 1px solid black;

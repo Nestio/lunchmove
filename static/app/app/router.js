@@ -28,11 +28,15 @@ var Router = Backbone.Router.extend({
     },
 
     showMoves: function() {
+        var move = channel.request('entities:move');
         var moves = channel.request('entities:moves');
         var spots = channel.request('entities:spots');
 
         $.when(moves.fetch(), spots.fetch()).done(function(){
-            var listView = new LunchMovesView({collection: moves});
+            var listView = new LunchMovesView({
+                model: move,
+                collection: moves
+            });
             regionManager.get('main').show(listView);
         });
     }

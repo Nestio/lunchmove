@@ -1,1 +1,5 @@
-<strong><%= user %></strong> is going to <%= spotName() %><em class="pull-right"><%= moment(updated_at).format('h:mm:ss a') %></em>
+<strong><%= isOwnMove ? 'You' : user %></strong> <%= isOwnMove ? 'are' : 'is' %> going to <strong><%= spotName %></strong>
+<% if (isOwnMove) { %>
+    <a href='../'>edit</a>
+<% } %>
+<em class="pull-right"><%= moment(updated_at).format('h:mm:ss a') %></em>

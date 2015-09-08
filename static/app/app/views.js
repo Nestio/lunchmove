@@ -11,10 +11,18 @@ var channel = Backbone.Radio.channel('global');
 var LunchMoveView = Marionette.ItemView.extend({
     tagName: 'li',
     className: 'list-group-item',
+    edit: function(e){
+        Backbone.history.navigate('', {trigger: true});
+        e.preventDefault();
+    },
+    events: {
+        'click a': 'edit'
+    },
     template: _.template(LunchMoveTpl),
-    templateHelpers: {
-        spotName: function(){
-            return channel.request('entities:spots').get(this.spot).get('name');
+    templateHelpers: function(){
+        return {
+            spotName: channel.request('entities:spots').get(this.model.get('spot')).get('name'),
+            isOwnMove: this.getOption('ownMove').id === this.model.id
         }
     }
 });
@@ -29,7 +37,12 @@ var LunchMovesView = Marionette.CompositeView.extend({
     emptyView: EmptyView,
     childView: LunchMoveView,
     childViewContainer: 'ul',
-    template: _.template(LunchMovesTpl)
+    template: _.template(LunchMovesTpl),
+    childViewOptions: function(){
+        return {
+            ownMove: this.model
+        };
+    }
 });
 
 var MoveFormView = Marionette.ItemView.extend({
