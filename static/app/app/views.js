@@ -163,7 +163,20 @@ var MoveFormView = Marionette.ItemView.extend({
 });
 
 var HeaderView = Marionette.ItemView.extend({
-    template: false
+    el: '#header',
+    events: {
+        'click a': 'navigate'
+    },
+    template: false,
+    activate: function(methodName){
+        this.$('.navbar-nav li').removeClass('active');
+        this.$('[data-action="' + methodName + '"]').addClass('active');
+    },
+    navigate: function(e){
+        e.preventDefault();
+        var route = $(e.currentTarget).attr('href').replace('../', '');
+        Backbone.history.navigate(route, {trigger: true});
+    }
 })
 
 module.exports = {

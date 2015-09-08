@@ -11,9 +11,7 @@ var regionManager = new Marionette.RegionManager({
     }
 });
 
-var headerView = new HeaderView({
-    $el: $('#header')
-});
+var headerView = new HeaderView();
 
 var Router = Backbone.Router.extend({
     routes: {
@@ -24,6 +22,8 @@ var Router = Backbone.Router.extend({
     makeMove: function() {
         var move = channel.request('entities:move');
         var spots = channel.request('entities:spots');
+
+        headerView.activate('makeMove');
 
         $.when(spots.fetch(), move.fetchRecent()).done(function(){
             var formView = new MoveFormView({
@@ -38,6 +38,8 @@ var Router = Backbone.Router.extend({
         var move = channel.request('entities:move');
         var moves = channel.request('entities:moves');
         var spots = channel.request('entities:spots');
+
+        headerView.activate('showMoves');
 
         $.when(moves.fetch(), spots.fetch(), move.fetchRecent()).done(function(){
             var listView = new LunchMovesView({

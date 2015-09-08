@@ -11,8 +11,14 @@ header.main-header {
         .navbar-nav {
             padding-left: 20px;
 
-            li > a {
-                padding-top: 47px;
+            li {
+                &.active {
+                    background-color: #f9f9f9;
+                }
+                
+                a {
+                   padding-top: 47px;
+               }
             }
         }
 

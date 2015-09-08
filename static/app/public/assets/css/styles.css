@@ -6084,7 +6084,9 @@ header.main-header {
     font-variant: small-caps; }
   header.main-header #navbar .navbar-nav {
     padding-left: 20px; }
-    header.main-header #navbar .navbar-nav li > a {
+    header.main-header #navbar .navbar-nav li.active {
+      background-color: #f9f9f9; }
+    header.main-header #navbar .navbar-nav li a {
       padding-top: 47px; }
 
 /*# sourceMappingURL=sourcemaps/styles.css.map */
