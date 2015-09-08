@@ -1,5 +1,10 @@
 var Move = Backbone.Model.extend({
-    urlRoot: '/json/moves/'
+    urlRoot: '/json/moves/',
+    fetchRecent: function(options){
+        options = options || {};
+        _.extend(options, {url: '/json/moves/recent/'})
+        return this.fetch(options);
+    }
 });
 
 var Moves = Backbone.Collection.extend({

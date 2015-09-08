@@ -18,7 +18,8 @@ var Router = Backbone.Router.extend({
     makeMove: function() {
         var move = channel.request('entities:move');
         var spots = channel.request('entities:spots');
-        spots.fetch().done(function(){
+
+        $.when(spots.fetch(), move.fetchRecent()).done(function(){
             var formView = new MoveFormView({
                 model: move
             });
@@ -32,7 +33,7 @@ var Router = Backbone.Router.extend({
         var moves = channel.request('entities:moves');
         var spots = channel.request('entities:spots');
 
-        $.when(moves.fetch(), spots.fetch()).done(function(){
+        $.when(moves.fetch(), spots.fetch(), move.fetchRecent()).done(function(){
             var listView = new LunchMovesView({
                 model: move,
                 collection: moves
