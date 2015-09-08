@@ -162,7 +162,12 @@ var MoveFormView = Marionette.ItemView.extend({
     }
 });
 
+var HeaderView = Marionette.ItemView.extend({
+    template: false
+})
+
 module.exports = {
     LunchMovesView: LunchMovesView,
-    MoveFormView: MoveFormView
+    MoveFormView: MoveFormView,
+    HeaderView: HeaderView
 }

@@ -1,12 +1,18 @@
 var LunchMovesView = require('app/views').LunchMovesView;
 var MoveFormView = require('app/views').MoveFormView;
+var HeaderView = require('app/views').HeaderView;
+
 var Move = require('app/entities').Move;
 var channel = Backbone.Radio.channel('global');
 
 var regionManager = new Marionette.RegionManager({
     regions: {
-        main: '#app'
+        main: '#app',
     }
+});
+
+var headerView = new HeaderView({
+    $el: $('#header')
 });
 
 var Router = Backbone.Router.extend({
