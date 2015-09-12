@@ -14,7 +14,9 @@ class MoveManager(models.Manager):
 
 class Move(models.Model):
     objects = MoveManager()
+
     user = models.CharField(max_length=50)
     spot = models.ForeignKey(Spot)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    uuid = models.UUIDField(blank=True, null=True)
