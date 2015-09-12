@@ -14,8 +14,8 @@ from .serializers import MoveSerializer, SpotSerializer
 
 def index(request):
     user_uuid = request.session.get('user_uuid') or str(uuid.uuid4())
-    print user_uuid
     request.session['user_uuid'] = user_uuid
+    request.session.set_expiry(None)
     try:
         move = Move.objects.get(uuid=user_uuid, updated_at__gte=timezone.now() - datetime.timedelta(hours=6))
         move = MoveSerializer(move).data
