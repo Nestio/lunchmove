@@ -25,7 +25,7 @@
     <div id="app"></div>
     <script type="text/javascript">
         var lunchmove = {
-            recent_move = {{ recent_move }}
+            recent_move: {{ recent_move|safe }}
         };
     </script>
     <script src="{% static 'app/public/vendor.js' %}" type="text/javascript"></script>

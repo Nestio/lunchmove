@@ -13,9 +13,11 @@ from rest_framework.response import Response
 from .serializers import MoveSerializer, SpotSerializer
 
 def index(request):
-    uuid = request.session.get('user_uuid') || str(uuid.uuid4())
+    user_uuid = request.session.get('user_uuid') or str(uuid.uuid4())
+    print user_uuid
+    request.session['user_uuid'] = user_uuid
     try:
-        move = Move.objects.get(uuid=uuid, updated_at__gte=timezone.now() - datetime.timedelta(hours=6))
+        move = Move.objects.get(uuid=user_uuid, updated_at__gte=timezone.now() - datetime.timedelta(hours=6))
         move = MoveSerializer(move).data
     except Move.DoesNotExist:
         move = {}
@@ -26,8 +28,8 @@ class MoveViewSet(viewsets.ModelViewSet):
     serializer_class = MoveSerializer
 
     def create(self, request):
-        print request.session['uuid']
-        data = request.data.copy().update({'uuid': request.session['uuid'])})
+        data = request.data.copy()
+        data.update({'uuid': request.session['user_uuid']})
         serializer = self.get_serializer(data=data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)

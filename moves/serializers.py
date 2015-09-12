@@ -4,7 +4,7 @@ from rest_framework import serializers
 class MoveSerializer(serializers.ModelSerializer):
     class Meta:
         model = Move
-        fields = ('spot', 'updated_at', 'user', 'id')
+        fields = ('spot', 'updated_at', 'user', 'id', 'uuid')
 
 
 class SpotSerializer(serializers.ModelSerializer):

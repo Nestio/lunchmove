@@ -27,7 +27,7 @@ var Router = Backbone.Router.extend({
 
         headerView.activate('makeMove');
 
-        $.when(spots.fetch(), move.fetchRecent()).done(function(){
+        spots.fetch().done(function(){
             var formView = new MoveFormView({
                 model: move
             });
@@ -44,7 +44,7 @@ var Router = Backbone.Router.extend({
 
         headerView.activate('showMoves');
 
-        $.when(moves.fetch(), spots.fetch(), move.fetchRecent()).done(function(){
+        $.when(moves.fetch(), spots.fetch()).done(function(){
             var listView = new LunchMovesView({
                 model: move,
                 collection: moves
