@@ -1,3 +1,5 @@
+require('app/constants');
+
 var Router = require('app/router');
 var Spots = require('app/entities').Spots;
 var Moves = require('app/entities').Moves;
@@ -6,7 +8,7 @@ var channel = Backbone.Radio.channel('global');
 
 var spots = new Spots();
 var moves = new Moves();
-var move = new Move();
+var move = new Move(lunchmove.recent_move);
 
 channel.reply('entities:spots', function(){
     return spots;
