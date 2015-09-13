@@ -95,9 +95,6 @@ USE_L10N = True
 
 USE_TZ = True
 
-
-# Static files (CSS, JavaScript, Images)
-
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 STATIC_ROOT = 'staticfiles'
 STATIC_URL = '/static/'
@@ -111,3 +108,6 @@ STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 REST_FRAMEWORK = {
     'PAGE_SIZE': 1000
 }
+
+HIPCHAT_ROOM_ID = os.environ['HIPCHAT_ROOM_ID']
+HIPCHAT_AUTH_TOKEN = os.environ['HIPCHAT_AUTH_TOKEN']
