@@ -10,19 +10,34 @@ var Spot = require('app/entities').Spot;
 var channel = Backbone.Radio.channel('global');
 
 var LunchMoveView = Marionette.ItemView.extend({
-    // edit: function(e){
-    //     Backbone.history.navigate('', {trigger: true});
-    //     e.preventDefault();
-    // },
-    // events: {
-    //     'click a': 'edit'
-    // },
+    edit: function(e){
+        Backbone.history.navigate('', {trigger: true});
+        e.preventDefault();
+    },
+    events: {
+        'click @ui.addMove': 'addMove'
+    },
+    ui: {
+        'addMove': '[data-ui="addMove"]'
+    },
+    addMove: function(){
+        var view = this;
+
+        var ownMove = channel.request('entities:move')
+        ownMove.save({
+            spot: this.model.id
+        }).done(function(){
+            var moves = channel.request('entities:moves');
+            moves.add(ownMove, {merge: true});
+            view.trigger('add:move');
+        });
+    },
     className: 'row move-row',
     template: _.template(LunchMoveTpl),
     templateHelpers: function(){
         return {
             spotName: channel.request('entities:spots').get(this.model.id).get('name'),
-            isOwnMove: this.getOption('ownMove').get('spot') === this.model.id
+            isOwnMove: channel.request('entities:move').get('spot') === this.model.id
         }
     }
 });
@@ -32,14 +47,17 @@ var EmptyView = Marionette.ItemView.extend({
 });
 
 var LunchMovesView = Marionette.CompositeView.extend({
+    childEvents: {
+        'add:move': 'recalculateMoves'
+    },
     template: _.template(LunchMovesTpl),
     childView: LunchMoveView,
     emptyView: EmptyView,
     childViewContainer: '.moves-container',
-    childViewOptions: function(){
-        return {
-            ownMove: this.model
-        };
+    recalculateMoves: function(){
+        var moves = channel.request('entities:moves');
+        this.collection = moves.groupBySpot();
+        this.render();
     }
 });
 
