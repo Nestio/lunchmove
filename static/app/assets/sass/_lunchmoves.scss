@@ -1,16 +1,48 @@
 .moves-container {
-    .spot-name {
-        text-align: right;
-        font-size: 18px;
-        border-right: 1px solid black;
+    .move-row {
+
+        border-bottom: 1px solid black;
+
+        &:last-child {
+            border-bottom: 1px solid transparent;
+        }
+
+        .spot-name, .spot-moves {
+            min-height: 60px;
+        }
+
+        .spot-name {
+            text-align: right;
+            font-size: 24px;
+            line-height: 60px;
+        }
+
+        .spot-moves {
+            border-left: 1px solid black;
+
+            .move {
+                display: inline-block;
+                min-width: 60px;
+
+                > div {
+                    height: 30px;
+                    line-height: 30px;
+                    text-align: center;
+                }
+
+                &.move-new {
+                    opacity: .4;
+                    color: #555555;
+
+                    &:hover {
+                        opacity: 1;
+                        cursor: pointer;
+                    }
+                }
+            }
+
+        }
+
     }
 
-    .spot-moves {
-        .move {
-            display: inline-block;
-            > div {
-                text-align: center;
-            }
-        }
-    }
 }

@@ -17,7 +17,7 @@ var LunchMoveView = Marionette.ItemView.extend({
     // events: {
     //     'click a': 'edit'
     // },
-    tagName: 'row',
+    className: 'row move-row',
     template: _.template(LunchMoveTpl),
     templateHelpers: function(){
         return {

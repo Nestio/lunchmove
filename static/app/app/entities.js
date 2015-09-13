@@ -11,7 +11,6 @@ var Moves = Backbone.Collection.extend({
     },
     groupBySpot: function(){
         return this.reduce(function(collection, move){
-            debugger;
             var model = collection.add({id: move.get('spot')});
 
             if (!model.has('moves')){

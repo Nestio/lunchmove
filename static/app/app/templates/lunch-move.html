@@ -5,7 +5,7 @@
     <% moves.each(function(move){ %>
         <div class="move">
             <div class="move-icon">
-                <span>1</span>
+                <span class="glyphicon glyphicon-user"></span>
             </div>
             <div class="move-name">
                 <span><%= isOwnMove ? 'You' : move.get('user') %></span>
@@ -13,12 +13,12 @@
         </div>
     <% }) %>
     <% if (!isOwnMove) { %>
-        <div class="move">
+        <div class="move move-new">
             <div class="move-icon">
-                <span>1</span>
+                <span class="glyphicon glyphicon-plus"></span>
             </div>
             <div class="move-name">
-                <span>You</span>
+                <span>Go Here</span>
             </div>
         </div>
     <% } %>
