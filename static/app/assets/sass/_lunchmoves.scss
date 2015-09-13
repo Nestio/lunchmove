@@ -1,0 +1,16 @@
+.moves-container {
+    .spot-name {
+        text-align: right;
+        font-size: 18px;
+        border-right: 1px solid black;
+    }
+
+    .spot-moves {
+        .move {
+            display: inline-block;
+            > div {
+                text-align: center;
+            }
+        }
+    }
+}

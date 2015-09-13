@@ -1,16 +1,25 @@
 <div class="spot-name col-md-6">
-    <strong><%= spotName %></span>
+    <span><%= spotName %></span>
 </div>
 <div class="spot-moves col-md-6">
     <% moves.each(function(move){ %>
         <div class="move">
-            <span class="move-icon">1</span>
-            <span class="move-name"><%= isOwnMove ? 'You' : move.get('user') %></span>
+            <div class="move-icon">
+                <span>1</span>
+            </div>
+            <div class="move-name">
+                <span><%= isOwnMove ? 'You' : move.get('user') %></span>
+            </div>
         </div>
     <% }) %>
     <% if (!isOwnMove) { %>
         <div class="move">
-            <span>1</span>
+            <div class="move-icon">
+                <span>1</span>
+            </div>
+            <div class="move-name">
+                <span>You</span>
+            </div>
         </div>
     <% } %>
 </div>
