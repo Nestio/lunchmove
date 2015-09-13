@@ -47,7 +47,7 @@ var Router = Backbone.Router.extend({
         $.when(moves.fetch(), spots.fetch()).done(function(){
             var listView = new LunchMovesView({
                 model: move,
-                collection: moves
+                collection: moves.groupBySpot()
             });
             regionManager.get('main').show(listView);
         });

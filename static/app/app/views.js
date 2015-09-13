@@ -34,10 +34,7 @@ var EmptyView = Marionette.ItemView.extend({
     template: _.template(EmptyTpl)
 });
 
-var LunchMovesView = Marionette.CompositeView.extend({
-    emptyView: EmptyView,
-    childView: LunchMoveView,
-    childViewContainer: 'ul',
+var LunchMovesView = Marionette.ItemView.extend({
     template: _.template(LunchMovesTpl),
     childViewOptions: function(){
         return {

@@ -8,6 +8,18 @@ var Moves = Backbone.Collection.extend({
     url: '/json/moves/',
     parse: function(response){
         return response.results;
+    },
+    groupBySpot: function(){
+        return this.reduce(function(collection, move){
+            var model = collection.add({id: move.get('spot')});
+
+            if (!model.has('moves'){
+                model.set('moves', new Backbone.Collection());
+            }
+
+            model.get('moves').add(move);
+
+        }, new Backbone.Collection());
     }
 });
 
