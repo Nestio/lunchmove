@@ -1,5 +1,6 @@
-from django.db import models
 import datetime
+from django.db import models
+from django.utils import timezone
 
 class Spot(models.Model):
     name = models.CharField(max_length=200)
@@ -9,7 +10,7 @@ class Spot(models.Model):
 
 class MoveManager(models.Manager):
     def recent(self):
-        start = datetime.datetime.now() - datetime.timedelta(hours=6)
+        start = timezone.now() - datetime.timedelta(hours=6)
         return self.filter(updated_at__gte=start).order_by('-updated_at')
 
 class Move(models.Model):
