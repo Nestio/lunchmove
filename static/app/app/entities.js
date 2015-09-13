@@ -1,7 +1,16 @@
 var channel = Backbone.Radio.channel('global');
 
+
+
 var Move = Backbone.Model.extend({
     urlRoot: '/json/moves/'
+});
+
+var GroupedMoves = Backbone.Collection.extend({
+    comparator: function(model){
+        var moves = model.get('moves');
+        return moves ? -moves.length : 0;
+    }
 });
 
 var Moves = Backbone.Collection.extend({
@@ -14,13 +23,13 @@ var Moves = Backbone.Collection.extend({
             var model = collection.add({id: move.get('spot')});
 
             if (!model.has('moves')){
-                model.set('moves', new Backbone.Collection());
+                model.set('moves', new Moves());
             }
 
             model.get('moves').add(move);
 
             return collection;
-        }, new Backbone.Collection());
+        }, new GroupedMoves());
     }
 });
 
