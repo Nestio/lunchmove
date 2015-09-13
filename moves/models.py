@@ -7,6 +7,9 @@ class Spot(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    def __unicode__(self):
+        return self.name
+
 
 class MoveManager(models.Manager):
     def recent(self):
@@ -21,3 +24,6 @@ class Move(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     uuid = models.UUIDField(blank=True, null=True)
+
+    def __unicode__(self):
+        return u'%s is going to %s' % (self.user, self.spot.name)
