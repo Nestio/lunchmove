@@ -10,32 +10,32 @@ var Spot = require('app/entities').Spot;
 var channel = Backbone.Radio.channel('global');
 
 var LunchMoveView = Marionette.ItemView.extend({
-    tagName: 'li',
-    className: 'list-group-item',
-    edit: function(e){
-        Backbone.history.navigate('', {trigger: true});
-        e.preventDefault();
-    },
-    events: {
-        'click a': 'edit'
-    },
+    // edit: function(e){
+    //     Backbone.history.navigate('', {trigger: true});
+    //     e.preventDefault();
+    // },
+    // events: {
+    //     'click a': 'edit'
+    // },
+    tagName: 'row',
     template: _.template(LunchMoveTpl),
     templateHelpers: function(){
         return {
-            spotName: channel.request('entities:spots').get(this.model.get('spot')).get('name'),
-            isOwnMove: this.getOption('ownMove').id === this.model.id
+            spotName: channel.request('entities:spots').get(this.model.id).get('name'),
+            isOwnMove: this.getOption('ownMove').get('spot') === this.model.id
         }
     }
 });
 
 var EmptyView = Marionette.ItemView.extend({
-    tagName: 'li',
-    className: 'list-group-item',
     template: _.template(EmptyTpl)
 });
 
-var LunchMovesView = Marionette.ItemView.extend({
+var LunchMovesView = Marionette.CompositeView.extend({
     template: _.template(LunchMovesTpl),
+    childView: LunchMoveView,
+    emptyView: EmptyView,
+    childViewContainer: '.moves-container',
     childViewOptions: function(){
         return {
             ownMove: this.model

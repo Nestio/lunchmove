@@ -1,5 +1,16 @@
-<strong><%= isOwnMove ? 'You' : user %></strong> <%= isOwnMove ? 'are' : 'is' %> going to <strong><%= spotName %></strong>
-<% if (isOwnMove) { %>
-    <a href='../'>edit</a>
-<% } %>
-<em class="pull-right"><%= moment(updated_at).format('h:mm:ss a') %></em>
+<div class="spot-name col-md-6">
+    <strong><%= spotName %></span>
+</div>
+<div class="spot-moves col-md-6">
+    <% moves.each(function(move){ %>
+        <div class="move">
+            <span class="move-icon">1</span>
+            <span class="move-name"><%= isOwnMove ? 'You' : move.get('user') %></span>
+        </div>
+    <% }) %>
+    <% if (!isOwnMove) { %>
+        <div class="move">
+            <span>1</span>
+        </div>
+    <% } %>
+</div>
