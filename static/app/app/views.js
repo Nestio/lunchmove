@@ -76,7 +76,7 @@ var LunchMovesView = Marionette.CompositeView.extend({
             previousModel.get('moves').remove(this.model.id);
             previousModel.trigger('change:moves');
         }
-        debugger;
+
         var newModel = this.collection.get(this.model.get('spot'));
         newModel.get('moves').add(this.model);
         newModel.trigger('change:moves');
