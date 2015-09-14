@@ -8,11 +8,11 @@
                 <span class="glyphicon glyphicon-user"></span>
             </div>
             <div class="move-name">
-                <span><%= isOwnMove ? 'You' : move.get('user') %></span>
+                <span><%= isOwnMove(move) ? 'You' : move.get('user') %></span>
             </div>
         </div>
     <% }) %>
-    <% if (!isOwnMove) { %>
+    <% if (!hasOwnMove) { %>
         <div class="move move-new" data-ui="addMove">
             <div class="move-icon">
                 <span class="glyphicon glyphicon-plus"></span>

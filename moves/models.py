@@ -31,7 +31,7 @@ class Move(models.Model):
         root = 'https://api.hipchat.com/v2/room/%s/notification' % settings.HIPCHAT_ROOM_ID
         params = {'auth_token': settings.HIPCHAT_AUTH_TOKEN}
         data = {'color': 'green', 'message': self.__unicode__(), 'notify': True, 'message_format': 'text'}
-        r = requests.post(root, params=params, data=data)s
+        r = requests.post(root, params=params, data=data)
         super(Move, self).save(*args, **kwargs)
 
     def __unicode__(self):

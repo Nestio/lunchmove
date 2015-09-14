@@ -10,6 +10,9 @@ var Spot = require('app/entities').Spot;
 var channel = Backbone.Radio.channel('global');
 
 var LunchMoveView = Marionette.ItemView.extend({
+    modelEvents: {
+        'change:moves': 'render'
+    },
     edit: function(e){
         Backbone.history.navigate('', {trigger: true});
         e.preventDefault();
@@ -22,22 +25,25 @@ var LunchMoveView = Marionette.ItemView.extend({
     },
     addMove: function(){
         var view = this;
-
         var ownMove = channel.request('entities:move')
         ownMove.save({
             spot: this.model.id
         }).done(function(){
             var moves = channel.request('entities:moves');
             moves.add(ownMove, {merge: true});
-            view.trigger('add:move');
+            ownMove.trigger('update');
         });
     },
     className: 'row move-row',
     template: _.template(LunchMoveTpl),
     templateHelpers: function(){
+        var ownMove =  channel.request('entities:move');
         return {
             spotName: channel.request('entities:spots').get(this.model.id).get('name'),
-            isOwnMove: channel.request('entities:move').get('spot') === this.model.id
+            isOwnMove: function(move){
+                return ownMove.id === move.id;
+            },
+            hasOwnMove: !!this.model.get('moves').get(ownMove.id)
         }
     }
 });
@@ -47,17 +53,33 @@ var EmptyView = Marionette.ItemView.extend({
 });
 
 var LunchMovesView = Marionette.CompositeView.extend({
-    childEvents: {
-        'add:move': 'recalculateMoves'
+    modelEvents: {
+        'update': 'recalculateMoves'
     },
     template: _.template(LunchMovesTpl),
     childView: LunchMoveView,
     emptyView: EmptyView,
     childViewContainer: '.moves-container',
     recalculateMoves: function(){
-        var moves = channel.request('entities:moves');
-        this.collection = moves.groupBySpot();
-        this.render();
+        var previousSpot;
+
+        this.collection.each(function(model){
+            model.get('moves').each(function(move){
+                if (move.id === this.model.id) {
+                    previousSpot = model.id;
+                }
+            }, this);
+        }, this);
+
+        if (previousSpot) {
+            var previousModel = this.collection.get(previousSpot);
+            previousModel.get('moves').remove(this.model.id);
+            previousModel.trigger('change:moves');
+        }
+        debugger;
+        var newModel = this.collection.get(this.model.get('spot'));
+        newModel.get('moves').add(this.model);
+        newModel.trigger('change:moves');
     }
 });
 
