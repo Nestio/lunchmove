@@ -111,3 +111,19 @@ REST_FRAMEWORK = {
 
 HIPCHAT_ROOM_ID = os.environ['HIPCHAT_ROOM_ID']
 HIPCHAT_AUTH_TOKEN = os.environ['HIPCHAT_AUTH_TOKEN']
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': os.getenv('DJANGO_LOG_LEVEL', 'ERROR'),
+        },
+    },
+}
