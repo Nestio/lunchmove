@@ -49,6 +49,7 @@ var LunchMoveView = Marionette.ItemView.extend({
 });
 
 var EmptyView = Marionette.ItemView.extend({
+    className: 'row',
     template: _.template(EmptyTpl)
 });
 
