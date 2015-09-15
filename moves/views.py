@@ -16,11 +16,15 @@ def index(request):
     user_uuid = request.session.get('user_uuid') or str(uuid.uuid4())
     request.session['user_uuid'] = user_uuid
     request.session.set_expiry(None)
-    try:
-        move = Move.objects.get(uuid=user_uuid, updated_at__gte=timezone.now() - datetime.timedelta(hours=6))
+
+    move = Move.objects.filter(uuid=user_uuid).order_by('-updated_at').first()
+    if move and move.updated_at >= timezone.now() - datetime.timedelta(hours=6):
         move = MoveSerializer(move).data
-    except Move.DoesNotExist:
+    elif move:
+        move = {'user': move.user}
+    else:
         move = {}
+
     return render(request, 'moves/index.html', {'recent_move': json.dumps(move)})
 
 class MoveViewSet(viewsets.ModelViewSet):
