@@ -35,4 +35,4 @@ class Move(models.Model):
         super(Move, self).save(*args, **kwargs)
 
     def __unicode__(self):
-        return u'%s is going to %s' % (self.user, self.spot.name)
+        return u'%s is going to eat %s' % (self.user, self.spot.name)
