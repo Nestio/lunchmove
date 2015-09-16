@@ -1,5 +1,6 @@
 import datetime
 import requests
+import json
 from django.db import models
 from django.utils import timezone
 from django.conf import settings
@@ -11,7 +12,6 @@ class Spot(models.Model):
 
     def __unicode__(self):
         return self.name
-
 
 class MoveManager(models.Manager):
     def recent(self):
@@ -28,11 +28,25 @@ class Move(models.Model):
     uuid = models.UUIDField(blank=True, null=True)
 
     def save(self, *args, **kwargs):
+        self.post_to_slack()
+        super(Move, self).save(*args, **kwargs)
+
+    def post_to_hipchat(self):
         root = 'https://api.hipchat.com/v2/room/%s/notification' % settings.HIPCHAT_ROOM_ID
         params = {'auth_token': settings.HIPCHAT_AUTH_TOKEN}
         data = {'color': 'green', 'message': self.__unicode__(), 'notify': True, 'message_format': 'text'}
         r = requests.post(root, params=params, data=data)
-        super(Move, self).save(*args, **kwargs)
+
+    def post_to_slack(self):
+        root = settings.SLACK_URL
+        data = {
+            "channel": settings.SLACK_ROOM,
+            "username": "lunchmove",
+            "text": self.__unicode__(),
+            "icon_emoji": ":fork_and_knife:"
+        }
+        r = requests.post(root, json=data)
+        print 'response from slack: %s' % r.text
 
     def __unicode__(self):
         return u'%s is going to eat %s' % (self.user, self.spot.name)

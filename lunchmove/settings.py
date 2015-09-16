@@ -111,6 +111,8 @@ REST_FRAMEWORK = {
 
 HIPCHAT_ROOM_ID = os.environ['HIPCHAT_ROOM_ID']
 HIPCHAT_AUTH_TOKEN = os.environ['HIPCHAT_AUTH_TOKEN']
+SLACK_URL = os.environ['SLACK_URL']
+SLACK_ROOM = os.environ['SLACK_ROOM']
 
 LOGGING = {
     'version': 1,
