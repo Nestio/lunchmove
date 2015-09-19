@@ -3,7 +3,10 @@ var channel = Backbone.Radio.channel('global');
 
 
 var Move = Backbone.Model.extend({
-    urlRoot: '/json/moves/'
+    urlRoot: '/json/moves/',
+    defaults: {
+        time: moment()
+    }
 });
 
 var GroupedMoves = Backbone.Collection.extend({
@@ -14,6 +17,7 @@ var GroupedMoves = Backbone.Collection.extend({
 });
 
 var Moves = Backbone.Collection.extend({
+    model: Move,
     url: '/json/moves/',
     parse: function(response){
         return response.results;

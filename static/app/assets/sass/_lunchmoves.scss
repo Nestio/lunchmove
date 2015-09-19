@@ -28,6 +28,16 @@
                     height: 30px;
                     line-height: 30px;
                     text-align: center;
+
+                    &.move-time {
+                        font-size: 18px;
+                        letter-spacing: -1px;
+                        font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+                    }
+
+                    &.move-name {
+
+                    }
                 }
 
                 &.move-new {

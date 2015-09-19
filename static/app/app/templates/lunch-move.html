@@ -1,11 +1,11 @@
-<div class="spot-name col-md-6">
+<div class="spot-name col-md-3">
     <span><%= spotName %></span>
 </div>
-<div class="spot-moves col-md-6">
+<div class="spot-moves col-md-9">
     <% moves.each(function(move){ %>
         <div class="move">
-            <div class="move-icon">
-                <span class="glyphicon glyphicon-user"></span>
+            <div class="move-time">
+                <span><%= move.get('time').format('h:mm') %></span>
             </div>
             <div class="move-name">
                 <span><%= isOwnMove(move) ? 'You' : move.get('user') %></span>

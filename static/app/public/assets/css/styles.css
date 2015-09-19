@@ -12159,6 +12159,11 @@ header.main-header {
         height: 30px;
         line-height: 30px;
         text-align: center; }
+        .moves-container .move-row .spot-moves .move > div.move-time {
+          background-color: #f9f9f9;
+          font-size: 18px;
+          letter-spacing: -1px;
+          font-family: Menlo, Monaco, Consolas, "Courier New", monospace; }
       .moves-container .move-row .spot-moves .move.move-new {
         opacity: .4;
         color: #555555; }
