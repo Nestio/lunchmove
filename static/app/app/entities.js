@@ -4,8 +4,9 @@ var channel = Backbone.Radio.channel('global');
 
 var Move = Backbone.Model.extend({
     urlRoot: '/json/moves/',
-    defaults: {
-        time: moment()
+    parse: function(response){
+        response.time = moment(response.time || undefined);
+        return response;
     }
 });
 

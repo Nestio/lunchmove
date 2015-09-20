@@ -116,6 +116,11 @@ var MoveFormView = Marionette.ItemView.extend({
         if (spot) {
             var spotName = channel.request('entities:spots').get(spot).get('name');
             this.ui.spot.typeahead('val', spotName);
+            this.ui.spotId.val(spot);
+        }
+        var time = this.model.get('time');
+        if (time) {
+            this.ui.time.val( moment(time).format('h:mm') );
         }
     },
     onShow: function(){
@@ -147,7 +152,7 @@ var MoveFormView = Marionette.ItemView.extend({
         e.preventDefault();
         var spotId = this.ui.spotId.val();
         var time = this.parseTime();
-        console.log(time);
+
         if (spotId && time) {
             this.model.save({
                 spot: spotId,
