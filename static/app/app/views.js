@@ -146,9 +146,9 @@ var MoveFormView = Marionette.ItemView.extend({
     onFormSubmit: function(e){
         e.preventDefault();
         var spotId = this.ui.spotId.val();
-        var time = this.ui.time.val();
-
-        if (spotId) {
+        var time = this.parseTime();
+        console.log(time);
+        if (spotId && time) {
             this.model.save({
                 spot: spotId,
                 time: time
@@ -158,6 +158,15 @@ var MoveFormView = Marionette.ItemView.extend({
                 }, this)
             });
         }
+    },
+    parseTime: function(){
+        var string = this.ui.time.val();
+        var split = string.split(':').map(function(num){return +num; });
+        if (split[0] < 6) {
+            split[0] += 12;
+        }
+
+        return moment(split.join(':'), 'hh:mm').format();
     },
     onSpotBlur: function(){
         var spots = channel.request('entities:spots');
