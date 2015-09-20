@@ -23,7 +23,7 @@ class Move(models.Model):
 
     user = models.CharField(max_length=50)
     spot = models.ForeignKey(Spot)
-    time = models.DateField(blank=True, null=True)
+    time = models.DateTimeField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     uuid = models.UUIDField(blank=True, null=True)
