@@ -1,7 +1,7 @@
 var LunchMovesView = require('app/views').LunchMovesView;
 var MoveFormView = require('app/views').MoveFormView;
-var HeaderView = require('app/views').HeaderView;
 var LoadingView = require('app/views').LoadingView;
+var LayoutView = require('app/views').LayoutView;
 
 var Move = require('app/entities').Move;
 var channel = Backbone.Radio.channel('global');
@@ -12,28 +12,10 @@ var regionManager = new Marionette.RegionManager({
     }
 });
 
-var headerView = new HeaderView();
-
 var Router = Backbone.Router.extend({
     routes: {
-        "": "makeMove",
+        "": "showMove",
         "moves": "showMoves",
-    },
-
-    makeMove: function() {
-        regionManager.get('main').show(new LoadingView());
-        var move = channel.request('entities:move');
-        var spots = channel.request('entities:spots');
-
-        headerView.activate('makeMove');
-
-        spots.fetch().done(function(){
-            var formView = new MoveFormView({
-                model: move
-            });
-
-            regionManager.get('main').show(formView);
-        });
     },
 
     showMoves: function() {
@@ -42,14 +24,13 @@ var Router = Backbone.Router.extend({
         var moves = channel.request('entities:moves');
         var spots = channel.request('entities:spots');
 
-        headerView.activate('showMoves');
-
         $.when(moves.fetch(), spots.fetch()).done(function(){
-            var listView = new LunchMovesView({
+            var layoutView = new LayoutView({
                 model: move,
                 collection: moves.groupBySpot()
             });
-            regionManager.get('main').show(listView);
+
+            regionManager.get('main').show(layoutView);
         });
     }
 

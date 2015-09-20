@@ -1,4 +1,5 @@
 var fs = require('fs');
+var LayoutTpl = fs.readFileSync(__dirname + '/templates/layout.html', 'utf8');
 var EmptyTpl = fs.readFileSync(__dirname + '/templates/empty-moves.html', 'utf8');
 var LunchMoveTpl = fs.readFileSync(__dirname + '/templates/lunch-move.html', 'utf8');
 var LunchMovesTpl = fs.readFileSync(__dirname + '/templates/lunch-moves.html', 'utf8');
@@ -201,22 +202,24 @@ var MoveFormView = Marionette.ItemView.extend({
     }
 });
 
-var HeaderView = Marionette.ItemView.extend({
-    el: '#header',
-    events: {
-        'click a': 'navigate'
+var LayoutView = Marionette.LayoutView.extend({
+    template: _.template(LayoutTpl),
+    regions: {
+        'form': '[data-region="form"]',
+        'moves': '[data-region="moves"]'
     },
-    template: false,
-    activate: function(methodName){
-        this.$('.navbar-nav li').removeClass('active');
-        this.$('[data-action="' + methodName + '"]').addClass('active');
-    },
-    navigate: function(e){
-        e.preventDefault();
-        var route = $(e.currentTarget).attr('href').replace('../', '');
-        Backbone.history.navigate(route, {trigger: true});
+    onShow: function(){
+        this.showChildView('form', new MoveFormView({
+            model: this.model
+        }));
+
+        this.showChildView('moves', new LunchMovesView({
+            model: this.model,
+            collection: this.collection
+        }));
     }
 });
+
 
 var LoadingView = Marionette.ItemView.extend({
     template: _.template(LoadingTpl)
@@ -228,5 +231,5 @@ module.exports = {
     LunchMovesView: LunchMovesView,
     LoadingView: LoadingView,
     MoveFormView: MoveFormView,
-    HeaderView: HeaderView
+    LayoutView: LayoutView
 }
