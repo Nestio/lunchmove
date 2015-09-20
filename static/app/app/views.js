@@ -91,19 +91,13 @@ var MoveFormView = Marionette.ItemView.extend({
         'form': 'form',
         'spot': '[name="spot"]',
         'spotId': '[name="spot_id"]',
-        'user': '[name="user"]'
+        'time': '[name="time"]'
     },
     events: {
         'typeahead:select @ui.spot': 'onTypeaheadSelect',
         'click [data-action="addSpot"]': 'addSpot',
-        'change @ui.form': 'onFormChange',
-        'blur @ui.spot': 'onSpotBlur',
-        'keydown input': function(e){
-            if (e.keyCode === 13) {
-                e.preventDefault();
-                $(e.currentTarget).blur();
-            }
-        }
+        'submit @ui.form': 'onFormSubmit',
+        'blur @ui.spot': 'onSpotBlur'
     },
     addSpot: function(){
         var spot = new Spot({
@@ -118,11 +112,7 @@ var MoveFormView = Marionette.ItemView.extend({
         });
     },
     deserializeModel: function(){
-        var user = this.model.get('user');
-        if (user) {
-            this.ui.user.val(user);
-        }
-        var spot = this.model.get('spot')
+        var spot = this.model.get('spot');
         if (spot) {
             var spotName = channel.request('entities:spots').get(spot).get('name');
             this.ui.spot.typeahead('val', spotName);
@@ -153,24 +143,19 @@ var MoveFormView = Marionette.ItemView.extend({
             }
         });
     },
-    onFormChange: function(){
-        if (this._disableSaving) {
-            return;
-        }
-
+    onFormSubmit: function(e){
+        e.preventDefault();
         var spotId = this.ui.spotId.val();
-        var user = this.ui.user.val();
+        var time = this.ui.time.val();
 
-        if (spotId && user) {
-            this._disableSaving = true;
-
+        if (spotId) {
             this.model.save({
                 spot: spotId,
-                user: user
+                time: time
             }, {
-                success: function(){
-                    Backbone.history.navigate('/moves', {trigger: true});
-                }
+                success: _.bind(function(){
+                    this.model.trigger('update');
+                }, this)
             });
         }
     },
