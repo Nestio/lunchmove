@@ -12056,118 +12056,108 @@ button.close {
     -webkit-transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg);
             transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg); } }
 
-.lunch-move-form {
-  background-color: white; }
-  .lunch-move-form .question {
-    margin-bottom: 100px; }
-  @media (max-width: 768px) {
-    .lunch-move-form .form-group {
-      display: inline-block;
-      margin-bottom: 0;
-      vertical-align: middle; } }
-  .lunch-move-form .form-group .form-control[type=text] {
-    font-size: 21px;
-    text-align: center;
-    border: 0px;
-    border-bottom: 1px solid black;
-    border-radius: 0px;
-    box-shadow: none;
-    width: 180px; }
-  .lunch-move-form .form-group .twitter-typeahead,
-  .lunch-move-form .form-group .tt-query,
-  .lunch-move-form .form-group .tt-hint {
-    margin-bottom: 0; }
-  .lunch-move-form .form-group .twitter-typeahead {
-    background-color: #fff;
-    width: 100%; }
-  .lunch-move-form .form-group .twitter-typeahead:focus {
-    border: 2px solid #0097cf; }
-  .lunch-move-form .form-group .tt-query {
-    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075); }
-  .lunch-move-form .form-group .tt-hint {
-    display: none;
-    color: #999; }
-  .lunch-move-form .form-group .tt-menu {
-    margin-top: -1px;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    z-index: 1000;
-    display: none;
-    float: left;
-    min-width: 180px;
-    padding: 0px;
-    list-style: none;
-    font-size: 14px;
-    background-color: #ffffff;
-    border-top: 1px solid black; }
-  .lunch-move-form .form-group .tt-suggestion, .lunch-move-form .form-group .tt-empty {
-    display: block;
-    padding: 3px 20px;
-    clear: both;
-    font-weight: normal;
-    color: #333333;
-    border: 1px solid black;
-    border-top: 0px;
-    width: 100%; }
-  .lunch-move-form .form-group .tt-suggestion:hover {
-    color: #ffffff;
-    text-decoration: none;
-    outline: 0;
-    background-color: #428bca;
-    cursor: pointer; }
-  .lunch-move-form .form-group .tt-suggestion.tt-cursor {
-    color: #fff;
-    background-color: #0097cf; }
-  .lunch-move-form .form-group .tt-suggestion p {
-    margin: 0; }
-  .lunch-move-form .form-group .tt-empty {
-    text-align: center; }
-
 header.main-header {
   box-shadow: 0 0 3px rgba(0, 0, 0, 0.8); }
-  header.main-header .navbar-header h1 {
-    font-size: 48px;
-    font-variant: small-caps; }
-  header.main-header #navbar .navbar-nav {
-    padding-left: 20px; }
-    header.main-header #navbar .navbar-nav li.active {
-      background-color: #f9f9f9; }
-    header.main-header #navbar .navbar-nav li a {
-      padding-top: 47px; }
+  header.main-header .lunch-move-form {
+    font-size: 21px; }
+    @media (max-width: 767px) {
+      header.main-header .lunch-move-form .form-group {
+        display: inline-block;
+        margin-bottom: 0;
+        vertical-align: middle; } }
+    header.main-header .lunch-move-form .form-group .form-control[type=text] {
+      font-size: 21px;
+      text-align: center;
+      border: 0px;
+      border-bottom: 1px solid black;
+      border-radius: 0px;
+      box-shadow: none;
+      width: 180px; }
+    header.main-header .lunch-move-form .form-group .twitter-typeahead,
+    header.main-header .lunch-move-form .form-group .tt-query,
+    header.main-header .lunch-move-form .form-group .tt-hint {
+      margin-bottom: 0; }
+    header.main-header .lunch-move-form .form-group .twitter-typeahead {
+      background-color: #fff;
+      width: 100%; }
+    header.main-header .lunch-move-form .form-group .twitter-typeahead:focus {
+      border: 2px solid #0097cf; }
+    header.main-header .lunch-move-form .form-group .tt-query {
+      box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075); }
+    header.main-header .lunch-move-form .form-group .tt-hint {
+      display: none;
+      color: #999; }
+    header.main-header .lunch-move-form .form-group .tt-menu {
+      margin-top: -1px;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      z-index: 1000;
+      display: none;
+      float: left;
+      min-width: 180px;
+      padding: 0px;
+      list-style: none;
+      background-color: #ffffff;
+      border-top: 1px solid black; }
+    header.main-header .lunch-move-form .form-group .tt-suggestion, header.main-header .lunch-move-form .form-group .tt-empty {
+      display: block;
+      padding: 3px 20px;
+      clear: both;
+      font-weight: normal;
+      color: #333333;
+      border: 1px solid black;
+      border-top: 0px;
+      width: 100%; }
+    header.main-header .lunch-move-form .form-group .tt-suggestion:hover {
+      color: #ffffff;
+      text-decoration: none;
+      outline: 0;
+      background-color: #428bca;
+      cursor: pointer; }
+    header.main-header .lunch-move-form .form-group .tt-suggestion.tt-cursor {
+      color: #fff;
+      background-color: #0097cf; }
+    header.main-header .lunch-move-form .form-group .tt-suggestion p {
+      margin: 0; }
+    header.main-header .lunch-move-form .form-group .tt-empty {
+      text-align: center; }
 
 .loading-container {
   text-align: center;
   margin-top: 200px; }
 
-.moves-container .move-row {
+.move-row {
   border-bottom: 1px solid black; }
-  .moves-container .move-row:last-child {
+  .move-row:last-child {
     border-bottom: 1px solid transparent; }
-  .moves-container .move-row .spot-name, .moves-container .move-row .spot-moves {
+  .move-row .spot-name, .move-row .spot-moves {
     min-height: 60px; }
-  .moves-container .move-row .spot-name {
+  .move-row .spot-name {
     text-align: right;
     font-size: 24px;
     line-height: 60px; }
-  .moves-container .move-row .spot-moves {
+  .move-row .spot-moves {
     border-left: 1px solid black; }
-    .moves-container .move-row .spot-moves .move {
+    .move-row .spot-moves .move {
       display: inline-block;
       min-width: 60px; }
-      .moves-container .move-row .spot-moves .move > div {
+      .move-row .spot-moves .move > div {
         height: 30px;
         line-height: 30px;
         text-align: center; }
-        .moves-container .move-row .spot-moves .move > div.move-time {
+        .move-row .spot-moves .move > div.move-time {
           font-size: 18px;
           letter-spacing: -1px;
           font-family: Menlo, Monaco, Consolas, "Courier New", monospace; }
-      .moves-container .move-row .spot-moves .move.move-new {
+      .move-row .spot-moves .move.move-new {
         opacity: .4;
         color: #555555; }
-        .moves-container .move-row .spot-moves .move.move-new:hover {
+        .move-row .spot-moves .move.move-new:hover {
           opacity: 1;
           cursor: pointer; }
+  .move-row.your-move {
+    margin-top: 30px;
+    margin-bottom: 30px; }
 
 /*# sourceMappingURL=sourcemaps/styles.css.map */
