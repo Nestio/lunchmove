@@ -55,6 +55,7 @@ var EmptyView = Marionette.ItemView.extend({
 });
 
 var LunchMovesView = Marionette.CompositeView.extend({
+    className: 'lunch-moves-list',
     modelEvents: {
         'update': 'recalculateMoves'
     },

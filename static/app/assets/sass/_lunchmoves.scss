@@ -1,11 +1,36 @@
-.move-row {
+.lunch-moves-list {
+    margin-top: 60px;
+    background-color: white;
+}
 
-    border-bottom: 1px solid black;
+.moves-title {
+    min-height: 120px;
+    line-height: 120px;
+    margin-bottom: 20px;
+    font-size: 48px;
+    text-align: center;
+    position: relative;
 
-    &:last-child {
-        border-bottom: 1px solid transparent;
+    .row > div{
+        z-index: 2;
     }
 
+    .lunch-moves-background {
+        z-index: 1;
+        opacity: .3;
+        background: url('../images/food-bg.jpg') no-repeat bottom center;
+        background-size: cover;
+        top: 0px;
+        bottom: 0px;
+        right: 0px;
+        left: 0px;
+        position: absolute;
+    }
+}
+
+.move-row {
+    background-color: white;
+    margin-bottom: 10px;
     .spot-name, .spot-moves {
         min-height: 60px;
     }
@@ -17,7 +42,6 @@
     }
 
     .spot-moves {
-        border-left: 1px solid black;
 
         .move {
             display: inline-block;

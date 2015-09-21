@@ -1,0 +1,17 @@
+body {
+    min-height: 800px;
+}
+
+.background {
+    position: fixed;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    opacity: .3;
+    z-index: 0;
+}
+
+#app {
+    z-index: 1;
+}
