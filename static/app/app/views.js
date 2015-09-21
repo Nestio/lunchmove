@@ -91,13 +91,16 @@ var MoveFormView = Marionette.ItemView.extend({
         'form': 'form',
         'spot': '[name="spot"]',
         'spotId': '[name="spot_id"]',
-        'time': '[name="time"]'
+        'time': '[name="time"]',
+        'submit': '[type="submit"]'
     },
     events: {
         'typeahead:select @ui.spot': 'onTypeaheadSelect',
         'click [data-action="addSpot"]': 'addSpot',
         'submit @ui.form': 'onFormSubmit',
-        'blur @ui.spot': 'onSpotBlur'
+        'blur @ui.spot': 'onSpotBlur',
+        'change @ui.form': 'toggleSaveButton',
+        'input input[type="text"]': 'toggleSaveButton'
     },
     addSpot: function(){
         var spot = new Spot({
@@ -119,13 +122,27 @@ var MoveFormView = Marionette.ItemView.extend({
             this.ui.spotId.val(spot);
         }
         var time = this.model.get('time');
+
         if (time) {
             this.ui.time.val( moment(time).format('h:mm') );
         }
     },
+    serializeForm: function(){
+        var data = {};
+        var spotId = this.ui.spotId.val();
+        if (spotId) {
+            data.spot = spotId;
+        }
+        var time = this.parseTime();
+        if (time) {
+            data.time = time;
+        }
+        return data;
+    },
     onShow: function(){
         this.renderTypeahead();
         this.deserializeModel();
+        this.toggleSaveButton();
     },
     renderTypeahead: function(){
         var spots = new Bloodhound({
@@ -148,16 +165,16 @@ var MoveFormView = Marionette.ItemView.extend({
             }
         });
     },
+    toggleSaveButton: function(){
+        var data = this.serializeForm();
+        var isComplete = _.has(data, 'time') && _.has(data, 'spot')
+        this.ui.submit.toggleClass('disabled', !isComplete);
+    },
     onFormSubmit: function(e){
         e.preventDefault();
-        var spotId = this.ui.spotId.val();
-        var time = this.parseTime();
-
-        if (spotId && time) {
-            this.model.save({
-                spot: spotId,
-                time: time
-            }, {
+        var data = this.serializeForm();
+        if (!_.isEmpty(data)){
+            this.model.save(data, {
                 success: _.bind(function(){
                     this.model.trigger('update');
                 }, this)
@@ -166,6 +183,8 @@ var MoveFormView = Marionette.ItemView.extend({
     },
     parseTime: function(){
         var string = this.ui.time.val();
+        if (!string || !string.match(/\d{1,2}:\d{2}/)){ return ''; }
+
         var split = string.split(':').map(function(num){return +num; });
         if (split[0] < 6) {
             split[0] += 12;
