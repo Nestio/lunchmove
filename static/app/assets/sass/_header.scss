@@ -1,5 +1,5 @@
 header.main-header {
-    box-shadow: 0 0 3px rgba(0,0,0,0.8);
+    border-bottom: 1px solid black;
 
     .lunch-move-form {
         font-size: 21px;
@@ -100,4 +100,15 @@ header.main-header {
 
     }
 
+    &.focused {
+        [type="submit"] {
+            display: inline-block;
+        }
+
+        box-shadow: 0 0 3px rgba(0,0,0,0.8);
+    }
+
+    [type="submit"] {
+        display: none;
+    }
 }

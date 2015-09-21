@@ -12057,7 +12057,7 @@ button.close {
             transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg); } }
 
 header.main-header {
-  box-shadow: 0 0 3px rgba(0, 0, 0, 0.8); }
+  border-bottom: 1px solid black; }
   header.main-header .lunch-move-form {
     font-size: 21px; }
     @media (max-width: 767px) {
@@ -12122,6 +12122,12 @@ header.main-header {
       margin: 0; }
     header.main-header .lunch-move-form .form-group .tt-empty {
       text-align: center; }
+  header.main-header.focused {
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.8); }
+    header.main-header.focused [type="submit"] {
+      display: inline-block; }
+  header.main-header [type="submit"] {
+    display: none; }
 
 .loading-container {
   text-align: center;
