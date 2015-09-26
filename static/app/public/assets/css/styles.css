@@ -12065,6 +12065,9 @@ button.close {
     border-radius: 0px;
     box-shadow: none; }
 
+.modal-backdrop {
+  background-color: #d9534f; }
+
 .lunch-move-form {
   background-color: white;
   font-size: 32px; }
@@ -12217,6 +12220,9 @@ header.main-header {
   text-align: center;
   margin-top: 200px; }
 
+.your-move {
+  padding-top: 30px; }
+
 .lunch-moves-list {
   margin-top: 60px;
   background-color: white; }
@@ -12252,7 +12258,8 @@ header.main-header {
     line-height: 60px; }
   .move-row .spot-moves .move {
     display: inline-block;
-    min-width: 60px; }
+    min-width: 60px;
+    border: 1px solid transparent; }
     .move-row .spot-moves .move > div {
       height: 30px;
       line-height: 30px;
@@ -12267,11 +12274,34 @@ header.main-header {
       .move-row .spot-moves .move.move-new:hover {
         opacity: 1;
         cursor: pointer; }
+    .move-row .spot-moves .move.own-move:hover {
+      cursor: pointer;
+      border-color: #d9534f;
+      color: #d9534f; }
   .move-row.your-move {
     margin-top: 30px;
     margin-bottom: 30px; }
 
-#app .btn, #modal .btn {
-  border-radius: 0px; }
+#app, #modal {
+  font-weight: 200; }
+  #app .btn, #modal .btn {
+    border-radius: 0px;
+    font-weight: 200; }
+    #app .btn.btn-default:hover, #app .btn.btn-default .active, #modal .btn.btn-default:hover, #modal .btn.btn-default .active {
+      color: #d9534f;
+      border-color: #d9534f;
+      background-color: white; }
+  #app h1, #app h2, #app h3, #app h4, #app h5, #app h6, #app .h1, #app .h2, #app .h3, #app .h4, #app .h5, #app .h6, #modal h1, #modal h2, #modal h3, #modal h4, #modal h5, #modal h6, #modal .h1, #modal .h2, #modal .h3, #modal .h4, #modal .h5, #modal .h6 {
+    font-weight: 100; }
+
+.lunch-move-header {
+  padding: 15px 0;
+  border-bottom: 1px solid black; }
+  .lunch-move-header h1 {
+    margin: 0px;
+    text-align: center;
+    font-size: 48px;
+    font-weight: 100;
+    text-shadow: 0px 0px 5px #d9534f; }
 
 /*# sourceMappingURL=sourcemaps/styles.css.map */

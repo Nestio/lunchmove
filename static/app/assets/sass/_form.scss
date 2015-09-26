@@ -11,11 +11,14 @@
             .modal-content {
                 border-radius: 0px;
                 box-shadow: none;
-
             }
 
         }
     }
+}
+
+.modal-backdrop {
+    background-color: $brand-danger;
 }
 
 .lunch-move-form {

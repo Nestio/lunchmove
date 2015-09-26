@@ -20,21 +20,20 @@ var LunchMoveView = Marionette.ItemView.extend({
         e.preventDefault();
     },
     events: {
-        'click @ui.addMove': 'addMove'
+        'click @ui.addMove': 'addMove',
+        'click @ui.editMove': 'addMove'
     },
     ui: {
+        'editMove': '.own-move',
         'addMove': '[data-ui="addMove"]'
     },
-    addMove: function(){
-        var view = this;
-        var ownMove = channel.request('entities:move')
-        ownMove.save({
-            spot: this.model.id
-        }).done(function(){
-            var moves = channel.request('entities:moves');
-            moves.add(ownMove, {merge: true});
-            ownMove.trigger('update');
-        });
+    addMove: function(e){
+        e.preventDefault();
+        var ownMove = channel.request('entities:move');
+        ownMove.set('spot', this.model.id);
+        var view = new MoveFormView({model: ownMove});
+        channel.command('show:modal', view);
+        return false;
     },
     className: 'row move-row',
     template: _.template(LunchMoveTpl),
@@ -181,7 +180,7 @@ var MoveFormView = ModalForm.extend({
     toggleSaveButton: function(){
         var data = this.serializeForm();
         var isComplete = _.has(data, 'time') && _.has(data, 'spot')
-        this.ui.submit.toggleClass('disabled', !isComplete);
+        this.ui.submit.toggleClass('hidden', !isComplete);
     },
     onFormSubmit: function(e){
         e.preventDefault();
@@ -191,6 +190,9 @@ var MoveFormView = ModalForm.extend({
                 success: _.bind(function(){
                     this.model.trigger('update');
                     this.$el.modal('hide');
+                    var moves = channel.request('entities:moves');
+                    moves.add(this.model, {merge: true});
+                    this.model.trigger('update');
                 }, this)
             });
         }
@@ -266,9 +268,11 @@ var LayoutView = Marionette.LayoutView.extend({
         'moves': '[data-region="moves"]'
     },
     onShow: function(){
-        this.showChildView('yourMove', new YourMoveView({
-            model: this.model
-        }));
+        if (!this.model.get('spot')) {
+            this.showChildView('yourMove', new YourMoveView({
+                model: this.model
+            }));
+        }
 
         this.showChildView('moves', new LunchMovesView({
             model: this.model,

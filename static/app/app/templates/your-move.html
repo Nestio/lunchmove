@@ -1,16 +1,8 @@
-<div class="container">
+<div class="container your-move">
     <div class="row">
         <div class="col-sm-12 text-center">
-        <% if (false) { %>
-        <h1>You are going to <%= spotName %>
-            <% if (time) { %>
-                at <%= moment(time).format('h:mm') %>
-            <% } %>
-        </h1>
-        <button type="button" data-ui="editMove" class="btn btn-default">Edit</button>
-        <% } else { %>
-            <h1>Where are you going?</h1>
-            <button type="button" data-ui="editMove" class="btn btn-primary">Choose</button>
+        <% if (!spot) { %>
+            <button type="button" data-ui="editMove" class="btn btn-default btn-lg">Where are you going?</button>
         <% } %>
         </div>
     </div>

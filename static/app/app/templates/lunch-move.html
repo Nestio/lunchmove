@@ -1,9 +1,9 @@
-<div class="spot-name col-md-3">
+<div class="spot-name col-md-6">
     <span><%= spotName %></span>
 </div>
-<div class="spot-moves col-md-9">
+<div class="spot-moves col-md-6">
     <% moves.each(function(move){ %>
-        <div class="move">
+        <div class="move <%= isOwnMove(move) ? 'own-move' : '' %>">
             <div class="move-time">
                 <span><%= move.get('time').format('h:mm') %></span>
             </div>

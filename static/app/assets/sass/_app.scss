@@ -1,5 +1,38 @@
 #app, #modal {
+
     .btn {
         border-radius: 0px;
+        font-weight: 200;
+
+        &.btn-default {
+            &:hover, .active {
+                color: $brand-danger;
+                border-color: $brand-danger;
+                background-color: white;
+            }
+        }
+
     }
+
+
+
+    h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
+        font-weight: 100;
+    }
+
+    font-weight: 200;
+}
+
+.lunch-move-header {
+    padding: 15px 0;
+    border-bottom: 1px solid black;
+    h1 {
+        margin: 0px;
+        text-align: center;
+        font-size: 48px;
+        font-weight: 100;
+        text-shadow:
+            0px 0px 5px $brand-danger;
+    }
+
 }

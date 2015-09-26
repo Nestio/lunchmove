@@ -1,3 +1,7 @@
+.your-move {
+    padding-top: 30px;
+}
+
 .lunch-moves-list {
     margin-top: 60px;
     background-color: white;
@@ -46,6 +50,7 @@
         .move {
             display: inline-block;
             min-width: 60px;
+            border: 1px solid transparent;
 
             > div {
                 height: 30px;
@@ -70,6 +75,14 @@
                 &:hover {
                     opacity: 1;
                     cursor: pointer;
+                }
+            }
+
+            &.own-move {
+                &:hover {
+                    cursor: pointer;
+                    border-color: $brand-danger;
+                    color: $brand-danger;
                 }
             }
         }
