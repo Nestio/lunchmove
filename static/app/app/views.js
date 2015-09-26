@@ -180,7 +180,7 @@ var MoveFormView = ModalForm.extend({
     },
     toggleSaveButton: function(){
         var data = this.serializeForm();
-        var isComplete = _.has(data, 'name');
+        var isComplete = _.has(data, 'time') && _.has(data, 'spot')
         this.ui.submit.toggleClass('hidden', !isComplete);
     },
     onFormSubmit: function(e){
@@ -241,7 +241,7 @@ var NameView = ModalForm.extend({
     template: _.template(NameFormTpl),
     ui: {
         'form': 'form',
-        'spot': '[name="name"]',
+        'user': '[name="user"]',
         'submit': '[type="submit"]'
     },
     events: {
@@ -254,12 +254,12 @@ var NameView = ModalForm.extend({
     },
     toggleSaveButton: function(){
         var data = this.serializeForm();
-        var isComplete = _.has(data, 'time') && _.has(data, 'spot')
+        var isComplete = _.has(data, 'user');
         this.ui.submit.toggleClass('hidden', !isComplete);
     },
     serializeForm: function(){
-        var name = this.ui.name.val();
-        return (name) ? {name: name} : name;
+        var user = this.ui.user.val();
+        return (user) ? {user: user} : user;
     },
     onFormSubmit: function(e){
         e.preventDefault();
@@ -267,6 +267,10 @@ var NameView = ModalForm.extend({
         if (!_.isEmpty(data)){
             this.model.set(data);
             this.$el.modal('hide');
+            setTimeout(_.bind(function(){
+                var view = new MoveFormView({model: this.model});
+                channel.command('show:modal', view);
+            }, this), 1);
         }
     },
 });
@@ -282,7 +286,8 @@ var YourMoveView = Marionette.ItemView.extend({
     template: _.template(YourMoveTpl),
     editMove: function(e){
         e.preventDefault();
-        var view = new MoveFormView({model: this.model});
+        var ViewClass = this.model.get('user') ? MoveFormView : NameView;
+        var view = new ViewClass({model: this.model});
         channel.command('show:modal', view);
         return false;
     },
