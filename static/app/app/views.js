@@ -87,8 +87,18 @@ var LunchMovesView = Marionette.CompositeView.extend({
     }
 });
 
-var MoveFormView = Marionette.ItemView.extend({
+var ModalForm = Marionette.ItemView.extend({
     className: 'modal',
+    _defaultEvents: {
+        'hide.bs.modal': 'destroy'
+    },
+    constructor: function(){
+        this.events = _.extend(this._defaultEvents, this.events);
+        Marionette.ItemView.prototype.constructor.apply(this, arguments);
+    }
+});
+
+var MoveFormView = ModalForm.extend({
     template: _.template(MoveFormTpl),
     ui: {
         'form': 'form',
@@ -181,7 +191,6 @@ var MoveFormView = Marionette.ItemView.extend({
                 success: _.bind(function(){
                     this.model.trigger('update');
                     this.$el.modal('hide');
-                    this.destroy();
                 }, this)
             });
         }
