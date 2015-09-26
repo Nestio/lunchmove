@@ -9,13 +9,17 @@ var channel = Backbone.Radio.channel('global');
 var regionManager = new Marionette.RegionManager({
     regions: {
         main: '#app',
+        modal: '#modal'
     }
+});
+
+channel.comply('show:modal', function(view){
+    regionManager.get('modal').show(view);
 });
 
 var Router = Backbone.Router.extend({
     routes: {
-        "": "showMove",
-        "moves": "showMoves",
+        "": "showMoves",
     },
 
     showMoves: function() {

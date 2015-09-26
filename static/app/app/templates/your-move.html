@@ -1,0 +1,17 @@
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12 text-center">
+        <% if (spot) { %>
+        <h1>You are going to <%= spotName %>
+            <% if (time) { %>
+                at <%= time.format('h:mm') %>
+            <% } %>
+        </h1>
+        <button type="button" data-ui="editMove" class="btn btn-default">Edit</button>
+        <% } else { %>
+            <h1>Where are you going?</h1>
+            <button type="button" data-ui="editMove" class="btn btn-primary">Choose</button>
+        <% } %>
+        </div>
+    </div>
+</div>

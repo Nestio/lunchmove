@@ -1,6 +1,11 @@
 var channel = Backbone.Radio.channel('global');
 
 var Move = Backbone.Model.extend({
+    defaults: {
+        name: null,
+        spot: null,
+        time: null
+    },
     urlRoot: '/json/moves/',
     parse: function(response){
         response.time = moment(response.time || undefined);

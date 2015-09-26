@@ -1,5 +1,6 @@
 var fs = require('fs');
 var LayoutTpl = fs.readFileSync(__dirname + '/templates/layout.html', 'utf8');
+var YourMoveTpl = fs.readFileSync(__dirname + '/templates/your-move.html', 'utf8');
 var EmptyTpl = fs.readFileSync(__dirname + '/templates/empty-moves.html', 'utf8');
 var LunchMoveTpl = fs.readFileSync(__dirname + '/templates/lunch-move.html', 'utf8');
 var LunchMovesTpl = fs.readFileSync(__dirname + '/templates/lunch-moves.html', 'utf8');
@@ -241,14 +242,25 @@ var MoveFormView = Marionette.ItemView.extend({
     }
 });
 
+var YourMoveView = Marionette.ItemView.extend({
+    template: _.template(YourMoveTpl),
+    templateHelpers: function(){
+        var spots = channel.request('entities:spots');
+        return {
+            spotName: this.model.has('spot') ? spots.get(this.model.get('spot')).get('name') : ''
+        }
+    }
+});
+
+
 var LayoutView = Marionette.LayoutView.extend({
     template: _.template(LayoutTpl),
     regions: {
-        'form': '[data-region="form"]',
+        'yourMove': '[data-region="yourMove"]',
         'moves': '[data-region="moves"]'
     },
     onShow: function(){
-        this.showChildView('form', new MoveFormView({
+        this.showChildView('yourMove', new YourMoveView({
             model: this.model
         }));
 
