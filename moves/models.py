@@ -51,4 +51,7 @@ class Move(models.Model):
         print 'response from slack: %s' % r.text
 
     def __unicode__(self):
-        return u'%s is going to eat %s' % (self.user, self.spot.name)
+        root = u'%s is going to eat %s' % (self.user, self.spot.name)
+        if self.time:
+            root = '%s at %s' % (root, self.time.strftime('%-I:%M'))
+        return root
