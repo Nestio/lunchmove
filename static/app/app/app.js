@@ -1,3 +1,4 @@
+$(function(){
 require('app/constants');
 
 var Router = require('app/router');
@@ -25,3 +26,4 @@ channel.reply('entities:move', function(){
 new Router();
 
 Backbone.history.start({pushState: true});
+});

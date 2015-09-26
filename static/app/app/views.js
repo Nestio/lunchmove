@@ -88,11 +88,7 @@ var LunchMovesView = Marionette.CompositeView.extend({
 });
 
 var MoveFormView = Marionette.ItemView.extend({
-    tagName: 'header',
-    className: 'navbar navbar-static-top main-header',
-    attributes: {
-        id: 'header'
-    },
+    className: 'modal',
     template: _.template(MoveFormTpl),
     ui: {
         'form': 'form',
@@ -102,17 +98,12 @@ var MoveFormView = Marionette.ItemView.extend({
         'submit': '[type="submit"]'
     },
     events: {
-        'click': 'focusForm',
         'typeahead:select @ui.spot': 'onTypeaheadSelect',
         'click [data-action="addSpot"]': 'addSpot',
         'submit @ui.form': 'onFormSubmit',
         'blur @ui.spot': 'onSpotBlur',
         'change @ui.form': 'toggleSaveButton',
         'input input[type="text"]': 'toggleSaveButton'
-    },
-    initialize: function(){
-        this.listenTo(channel, 'form:focus', this.formFocus);
-        this.listenTo(channel, 'form:blur', this.formBlur);
     },
     addSpot: function(){
         var spot = new Spot({
@@ -155,9 +146,6 @@ var MoveFormView = Marionette.ItemView.extend({
         this.renderTypeahead();
         this.deserializeModel();
         this.toggleSaveButton();
-        if (!this.model.has('spot')){
-            this.formFocus();
-        }
     },
     renderTypeahead: function(){
         var spots = new Bloodhound({
@@ -191,8 +179,9 @@ var MoveFormView = Marionette.ItemView.extend({
         if (!_.isEmpty(data)){
             this.model.save(data, {
                 success: _.bind(function(){
-                    this.blurForm();
                     this.model.trigger('update');
+                    this.$el.modal('hide');
+                    this.destroy();
                 }, this)
             });
         }
@@ -233,19 +222,27 @@ var MoveFormView = Marionette.ItemView.extend({
         return {
             spots: channel.request('entities:spots').toJSON()
         }
-    },
-    focusForm: function(){
-        this.$el.addClass('focused');
-    },
-    blurForm: function(){
-        this.$el.removeClass('focused');
     }
 });
 
+
 var YourMoveView = Marionette.ItemView.extend({
+    ui: {
+        'editMove': '[data-ui="editMove"]'
+    },
+    events: {
+        'click @ui.editMove': 'editMove'
+    },
     template: _.template(YourMoveTpl),
+    editMove: function(e){
+        e.preventDefault();
+        var view = new MoveFormView({model: this.model});
+        channel.command('show:modal', view);
+        return false;
+    },
     templateHelpers: function(){
         var spots = channel.request('entities:spots');
+
         return {
             spotName: this.model.has('spot') ? spots.get(this.model.get('spot')).get('name') : ''
         }

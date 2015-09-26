@@ -15,6 +15,7 @@ var regionManager = new Marionette.RegionManager({
 
 channel.comply('show:modal', function(view){
     regionManager.get('modal').show(view);
+    view.$el.modal();
 });
 
 var Router = Backbone.Router.extend({
