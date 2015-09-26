@@ -261,6 +261,9 @@ var NameView = ModalForm.extend({
 
 
 var YourMoveView = Marionette.ItemView.extend({
+    modelEvents: {
+        'change:spot': 'destroy'
+    },
     ui: {
         'editMove': '[data-ui="editMove"]'
     },
