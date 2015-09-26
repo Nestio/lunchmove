@@ -12087,7 +12087,7 @@ button.close {
     border-bottom: 1px solid black;
     border-radius: 0px;
     box-shadow: none;
-    width: 180px; }
+    width: 270px; }
   .lunch-move-form .form-group .twitter-typeahead,
   .lunch-move-form .form-group .tt-query,
   .lunch-move-form .form-group .tt-hint {
@@ -12110,10 +12110,10 @@ button.close {
     z-index: 1000;
     display: none;
     float: left;
-    min-width: 180px;
+    min-width: 270px;
     padding: 0px;
     list-style: none;
-    font-size: 14px;
+    font-size: 32px;
     background-color: #ffffff;
     border-top: 1px solid black; }
   .lunch-move-form .form-group .tt-suggestion, .lunch-move-form .form-group .tt-empty {

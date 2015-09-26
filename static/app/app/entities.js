@@ -37,6 +37,9 @@ var Moves = Backbone.Collection.extend({
 
             return collection;
         }, new GroupedMoves());
+    },
+    comparator: function(model){
+        return moment(model.get('time')).valueOf();
     }
 });
 

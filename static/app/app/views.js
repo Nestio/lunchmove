@@ -32,7 +32,8 @@ var LunchMoveView = Marionette.ItemView.extend({
         e.preventDefault();
         var ownMove = channel.request('entities:move');
         ownMove.set('spot', this.model.id);
-        var view = new MoveFormView({model: ownMove});
+        var ViewClass = this.model.get('user') ? MoveFormView : NameView;
+        var view = new ViewClass({model: ownMove});
         channel.command('show:modal', view);
         return false;
     },
@@ -164,7 +165,7 @@ var MoveFormView = ModalForm.extend({
     toggleSaveButton: function(){
         var data = this.serializeForm();
         var isComplete = _.has(data, 'time') && _.has(data, 'spot')
-        this.ui.submit.toggleClass('hidden', !isComplete);
+        this.ui.submit.toggleClass('disabled', !isComplete);
     },
     onFormSubmit: function(e){
         e.preventDefault();
@@ -238,7 +239,7 @@ var NameView = ModalForm.extend({
     toggleSaveButton: function(){
         var data = this.serializeForm();
         var isComplete = _.has(data, 'user');
-        this.ui.submit.toggleClass('hidden', !isComplete);
+        this.ui.submit.toggleClass('disabled', !isComplete);
     },
     serializeForm: function(){
         var user = this.ui.user.val();
