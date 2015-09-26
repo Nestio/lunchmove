@@ -79,9 +79,7 @@
             }
 
             &.own-move {
-                .move-name > span, .move-time > span {
-                    text-shadow: 0px 0px 1px $brand-danger;
-                }
+                border-bottom-color: black;
 
                 &:hover {
                     cursor: pointer;

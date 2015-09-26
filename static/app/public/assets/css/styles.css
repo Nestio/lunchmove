@@ -12274,12 +12274,12 @@ header.main-header {
       .move-row .spot-moves .move.move-new:hover {
         opacity: 1;
         cursor: pointer; }
-    .move-row .spot-moves .move.own-move .move-name > span, .move-row .spot-moves .move.own-move .move-time > span {
-      text-shadow: 0px 0px 1px #d9534f; }
-    .move-row .spot-moves .move.own-move:hover {
-      cursor: pointer;
-      border-color: #d9534f;
-      color: #d9534f; }
+    .move-row .spot-moves .move.own-move {
+      border-bottom-color: black; }
+      .move-row .spot-moves .move.own-move:hover {
+        cursor: pointer;
+        border-color: #d9534f;
+        color: #d9534f; }
   .move-row.your-move {
     margin-top: 30px;
     margin-bottom: 30px; }
@@ -12297,11 +12297,10 @@ header.main-header {
     font-weight: 100; }
 
 .lunch-move-header {
-  padding: 15px 0;
+  padding: 15px 30px;
   border-bottom: 1px solid black; }
   .lunch-move-header h1 {
     margin: 0px;
-    text-align: center;
     font-size: 48px;
     font-weight: 100;
     text-shadow: 0px 0px 5px #d9534f; }
