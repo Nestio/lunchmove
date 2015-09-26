@@ -6,6 +6,7 @@ var LunchMoveTpl = fs.readFileSync(__dirname + '/templates/lunch-move.html', 'ut
 var LunchMovesTpl = fs.readFileSync(__dirname + '/templates/lunch-moves.html', 'utf8');
 var LoadingTpl = fs.readFileSync(__dirname + '/templates/loading.html', 'utf8');
 var MoveFormTpl = fs.readFileSync(__dirname + '/templates/lunch-move-form.html', 'utf8');
+var NameFormTpl = fs.readFileSync(__dirname + '/templates/name-form.html', 'utf8');
 var EmptyQueryTpl = fs.readFileSync(__dirname + '/templates/empty-query.html', 'utf8');
 var Spot = require('app/entities').Spot;
 
@@ -179,7 +180,7 @@ var MoveFormView = ModalForm.extend({
     },
     toggleSaveButton: function(){
         var data = this.serializeForm();
-        var isComplete = _.has(data, 'time') && _.has(data, 'spot')
+        var isComplete = _.has(data, 'name');
         this.ui.submit.toggleClass('hidden', !isComplete);
     },
     onFormSubmit: function(e){
@@ -234,6 +235,40 @@ var MoveFormView = ModalForm.extend({
             spots: channel.request('entities:spots').toJSON()
         }
     }
+});
+
+var NameView = ModalForm.extend({
+    template: _.template(NameFormTpl),
+    ui: {
+        'form': 'form',
+        'spot': '[name="name"]',
+        'submit': '[type="submit"]'
+    },
+    events: {
+        'submit @ui.form': 'onFormSubmit',
+        'change @ui.form': 'toggleSaveButton',
+        'input input[type="text"]': 'toggleSaveButton'
+    },
+    onShow: function(){
+        this.toggleSaveButton();
+    },
+    toggleSaveButton: function(){
+        var data = this.serializeForm();
+        var isComplete = _.has(data, 'time') && _.has(data, 'spot')
+        this.ui.submit.toggleClass('hidden', !isComplete);
+    },
+    serializeForm: function(){
+        var name = this.ui.name.val();
+        return (name) ? {name: name} : name;
+    },
+    onFormSubmit: function(e){
+        e.preventDefault();
+        var data = this.serializeForm();
+        if (!_.isEmpty(data)){
+            this.model.set(data);
+            this.$el.modal('hide');
+        }
+    },
 });
 
 
