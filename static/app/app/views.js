@@ -65,25 +65,8 @@ var LunchMovesView = Marionette.CompositeView.extend({
     emptyView: EmptyView,
     childViewContainer: '.moves-container',
     recalculateMoves: function(){
-        var previousSpot;
-
-        this.collection.each(function(model){
-            model.get('moves').each(function(move){
-                if (move.id === this.model.id) {
-                    previousSpot = model.id;
-                }
-            }, this);
-        }, this);
-
-        if (previousSpot) {
-            var previousModel = this.collection.get(previousSpot);
-            previousModel.get('moves').remove(this.model.id);
-            previousModel.trigger('change:moves');
-        }
-
-        var newModel = this.collection.get(this.model.get('spot'));
-        newModel.get('moves').add(this.model);
-        newModel.trigger('change:moves');
+        this.collection = channel.request('entities:moves').groupBySpot();
+        this.render();
     }
 });
 

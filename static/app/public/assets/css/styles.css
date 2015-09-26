@@ -12274,6 +12274,8 @@ header.main-header {
       .move-row .spot-moves .move.move-new:hover {
         opacity: 1;
         cursor: pointer; }
+    .move-row .spot-moves .move.own-move .move-name > span, .move-row .spot-moves .move.own-move .move-time > span {
+      text-shadow: 0px 0px 1px #d9534f; }
     .move-row .spot-moves .move.own-move:hover {
       cursor: pointer;
       border-color: #d9534f;

@@ -8,7 +8,13 @@
                 <span><%= move.get('time').format('h:mm') %></span>
             </div>
             <div class="move-name">
-                <span><%= isOwnMove(move) ? 'You' : move.get('user') %></span>
+                <span>
+                    <% if (isOwnMove(move)) { %>
+                        You <span class="glyphicon glyphicon-pencil"></span>
+                    <% } else { %>
+                        <%- move.get('user') %>
+                    <% } %>
+                </span>
             </div>
         </div>
     <% }) %>

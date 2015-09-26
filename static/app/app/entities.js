@@ -15,8 +15,7 @@ var Move = Backbone.Model.extend({
 
 var GroupedMoves = Backbone.Collection.extend({
     comparator: function(model){
-        var moves = model.get('moves');
-        return moves ? -moves.length : 0;
+        return channel.request('entities:spots').get(model.id).get('name');
     }
 });
 
