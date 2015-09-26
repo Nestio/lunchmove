@@ -39,11 +39,11 @@ Migrate your database, create a superuser and run the server:
 ### Front end dependencies and development:
 
 The front end assets are located in the public/assets folder. Packages are managed via NPM and Bower. To install the front end assets, navigate to the folder and run the following commands:
-   $ cd static/app
-   $ npm install
-   $ npm run setup
+    $ cd static/app
+    $ npm install
+    $ npm run setup
 
 During development, to recompile the javascript and stylesheets:
-   $ gulp build
+    $ gulp build
 
 The compiled javascript and stylesheets are checked into repository, so if you make any changes to them, make sure they've been recompiled before pushing.
