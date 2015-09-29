@@ -14,6 +14,14 @@ var ModalForm = Marionette.ItemView.extend({
         this.events = _.extend(this._defaultEvents, this.events);
         Marionette.ItemView.prototype.constructor.apply(this, arguments);
     }
+    // deserializeModel: function(){
+    //     _.each(this.fields, function(modelField, fieldName){
+    //         this.getField(name).val(this.model.get(modelField));
+    //     });
+    // },
+    // getField: function(name){
+    //     return this.$('[name="' + name + '"');
+    // }
 });
 
 var MoveFormView = ModalForm.extend({
@@ -118,6 +126,22 @@ var MoveFormView = ModalForm.extend({
     },
     parseTime: function(){
         var string = this.ui.time.val();
+
+        var wordMap = {
+            'rightnow': 1,
+            'immediately': 1,
+            'now': 1,
+            'soonish': 15,
+            'soon': 15,
+            'later': 60
+        };
+
+        var stringVal = wordMap[string.replace(/\W+/g, '').toLowerCase()];
+
+        if (stringVal ) {
+            return moment().add(stringVal, 'm').format();
+        }
+
         if (!string || !string.match(/\d{1,2}:\d{2}/)){ return ''; }
 
         var split = string.split(':').map(function(num){return +num; });
