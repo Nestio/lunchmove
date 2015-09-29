@@ -1,5 +1,4 @@
-var LunchMovesView = require('app/views').LunchMovesView;
-var MoveFormView = require('app/views').MoveFormView;
+require('app/form-views');
 var LoadingView = require('app/views').LoadingView;
 var LayoutView = require('app/views').LayoutView;
 
