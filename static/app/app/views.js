@@ -164,13 +164,13 @@ var MoveFormView = ModalForm.extend({
     },
     toggleSaveButton: function(){
         var data = this.serializeForm();
-        var isComplete = _.has(data, 'time') && _.has(data, 'spot')
+        var isComplete = _.has(data, 'time') && _.has(data, 'spot');
         this.ui.submit.toggleClass('disabled', !isComplete);
     },
     onFormSubmit: function(e){
         e.preventDefault();
         var data = this.serializeForm();
-        if (!_.isEmpty(data)){
+        if (_.has(data, 'time') && _.has(data, 'spot')){
             this.model.save(data, {
                 success: _.bind(function(){
                     this.model.trigger('update');
