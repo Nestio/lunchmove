@@ -5,7 +5,6 @@ var EmptyTpl = fs.readFileSync(__dirname + '/templates/empty-moves.html', 'utf8'
 var LunchMoveTpl = fs.readFileSync(__dirname + '/templates/lunch-move.html', 'utf8');
 var LunchMovesTpl = fs.readFileSync(__dirname + '/templates/lunch-moves.html', 'utf8');
 var LoadingTpl = fs.readFileSync(__dirname + '/templates/loading.html', 'utf8');
-var Spot = require('app/entities').Spot;
 
 var channel = Backbone.Radio.channel('global');
 

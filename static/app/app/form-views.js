@@ -2,6 +2,7 @@ var fs = require('fs');
 var MoveFormTpl = fs.readFileSync(__dirname + '/templates/lunch-move-form.html', 'utf8');
 var NameFormTpl = fs.readFileSync(__dirname + '/templates/name-form.html', 'utf8');
 var EmptyQueryTpl = fs.readFileSync(__dirname + '/templates/empty-query.html', 'utf8');
+var Spot = require('app/entities').Spot;
 
 var channel = Backbone.Radio.channel('global');
 
