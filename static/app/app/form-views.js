@@ -143,9 +143,11 @@ var MoveFormView = ModalForm.extend({
             return moment().add(stringVal, 'm').format();
         }
 
-        if (!string || !string.match(/\d{1,2}:\d{2}/)){ return ''; }
+        var numVal = string.replace(/([^:0-9])/g, '');
 
-        var split = string.split(':').map(function(num){return +num; });
+        if (!numVal || !numVal.match(/\d{1,2}:\d{2}/)){ return ''; }
+
+        var split = numVal.split(':').map(function(num){return +num; });
         if (split[0] < 6) {
             split[0] += 12;
         }
