@@ -1,18 +1,16 @@
 var gulp = require('gulp');
-var concat = require('gulp-concat');
-var mainBowerFiles = require('main-bower-files');
 var browserify = require('browserify');
 var source = require('vinyl-source-stream');
+var buffer = require('vinyl-buffer');
 var watchify = require('watchify');
 var uglify = require('gulp-uglify');
-var buffer = require('vinyl-buffer');
 var sass = require('gulp-sass');
 var sourcemaps = require('gulp-sourcemaps');
 var cssGlobbing = require('gulp-css-globbing');
 var autoprefixer = require('gulp-autoprefixer');
 var minify = require('gulp-minify-css');
 var shell = require('gulp-shell');
-var _ = require('./bower_components/underscore/underscore.js');
+var _ = require('underscore');
 
 
 // App Build Tasks
@@ -23,18 +21,6 @@ gulp.task('bower:update', function(){
         'bower update -F',
         'bower install -F'
     ]));
-});
-
-gulp.task('build:vendor', function(){
-    return gulp.src(mainBowerFiles())
-        .pipe(concat('vendor.js'))
-        .pipe(gulp.dest('./public'));
-});
-
-gulp.task('build:vendor:production', ['build:vendor'], function(){
-    gulp.src('./public/vendor.js')
-        .pipe(uglify())
-        .pipe(gulp.dest('./public'));
 });
 
 gulp.task('build:app', function(){
@@ -79,6 +65,8 @@ function bundleApp(b, transforms) {
     b.pipe(gulp.dest('./public'));
 }
 
+
+
 // SASS & CSS tasks
 
 gulp.task('build:sass', function(){
@@ -97,7 +85,6 @@ gulp.task('watch:sass', function(){
     gulp.watch('./assets/sass/**/*.*', ['build:sass']);
 });
 
-
 // Full Build Tasks
 gulp.task('watch', ['watch:app','watch:sass']);
-gulp.task('build', ['build:vendor','build:app','build:sass']);
+gulp.task('build', ['build:app','build:sass']);
