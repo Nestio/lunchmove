@@ -38,7 +38,7 @@ Migrate your database, create a superuser and run the server:
 
 ### Front end dependencies and development:
 
-The front end assets are located in the public/assets folder. Packages are managed via NPM and Bower. To install the front end assets, navigate to the folder and run the following commands:
+The front end assets are located in the public/assets folder. Packages are managed via NPM. To install the front end assets, navigate to the folder and run the following commands:
 
     $ cd static/app
     $ npm install
