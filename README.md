@@ -26,7 +26,7 @@ Install the dependencies. If this fails on psycipg2, you may need to install lib
 
     $ pip install -r requirements.txt
     
-Some of the python dependencies in requirements.txt might have some issues with installation, in pariculing cffi and the crpyto things. some of the following might be required to get this working:
+Some of the python dependencies in requirements.txt might have some issues with installation, in particular cffi and the crpyto things. some of the following might be required to get this working:
 
     # this installs command line tools on OSX, needed for compiling c libs
     $ xcode-select --install 
