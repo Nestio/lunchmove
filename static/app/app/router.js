@@ -1,9 +1,17 @@
+// Dependencies
+var $ = require('jquery');
+var Backbone = require('backbone');
+var Marionette = require('backbone.marionette');
+var Radio = require('backbone.radio');
+var moment = require('moment');
+
+//App
 require('app/form-views');
 var LoadingView = require('app/views').LoadingView;
 var LayoutView = require('app/views').LayoutView;
 
 var Move = require('app/entities').Move;
-var channel = Backbone.Radio.channel('global');
+var channel = Radio.channel('global');
 
 var regionManager = new Marionette.RegionManager({
     regions: {
@@ -12,7 +20,7 @@ var regionManager = new Marionette.RegionManager({
     }
 });
 
-channel.comply('show:modal', function(view){
+channel.reply('show:modal', function(view){
     regionManager.get('modal').show(view);
     view.$el.modal();
 });

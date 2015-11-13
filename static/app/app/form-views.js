@@ -1,10 +1,20 @@
+//Dependencies
 var fs = require('fs');
+var $ = global.jQuery = require('jquery');
+var _ = require('underscore');
+var Marionette = require('backbone.marionette');
+var Radio = require('backbone.radio');
+var moment = require('moment');
+global.Bloodhound = require('typeahead.js/dist/bloodhound');
+require('typeahead.js/dist/typeahead.jquery');
+
+//App
 var MoveFormTpl = fs.readFileSync(__dirname + '/templates/lunch-move-form.html', 'utf8');
 var NameFormTpl = fs.readFileSync(__dirname + '/templates/name-form.html', 'utf8');
 var EmptyQueryTpl = fs.readFileSync(__dirname + '/templates/empty-query.html', 'utf8');
 var Spot = require('app/entities').Spot;
 
-var channel = Backbone.Radio.channel('global');
+var channel = Radio.channel('global');
 
 var ModalForm = Marionette.ItemView.extend({
     className: 'modal',
@@ -214,15 +224,15 @@ var NameView = ModalForm.extend({
             this.$el.modal('hide');
             setTimeout(_.bind(function(){
                 var view = new MoveFormView({model: this.model});
-                channel.command('show:modal', view);
+                channel.request('show:modal', view);
             }, this), 1);
         }
     },
 });
 
-channel.comply('show:form', function(){
+channel.reply('show:form', function(){
     var ownMove = channel.request('entities:move');
     var ViewClass = ownMove.get('user') ? MoveFormView : NameView;
     var view = new ViewClass({model: ownMove});
-    channel.command('show:modal', view);
+    channel.request('show:modal', view);
 });

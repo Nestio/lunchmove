@@ -1,3 +1,9 @@
+// Dependencies
+var Backbone = require('backbone');
+var Radio = require('backbone.radio');
+var moment = require('moment');
+
+//App
 var channel = Backbone.Radio.channel('global');
 
 var Move = Backbone.Model.extend({

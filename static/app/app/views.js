@@ -1,4 +1,12 @@
+// Dependencies
 var fs = require('fs');
+var $ = require('jquery');
+var _ = require('underscore');
+var Backbone = require('backbone');
+var Marionette = require('backbone.marionette');
+var Radio = require('backbone.radio');
+
+//App
 var LayoutTpl = fs.readFileSync(__dirname + '/templates/layout.html', 'utf8');
 var YourMoveTpl = fs.readFileSync(__dirname + '/templates/your-move.html', 'utf8');
 var EmptyTpl = fs.readFileSync(__dirname + '/templates/empty-moves.html', 'utf8');
@@ -6,7 +14,7 @@ var LunchMoveTpl = fs.readFileSync(__dirname + '/templates/lunch-move.html', 'ut
 var LunchMovesTpl = fs.readFileSync(__dirname + '/templates/lunch-moves.html', 'utf8');
 var LoadingTpl = fs.readFileSync(__dirname + '/templates/loading.html', 'utf8');
 
-var channel = Backbone.Radio.channel('global');
+var channel = Radio.channel('global');
 
 var LunchMoveView = Marionette.ItemView.extend({
     modelEvents: {
@@ -27,7 +35,7 @@ var LunchMoveView = Marionette.ItemView.extend({
     addMove: function(e){
         e.preventDefault();
         channel.request('entities:move').set('spot', this.model.id);
-        channel.command('show:form');
+        channel.request('show:form');
         return false;
     },
     className: 'row move-row',
@@ -78,7 +86,7 @@ var YourMoveView = Marionette.ItemView.extend({
     template: _.template(YourMoveTpl),
     editMove: function(e){
         e.preventDefault();
-        channel.command('show:form');
+        channel.request('show:form');
         return false;
     },
     templateHelpers: function(){
