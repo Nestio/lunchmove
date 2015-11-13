@@ -36,6 +36,10 @@ Some of the python dependencies in requirements.txt might have some issues with 
     
     # and this installs yet another dependency of cffi that pip can't quite seem to do on its own
     $ brew install libpqxx
+    
+    # you might also run into problems installing the cryptography lib on OSX El Capitan because Apple hates you and wants you to suffer
+    # https://github.com/pyca/cryptography/issues/2350
+    $ env LDFLAGS="-L$(brew --prefix openssl)/lib" CFLAGS="-I$(brew --prefix openssl)/include" pip install cryptography
 
 Create a database. On OSX, I'm using [Postgres.app](http://postgresapp.com/) to manage connecting to the database shell.
 
