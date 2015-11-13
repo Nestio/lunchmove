@@ -25,6 +25,17 @@ Then run the activation script:
 Install the dependencies. If this fails on psycipg2, you may need to install libpq, on Mac: `brew install libpqxx`.
 
     $ pip install -r requirements.txt
+    
+Some of the python dependencies in requirements.txt might have some issues with installation, in pariculing cffi and the crpyto things. some of the following might be required to get this working:
+
+    # this installs command line tools on OSX, needed for compiling c libs
+    $ xcode-select --install 
+    
+    # this installs the c libs for ffi, using pkg-config so the appropriate compiler options are automatically used
+    $ brew install pkg-config libffi
+    
+    # and this installs yet another dependency of cffi that pip can't quite seem to do on its own
+    $ brew install libpqxx
 
 Create a database. On OSX, I'm using [Postgres.app](http://postgresapp.com/) to manage connecting to the database shell.
 
