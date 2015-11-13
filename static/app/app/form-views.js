@@ -124,8 +124,10 @@ var MoveFormView = ModalForm.extend({
         e.preventDefault();
         var data = this.serializeForm();
         if (_.has(data, 'time') && _.has(data, 'spot')){
+            this.ui.submit.attr('disabled', true);
             this.model.save(data, {
                 success: _.bind(function(){
+                    this.ui.submit.attr('disabled', true);
                     this.model.trigger('update');
                     this.$el.modal('hide');
                     var moves = channel.request('entities:moves');
