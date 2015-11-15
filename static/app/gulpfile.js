@@ -15,14 +15,6 @@ var _ = require('underscore');
 
 // App Build Tasks
 
-gulp.task('bower:update', function(){
-    gulp.src('').pipe(shell([
-        'bower prune',
-        'bower update -F',
-        'bower install -F'
-    ]));
-});
-
 gulp.task('build:app', function(){
     var b = setupAppBundle();
     bundleApp(b);
