@@ -12,7 +12,6 @@ var YourMoveTpl = fs.readFileSync(__dirname + '/templates/your-move.html', 'utf8
 var EmptyTpl = fs.readFileSync(__dirname + '/templates/empty-moves.html', 'utf8');
 var LunchMoveTpl = fs.readFileSync(__dirname + '/templates/lunch-move.html', 'utf8');
 var LunchMovesTpl = fs.readFileSync(__dirname + '/templates/lunch-moves.html', 'utf8');
-var LoadingTpl = fs.readFileSync(__dirname + '/templates/loading.html', 'utf8');
 
 var channel = Radio.channel('global');
 
@@ -115,12 +114,6 @@ var LayoutView = Marionette.LayoutView.extend({
     }
 });
 
-
-var LoadingView = Marionette.ItemView.extend({
-    template: _.template(LoadingTpl)
-});
-
 module.exports = {
-    LoadingView: LoadingView,
     LayoutView: LayoutView
 }

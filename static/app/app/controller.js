@@ -6,10 +6,10 @@ var Radio = require('backbone.radio');
 //App
 var channel = Radio.channel('global');
 var Move = require('app/entities').Move;
-var LoadingView = require('app/views').LoadingView;
-var LayoutView = require('app/views').LayoutView;
-var MoveFormView = require('app/form-views').MoveFormView;
-var NameView = require('app/form-views').NameView;
+var LoadingView = require('app/common/views').LoadingView;
+var LayoutView = require('app/list/views').LayoutView;
+var MoveFormView = require('app/edit/views').MoveFormView;
+var NameView = require('app/edit/views').NameView;
 
 var Controller = Marionette.Object.extend({
     initialize: function(){
