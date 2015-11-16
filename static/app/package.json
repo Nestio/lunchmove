@@ -39,13 +39,16 @@
     "backbone.marionette": "^2.4.3",
     "backbone.radio": "^1.0.2",
     "backbone.select": "^1.3.2",
+    "backbone.syphon": "git://github.com/nestio/backbone.syphon.git",
     "bootstrap": "^3.3.5",
     "bootstrap-sass": "^3.3.5",
     "jquery": "2.1.1",
     "jquery.cookie": "~1.4.1",
+    "jquery.iframe-transport": "^1.0.0",
     "underscore": "~1.8.3",
     "typeahead.js": "~0.11.1",
     "moment": "~2.8.3",
+    "numeral": "^1.5.3",
     "spinkit": "^1.2.2",
     "vinyl-buffer": "^1.0.0"
   }

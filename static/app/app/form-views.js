@@ -13,6 +13,7 @@ var MoveFormTpl = fs.readFileSync(__dirname + '/templates/lunch-move-form.html',
 var NameFormTpl = fs.readFileSync(__dirname + '/templates/name-form.html', 'utf8');
 var EmptyQueryTpl = fs.readFileSync(__dirname + '/templates/empty-query.html', 'utf8');
 var Spot = require('app/entities').Spot;
+var FormView = require('app/lib/form-view');
 
 var channel = Radio.channel('global');
 
