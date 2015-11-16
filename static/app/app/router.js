@@ -7,18 +7,36 @@ var moment = require('moment');
 
 var channel = Radio.channel('global');
 
+var API = {
+    edit: function(){
+        channel.trigger('call:method', 'edit');
+    },
+    list: function() {
+        channel.trigger('call:method', 'list');
+    }
+};
+
+channel.on('edit', function(){
+    Backbone.history.navigate('edit');
+    API.edit();
+});
+
+channel.on('list', function(){
+    Backbone.history.navigate('');
+    API.list();
+});
+
 var Router = Backbone.Router.extend({
     routes: {
         "": "list",
         "edit": "edit"
     },
     edit: function(){
-        channel.trigger('edit');
+        API.edit();
     },
     list: function() {
-        channel.trigger('list');
+        API.list();
     }
-
 });
 
 module.exports = Router;

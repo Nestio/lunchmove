@@ -1,5 +1,6 @@
 //Dependencies
 var $ = require('jquery');
+var Backbone = require('backbone');
 var Marionette = require('backbone.marionette');
 var Radio = require('backbone.radio');
 
@@ -13,8 +14,11 @@ var NameView = require('app/edit/views').NameView;
 
 var Controller = Marionette.Object.extend({
     initialize: function(){
-        channel.on('list', this.list, this);
-        channel.on('edit', this.edit, this);
+        channel.on('call:method', function(methodName){
+            if (this[methodName]) {
+                this[methodName]();
+            }
+        }, this);
     },
     list: function(){
         var mainRegion = channel.request('get:region', 'main');
@@ -33,6 +37,7 @@ var Controller = Marionette.Object.extend({
         });
     },
     edit: function(){
+        Backbone.history.navigate('edit');
         var move = channel.request('entities:move');
         var spots = channel.request('entities:spots');
 
