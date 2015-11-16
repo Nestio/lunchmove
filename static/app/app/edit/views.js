@@ -96,24 +96,24 @@ var MoveFormView = ModalFormView.extend({
     },
     onSpotBlur: function(){
         var spots = channel.request('entities:spots');
-        var spotId = this.ui.spotId.val();
+        var spotId = this.ui.spot.val();
 
         if (!spotId) {
-            var spotVal = this.ui.spot.typeahead('val');
+            var spotVal = this.ui.spotName.typeahead('val');
             var selectedSpot = spots.find(function(spot){
                 return spot.get('name').toLowerCase() == spotVal.toLowerCase();
             });
 
             if (selectedSpot) {
-                this.ui.spotId.val(selectedSpot.id).change();
+                this.ui.spot.val(selectedSpot.id).change();
                 spotId = selectedSpot.id;
             }
         }
 
-        this.ui.spot.typeahead('val', spotId ? spots.get(+spotId).get('name') : '');
+        this.ui.spotName.typeahead('val', spotId ? spots.get(+spotId).get('name') : '');
     },
     onTypeaheadSelect: function(e, obj){
-        this.ui.spotId.val(obj.id).change();
+        this.ui.spot.val(obj.id).change();
     },
     renderTypeahead: function(){
         var spots = new Bloodhound({
