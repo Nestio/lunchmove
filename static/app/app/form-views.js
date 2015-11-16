@@ -156,8 +156,7 @@ var NameView = ModalFormView.extend({
         this.model.set(data);
         this.$el.modal('hide');
         setTimeout(_.bind(function(){
-            var view = new MoveFormView({model: this.model});
-            channel.request('show:modal', view);
+            channel.trigger('edit');
         }, this), 1);
     },
     onShow: function(){
@@ -165,9 +164,7 @@ var NameView = ModalFormView.extend({
     }
 });
 
-channel.reply('show:form', function(){
-    var ownMove = channel.request('entities:move');
-    var ViewClass = ownMove.get('user') ? MoveFormView : NameView;
-    var view = new ViewClass({model: ownMove});
-    channel.request('show:modal', view);
-});
+module.exports = {
+    NameView: NameView,
+    MoveFormView: MoveFormView
+};

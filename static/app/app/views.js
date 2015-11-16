@@ -20,10 +20,6 @@ var LunchMoveView = Marionette.ItemView.extend({
     modelEvents: {
         'change:moves': 'render'
     },
-    edit: function(e){
-        Backbone.history.navigate('', {trigger: true});
-        e.preventDefault();
-    },
     events: {
         'click @ui.addMove': 'addMove',
         'click @ui.editMove': 'addMove'
@@ -35,7 +31,7 @@ var LunchMoveView = Marionette.ItemView.extend({
     addMove: function(e){
         e.preventDefault();
         channel.request('entities:move').set('spot', this.model.id);
-        channel.request('show:form');
+        channel.trigger('edit');
         return false;
     },
     className: 'row move-row',
@@ -86,7 +82,7 @@ var YourMoveView = Marionette.ItemView.extend({
     template: _.template(YourMoveTpl),
     editMove: function(e){
         e.preventDefault();
-        channel.request('show:form');
+        channel.trigger('edit');
         return false;
     },
     templateHelpers: function(){

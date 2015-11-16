@@ -60,7 +60,7 @@ var MoveTime = module.exports.MoveTime = {
         return moment(split.join(':'), 'hh:mm').format();
     },
     decode: function(val) {
-        return moment(val).format('h:mm');
+        return val ? moment(val).format('h:mm') : '';
     }
 };
 
