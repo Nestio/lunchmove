@@ -37,15 +37,23 @@ var Controller = Marionette.Object.extend({
         });
     },
     edit: function(){
-        Backbone.history.navigate('edit');
         var move = channel.request('entities:move');
         var spots = channel.request('entities:spots');
-
-        $.when(spots.fetch()).done(function(){
+        
+        var callback = function(){
             var ViewClass = move.get('user') ? MoveFormView : NameView;
             var view = new ViewClass({model: move});
             channel.request('show:modal', view);
-        });
+        };
+        
+        if (spots.length) {
+            callback();
+        } else {
+            var mainRegion = channel.request('get:region', 'main');
+            mainRegion.show(new LoadingView());
+            spots.fetch().done(callback);
+        }
+
     }
 });
 
