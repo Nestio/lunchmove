@@ -77,8 +77,19 @@ WSGI_APPLICATION = 'lunchmove.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
 
+# DATABASES = {
+#     'default': dj_database_url.config(default=os.environ['DATABASE_URL'])
+# }
+
 DATABASES = {
-    'default': dj_database_url.config(default=os.environ['DATABASE_URL'])
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'lunchmove_dev1',
+        'USER': 'lunchmove',
+        'PASSWORD': 'lunchmove',
+        'HOST': '127.0.0.1',
+        'PORT': '5432',
+    }
 }
 
 
