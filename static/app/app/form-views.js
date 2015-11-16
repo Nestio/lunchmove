@@ -28,7 +28,7 @@ var ModalFormView = FormView.extend({
     constructor: function(){
         this.events = _.extend(this._modalFormEvents, this.events);
         FormView.prototype.constructor.apply(this, arguments);
-    }
+    },
     isComplete: function(){
         var data = this.serializeForm();
         return _.all(this.requiredFields, function(field){

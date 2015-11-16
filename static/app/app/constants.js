@@ -1,4 +1,5 @@
 // Dependencies
+var Marionette = require('backbone.marionette');
 var Radio = require('backbone.radio');
 var moment = require('moment');
 
@@ -8,6 +9,17 @@ var Constants = {
     RECENT_THRESHOLD: moment().subtract(6, 'hours')
 };
 
-channel.reply('get:constant', function(name){
-    return Constants[name];
-})
+var API = Marionette.Object.extend({
+    initialize: function(){
+        channel.reply('get:constant', function(name){
+            return Constants[name];
+        });
+    },
+    onDestroy: function(){
+        channel.stopReplying('get:constant');
+    }
+});
+
+module.exports = {
+    API: API
+};

@@ -1,5 +1,6 @@
 // Dependencies
 var Backbone = require('backbone');
+var Marionette = require('backbone.marionette');
 var Radio = require('backbone.radio');
 var moment = require('moment');
 
@@ -60,7 +61,33 @@ var Spots = Backbone.Collection.extend({
     }
 });
 
+var spots = new Spots();
+var moves = new Moves();
+var move = new Move(lunchmove.recent_move);
+
+var API = Marionette.Object.extend({
+    initialize: function(){
+        channel.reply('entities:spots', function(){
+            return spots;
+        });
+
+        channel.reply('entities:moves', function(){
+            return moves;
+        });
+
+        channel.reply('entities:move', function(){
+            return move;
+        });
+    }, 
+    onDestroy: function(){
+        channel.stopReplying('entities:spots');
+        channel.stopReplying('entities:moves');
+        channel.stopReplying('entities:move');
+    }
+});
+
 module.exports = {
+    API: API,
     Spots: Spots,
     Moves: Moves,
     Move: Move,
