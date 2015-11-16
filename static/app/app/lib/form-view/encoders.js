@@ -31,6 +31,39 @@ var Date = module.exports.Date = {
     }
 };
 
+var MoveTime = module.exports.MoveTime = {
+    encode: function(val) {
+        var wordMap = {
+            'rightnow': 1,
+            'immediately': 1,
+            'now': 1,
+            'soonish': 15,
+            'soon': 15,
+            'later': 60
+        };
+
+        var stringVal = wordMap[val.replace(/\W+/g, '').toLowerCase()];
+
+        if (stringVal) {
+            return moment().add(stringVal, 'm').format();
+        }
+
+        var numVal = val.replace(/([^:0-9])/g, '');
+
+        if (!numVal || !numVal.match(/\d{1,2}:\d{2}/)){ return ''; }
+
+        var split = numVal.split(':').map(function(num){return +num; });
+        if (split[0] < 6) {
+            split[0] += 12;
+        }
+
+        return moment(split.join(':'), 'hh:mm').format();
+    },
+    decode: function(val) {
+        return moment(val).format('h:mm');
+    }
+};
+
 var Currency = module.exports.Currency = {
     encode: function(val) {
         if (val && regex.currency.test(val)){
