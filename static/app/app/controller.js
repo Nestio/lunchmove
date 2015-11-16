@@ -26,13 +26,12 @@ var Controller = Marionette.Object.extend({
         var move = channel.request('entities:move');
         var moves = channel.request('entities:moves');
         var spots = channel.request('entities:spots');
-
         $.when(moves.fetch(), spots.fetch()).done(function(){
             var layoutView = new LayoutView({
                 model: move,
                 collection: moves.groupBySpot()
             });
-
+        
             mainRegion.show(layoutView);
         });
     },
