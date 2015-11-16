@@ -26,14 +26,30 @@ var ModalForm = Marionette.ItemView.extend({
         this.events = _.extend(this._defaultEvents, this.events);
         Marionette.ItemView.prototype.constructor.apply(this, arguments);
     }
-    // deserializeModel: function(){
-    //     _.each(this.fields, function(modelField, fieldName){
-    //         this.getField(name).val(this.model.get(modelField));
-    //     });
-    // },
-    // getField: function(name){
-    //     return this.$('[name="' + name + '"');
-    // }
+});
+
+var ModalFormView = FormView.extend({
+    className: 'modal',
+    requiredFields: [],
+    isComplete: function(){
+        var data = this.serializeForm();
+        return _.all(this.requiredFields, function(field){
+            return data[field];
+        });
+    },
+    toggleSaveButton: function(){
+        this.ui.saveButton.toggleClass('disabled', !this.isComplete());
+    },
+    _modalFormEvents: {
+        'hide.bs.modal': 'destroy',
+        'change @ui.form': 'toggleSaveButton',
+        'input input[type="text"]': 'toggleSaveButton'
+    },
+    constructor: function(){
+        this.events = _.extend(this._modalFormEvents, this.events);
+        FormView.prototype.constructor.apply(this, arguments);
+        this.on('show', this.toggleSaveButton);
+    }
 });
 
 var MoveFormView = ModalForm.extend({
@@ -195,41 +211,22 @@ var MoveFormView = ModalForm.extend({
     }
 });
 
-var NameView = ModalForm.extend({
+var NameView = ModalFormView.extend({
     template: _.template(NameFormTpl),
-    ui: {
-        'form': 'form',
-        'user': '[name="user"]',
-        'submit': '[type="submit"]'
-    },
-    events: {
-        'submit @ui.form': 'onFormSubmit',
-        'change @ui.form': 'toggleSaveButton',
-        'input input[type="text"]': 'toggleSaveButton'
-    },
-    onShow: function(){
-        this.toggleSaveButton();
-    },
-    toggleSaveButton: function(){
-        var data = this.serializeForm();
-        var isComplete = _.has(data, 'user');
-        this.ui.submit.toggleClass('disabled', !isComplete);
-    },
-    serializeForm: function(){
-        var user = this.ui.user.val();
-        return (user) ? {user: user} : user;
-    },
-    onFormSubmit: function(e){
-        e.preventDefault();
-        var data = this.serializeForm();
-        if (!_.isEmpty(data)){
-            this.model.set(data);
-            this.$el.modal('hide');
-            setTimeout(_.bind(function(){
-                var view = new MoveFormView({model: this.model});
-                channel.request('show:modal', view);
-            }, this), 1);
+    fields: {
+        'user': {
+            rules: 'required'
         }
+    },
+    requiredFields: ['user'],
+    onSubmit: function(e, data){
+        e.preventDefault();
+        this.model.set(data);
+        this.$el.modal('hide');
+        setTimeout(_.bind(function(){
+            var view = new MoveFormView({model: this.model});
+            channel.request('show:modal', view);
+        }, this), 1);
     },
 });
 
