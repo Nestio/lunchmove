@@ -23,3 +23,4 @@ vagrant.json
 *.swp
 *.pgbak
 Gemfile.lock
+lunchmove/conf/active.py
