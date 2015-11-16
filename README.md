@@ -15,7 +15,7 @@ Set the following environment variables in the `lunchmove-env/bin/activate` scri
     export SECRET_KEY=[generate a Django Secret key]
     export HIPCHAT_ROOM_ID=1934389
     export HIPCHAT_AUTH_TOKEN=[get this from Ben]
-    export SLACK_ROOM=test
+    export SLACK_ROOM=lunchmove
     export SLACK_URL=[get this from Ben]
 
 Then run the activation script:
