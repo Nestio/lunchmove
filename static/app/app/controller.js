@@ -33,10 +33,14 @@ var Controller = Marionette.Object.extend({
         });
     },
     edit: function(){
-        var ownMove = channel.request('entities:move');
-        var ViewClass = ownMove.get('user') ? MoveFormView : NameView;
-        var view = new ViewClass({model: ownMove});
-        channel.request('show:modal', view);
+        var move = channel.request('entities:move');
+        var spots = channel.request('entities:spots');
+
+        $.when(spots.fetch()).done(function(){
+            var ViewClass = move.get('user') ? MoveFormView : NameView;
+            var view = new ViewClass({model: move});
+            channel.request('show:modal', view);
+        });
     }
 });
 

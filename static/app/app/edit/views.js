@@ -28,6 +28,9 @@ var ModalFormView = FormView.extend({
     constructor: function(){
         this.events = _.extend(this._modalFormEvents, this.events);
         FormView.prototype.constructor.apply(this, arguments);
+        this.on('destroy', function(){
+            channel.trigger('list');
+        });
     },
     isComplete: function(){
         var data = this.serializeForm();
@@ -37,7 +40,7 @@ var ModalFormView = FormView.extend({
     },
     toggleSaveButton: function(){
         this.ui.saveButton.toggleClass('disabled', !this.isComplete());
-    },
+    }
 });
 
 var MoveFormView = ModalFormView.extend({
@@ -90,9 +93,6 @@ var MoveFormView = ModalFormView.extend({
     },
     onSubmitSuccess: function(e){
         this.$el.modal('hide');
-        var moves = channel.request('entities:moves');
-        moves.add(this.model, {merge: true});
-        this.model.trigger('update');
     },
     onSpotBlur: function(){
         var spots = channel.request('entities:spots');

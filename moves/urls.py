@@ -8,6 +8,6 @@ router.register(r'spots', SpotViewSet)
 
 urlpatterns = [
     url(r'^$', index, name='index'),
-    url(r'^moves$', index, name='index'),
+    url(r'^edit$', index, name='index'),
     url(r'^json/', include(router.urls)),
 ]
