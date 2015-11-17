@@ -25,6 +25,8 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG', False)
+ENV = 'dev' if DEBUG else 'prod'
+
 
 ALLOWED_HOSTS = ['.lunchmove.info', 'lunchmove.herokuapp.com']
 
@@ -77,10 +79,19 @@ WSGI_APPLICATION = 'lunchmove.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
 
-DATABASES = {
-    'default': dj_database_url.config(default=os.environ['DATABASE_URL'])
+dev_db = {
+    'ENGINE': 'django.db.backends.postgresql_psycopg2',
+    'NAME': 'lunchmove_dev1',
+    'USER': 'lunchmove',
+    'PASSWORD': 'lunchmove',
+    'HOST': '127.0.0.1',
+    'PORT': '5432',
 }
+prod_db = dj_database_url.config(default=os.environ['DATABASE_URL'])
 
+DATABASES = {
+    'default': dev_db if ENV == 'dev' else prod_db
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/

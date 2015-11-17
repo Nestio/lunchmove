@@ -15,3 +15,15 @@ lunchmove-env
 # Ignore javascript dependencies
 static/app/bower_components/*
 static/app/node_modules/*
+
+# Ignore .vagrant/ things and other stuff related to local dev env
+\.DS_Store
+\.vagrant
+vagrant.json
+*.swp
+*.pgbak
+Gemfile.lock
+
+
+# VERY IMPORTANT: ignore setup/private because it has sensitive things in it. we'll have to copy these files around between ourselves manually, preferably with charcoal rubbings or perhaps cuneiform tablets
+setup/private/*
