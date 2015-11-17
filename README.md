@@ -1,59 +1,21 @@
 # Lunchmove
 
-### Setting up the environment
+### Setting up the environment and getting started
 
-Make sure you have Virtualenv installed on your local machine.
+This is managed through Vagrant cuz its more awesome. Why have just a virtualenv when you can have a whole virtual machine? yeah, exactly. Here's what you need to do 
 
-Create the virtualenv:
-
-    $ virtualenv lunchmove-env
-
-Set the following environment variables in the `lunchmove-env/bin/activate` script. Some of the secret variables you should get from me:
-
-    export DATABASE_URL=postgres://:@localhost/lunchmove_dev1
-    export DEBUG=True
-    export SECRET_KEY=[generate a Django Secret key]
-    export HIPCHAT_ROOM_ID=1934389
-    export HIPCHAT_AUTH_TOKEN=[get this from Ben]
-    export SLACK_ROOM=test
-    export SLACK_URL=[get this from Ben]
-
-Then run the activation script:
-
-    $ source lunchmove-env/bin/activate
-
-Install the dependencies. If this fails on psycipg2, you may need to install libpq, on Mac: `brew install libpqxx`.
-
-    $ pip install -r requirements.txt
-    
-Some of the python dependencies in requirements.txt might have some issues with installation, in particular cffi and the crpyto things. some of the following might be required to get this working:
-
-    # this installs command line tools on OSX, needed for compiling c libs
-    $ xcode-select --install 
-    
-    # this installs the c libs for ffi, using pkg-config so the appropriate compiler options are automatically used
-    $ brew install pkg-config libffi
-    
-    # and this installs yet another dependency of cffi that pip can't quite seem to do on its own
-    $ brew install libpqxx
-    
-    # you might also run into problems installing the cryptography lib on OSX El Capitan because Apple hates you and wants you to suffer
-    # https://github.com/pyca/cryptography/issues/2350
-    $ env LDFLAGS="-L$(brew --prefix openssl)/lib" CFLAGS="-I$(brew --prefix openssl)/include" pip install cryptography
-    
-    # installing OpenSSL might also be problematic. you might have to manually build and link it, like this
-    $ brew install openssl
-    $ brew link openssl --force
-
-Create a database. On OSX, I'm using [Postgres.app](http://postgresapp.com/) to manage connecting to the database shell.
-
-    $ CREATE DATABASE lunchmove_dev1;
-
-Migrate your database, create a superuser and run the server:
-
-    $ python manage.py migrate
-    $ python manage.py createsuperuser
-    $ python manage.py runserver
+1. Install [VirtualBox](https://www.virtualbox.org/wiki/Downloads) 
+2. Install [Vagrant](https://www.vagrantup.com/)
+3. clone the repo to your development machine
+    1. IMPORTANT: you will need to copy a couple of files into your local filesystem manually because they contain sensitive tokens and we don't want that in a public git repo. ask Dan or Ben or some other person who spends all day on a computer for these. 
+    2. copy `create_db.sql` into `lunchmove/setup/private/create_db.sql`
+    3. copy 'set_env.sh' into `lunchmove/setup/private/set_env.sh`
+4. `host$ vagrant up`
+5. `host$ vagrant ssh`
+6. `vm$ cd /vagrant`
+7. `vm$ python manage.py runserver 0.0.0.0:8080` 
+8. in your browser you can now visit localhost:8080 and have you some lunchmoves
+9. login to slack and check out the lunchmove private channel, which is where the dev environment posts messages to
 
 ### Front end dependencies and development:
 
@@ -68,3 +30,10 @@ During development, to recompile the javascript and stylesheets:
     $ gulp build
 
 The compiled javascript and stylesheets are checked into repository, so if you make any changes to them, make sure they've been recompiled before pushing.
+
+### To deploy
+
+1. make a Heroku account
+2. download the [heroku toolbelt](https://toolbelt.heroku.com/) and login on the command-line to your heroku account
+3. link your local git repo to the heroku app like this `heroku git:remote -a lunchmove`
+4. `git push heroku master`
