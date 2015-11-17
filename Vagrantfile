@@ -25,9 +25,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     # vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
     # vb.customize ["modifyvm", :id, "--natdnsproxy1", "on"]
     # POSSIBLY those two lines above didn't actually work so a second possible solution is to try virtio driver, to do so uncomment the line below and provision
-    # vb.customize ["modifyvm", :id, "--nictype1", "virtio"]
+    vb.customize ["modifyvm", :id, "--nictype1", "virtio"]
   end
 
-  config.vm.provision "shell", path: "setup/provisioner.sh"
+  config.vm.provision "shell", path: "setup/provisioner.sh", privileged: false
 
 end

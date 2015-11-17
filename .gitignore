@@ -24,3 +24,6 @@ vagrant.json
 *.pgbak
 Gemfile.lock
 lunchmove/conf/active.py
+
+# VERY IMPORTANT: ignore setup/private because it has sensitive things in it. we'll have to copy these files around between ourselves manually, preferably with charcoal rubbings or perhaps cuneiform tablets
+setup/private/*
