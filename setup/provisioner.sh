@@ -34,7 +34,6 @@ source $VAGRANT_USER_HOME/.bashrc
 
 # create database user and the database itself
 # TODO: don't hardcode this, but for now its an expedient
-# this is a little fucked up right now because apparently can't create databases from inside a function
 sudo -u postgres psql -f $PROJECT_PATH/setup/private/create_db.sql
 
 # run migrations
