@@ -29,8 +29,10 @@ class Move(models.Model):
     uuid = models.UUIDField(blank=True, null=True)
 
     def save(self, *args, **kwargs):
-        if not settings.DEBUG:
-            self.post_to_slack()
+        # removing the DEBUG conditional check here
+        # should be safe for now because dev environment will be pointing at the private lunchmove room on slack, which is designated for testing
+        # TODO: better system for determining which slack (and/or other output destinations) to post to
+        self.post_to_slack()
         super(Move, self).save(*args, **kwargs)
 
     def post_to_hipchat(self):
