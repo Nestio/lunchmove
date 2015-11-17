@@ -28,13 +28,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     # vb.customize ["modifyvm", :id, "--nictype1", "virtio"]
   end
 
-  # COPIED FROM CHUCK - uncertain if this hack/fix is still needed
-  # config.vm.provision "shell", run: "always" do |s|
-  #   s.inline = 'sed --in-place -e "s:post-up route del default dev \\$IFACE$:post-up route del default dev \\$IFACE || true:g" /etc/network/interfaces'
-  #   # HACK WARNING
-  #   # fixes and issue with vagrant and cloud-init that causes you to have wait 3 minutes for the VM to start
-  #   # see https://github.com/mitchellh/vagrant/issues/3860
-  #   # this basically resets a setting created by the Vagrant built-in network configuration
-  # end
+  config.vm.provision "shell", path: "setup/provisioner.sh"
 
 end
