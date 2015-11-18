@@ -13,18 +13,12 @@ var channel = Radio.channel('global');
 
 var regionManager = new Marionette.RegionManager({
     regions: {
-        main: '#app',
-        modal: '#modal'
+        main: '#app'
     }
 });
 
 channel.reply('get:region', function(region){
     return regionManager.get(region);
-});
-
-channel.reply('show:modal', function(view){
-    regionManager.get('modal').show(view);
-    view.$el.modal();
 });
 
 new Controller();

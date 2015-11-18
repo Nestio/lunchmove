@@ -17,20 +17,22 @@ var FormView = require('app/lib/form-view');
 
 var channel = Radio.channel('global');
 
-var ModalFormView = FormView.extend({
-    className: 'modal',
-    _modalFormEvents: {
-        'hide.bs.modal': 'destroy',
+var BaseFormView = FormView.extend({
+
+    lunchmoveUI: {
+      cancel: '[data-ui="cancel"]'
+    },
+
+    _lunchmoveBaseFormEvents: {
         'change @ui.form': 'toggleSaveButton',
-        'input input[type="text"]': 'toggleSaveButton'
+        'input input[type="text"]': 'toggleSaveButton',
+        'click @ui.cancel': 'cancel'
     },
     requiredFields: [],
     constructor: function(){
-        this.events = _.extend(this._modalFormEvents, this.events);
+        this.events = _.extend({}, this._lunchmoveBaseFormEvents, this.events);
+        this.ui = _.extend({}, this.lunchmoveUI, this.ui);
         FormView.prototype.constructor.apply(this, arguments);
-        this.on('destroy', function(){
-            channel.trigger('list');
-        });
     },
     isComplete: function(){
         var data = this.serializeForm();
@@ -40,10 +42,14 @@ var ModalFormView = FormView.extend({
     },
     toggleSaveButton: function(){
         this.ui.saveButton.toggleClass('disabled', !this.isComplete());
+    },
+    cancel: function(e) {
+      e.preventDefault();
+      channel.trigger('list');
     }
 });
 
-var MoveFormView = ModalFormView.extend({
+var MoveFormView = BaseFormView.extend({
     template: _.template(MoveFormTpl),
     fields: {
         'spot': {
@@ -74,6 +80,7 @@ var MoveFormView = ModalFormView.extend({
         spot.save({}, {
             success: _.bind(function(){
                 channel.request('entities:spots').add(spot);
+                this.ui.spot.val(spot.id);
                 this.ui.spotName.typeahead('val', spot.get('name')).blur();
             }, this)
         });
@@ -85,14 +92,14 @@ var MoveFormView = ModalFormView.extend({
             this.ui.spotName.typeahead('val', spotName);
             this.ui.spot.val(spot);
         }
-        
+
         this.toggleSaveButton();
     },
     onShow: function(){
         this.renderTypeahead();
     },
     onSubmitSuccess: function(e){
-        this.$el.modal('hide');
+      channel.trigger('list');
     },
     onSpotBlur: function(){
         var spots = channel.request('entities:spots');
@@ -143,7 +150,7 @@ var MoveFormView = ModalFormView.extend({
     }
 });
 
-var NameView = ModalFormView.extend({
+var NameView = BaseFormView.extend({
     template: _.template(NameFormTpl),
     fields: {
         'user': {
@@ -154,10 +161,7 @@ var NameView = ModalFormView.extend({
     onSubmit: function(e, data){
         e.preventDefault();
         this.model.set(data);
-        this.$el.modal('hide');
-        setTimeout(_.bind(function(){
-            channel.trigger('edit');
-        }, this), 1);
+        channel.trigger('edit');
     },
     onShow: function(){
         this.toggleSaveButton();
