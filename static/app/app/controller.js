@@ -42,12 +42,11 @@ var Controller = Marionette.Object.extend({
         var spots = channel.request('entities:spots');
 
         var callback = function(){
-            
+
             var ViewClass = move.get('user') ? MoveFormView : NameView;
             var view = new ViewClass({model: move});
             var mainRegion = channel.request('get:region', 'main');
             mainRegion.show(view);
-            // channel.request('show:modal', view);
         };
 
         if (spots.length) {

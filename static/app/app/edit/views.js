@@ -70,12 +70,10 @@ var MoveFormView = BaseFormView.extend({
         var spot = new Spot({
             name: this.ui.spotName.typeahead('val')
         });
-        // debugger
 
         spot.save({}, {
             success: _.bind(function(){
                 channel.request('entities:spots').add(spot);
-                // debugger
                 this.ui.spot.val(spot.id);
                 this.ui.spotName.typeahead('val', spot.get('name')).blur();
             }, this)
@@ -96,10 +94,8 @@ var MoveFormView = BaseFormView.extend({
     },
     onSubmitSuccess: function(e){
       channel.trigger('list');
-        // this.$el.modal('hide');
     },
     onSpotBlur: function(){
-      // debugger
         var spots = channel.request('entities:spots');
         var spotId = this.ui.spot.val();
 
@@ -118,7 +114,6 @@ var MoveFormView = BaseFormView.extend({
         this.ui.spotName.typeahead('val', spotId ? spots.get(+spotId).get('name') : '');
     },
     onTypeaheadSelect: function(e, obj){
-        debugger
         this.ui.spot.val(obj.id).change();
     },
     renderTypeahead: function(){
@@ -160,9 +155,7 @@ var NameView = BaseFormView.extend({
     onSubmit: function(e, data){
         e.preventDefault();
         this.model.set(data);
-        setTimeout(_.bind(function(){
-            channel.trigger('edit');
-        }, this), 1);
+        channel.trigger('edit');
     },
     onShow: function(){
         this.toggleSaveButton();
