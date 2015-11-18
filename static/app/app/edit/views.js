@@ -18,14 +18,20 @@ var FormView = require('app/lib/form-view');
 var channel = Radio.channel('global');
 
 var BaseFormView = FormView.extend({
-    _modalFormEvents: {
+
+    lunchmoveUI: {
+      cancel: '[data-ui="cancel"]'
+    },
+
+    _lunchmoveBaseFormEvents: {
         'change @ui.form': 'toggleSaveButton',
         'input input[type="text"]': 'toggleSaveButton',
-        'click .cancel': 'cancel'
+        'click @ui.cancel': 'cancel'
     },
     requiredFields: [],
     constructor: function(){
-        this.events = _.extend(this._modalFormEvents, this.events);
+        this.events = _.extend({}, this._lunchmoveBaseFormEvents, this.events);
+        this.ui = _.extend({}, this.lunchmoveUI, this.ui);
         FormView.prototype.constructor.apply(this, arguments);
     },
     isComplete: function(){
