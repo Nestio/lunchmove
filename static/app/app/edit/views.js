@@ -17,12 +17,13 @@ var FormView = require('app/lib/form-view');
 
 var channel = Radio.channel('global');
 
-var ModalFormView = FormView.extend({
-    className: 'modal',
+var BaseFormView = FormView.extend({
+    // className: 'modal',
     _modalFormEvents: {
         'hide.bs.modal': 'destroy',
         'change @ui.form': 'toggleSaveButton',
-        'input input[type="text"]': 'toggleSaveButton'
+        'input input[type="text"]': 'toggleSaveButton',
+        'click .cancel': 'cancel'
     },
     requiredFields: [],
     constructor: function(){
@@ -40,10 +41,14 @@ var ModalFormView = FormView.extend({
     },
     toggleSaveButton: function(){
         this.ui.saveButton.toggleClass('disabled', !this.isComplete());
+    },
+    cancel: function(e) {
+      e.preventDefault();
+      channel.trigger('list');
     }
 });
 
-var MoveFormView = ModalFormView.extend({
+var MoveFormView = BaseFormView.extend({
     template: _.template(MoveFormTpl),
     fields: {
         'spot': {
@@ -85,7 +90,7 @@ var MoveFormView = ModalFormView.extend({
             this.ui.spotName.typeahead('val', spotName);
             this.ui.spot.val(spot);
         }
-        
+
         this.toggleSaveButton();
     },
     onShow: function(){
@@ -143,7 +148,7 @@ var MoveFormView = ModalFormView.extend({
     }
 });
 
-var NameView = ModalFormView.extend({
+var NameView = BaseFormView.extend({
     template: _.template(NameFormTpl),
     fields: {
         'user': {
@@ -154,7 +159,7 @@ var NameView = ModalFormView.extend({
     onSubmit: function(e, data){
         e.preventDefault();
         this.model.set(data);
-        this.$el.modal('hide');
+        // this.$el.modal('hide');
         setTimeout(_.bind(function(){
             channel.trigger('edit');
         }, this), 1);

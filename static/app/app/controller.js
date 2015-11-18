@@ -21,30 +21,35 @@ var Controller = Marionette.Object.extend({
         }, this);
     },
     list: function(){
+
+        var move = channel.request('entities:move');
+        var spots = channel.request('entities:spots');
+
         var mainRegion = channel.request('get:region', 'main');
         mainRegion.show(new LoadingView());
-        var move = channel.request('entities:move');
         var moves = channel.request('entities:moves');
-        var spots = channel.request('entities:spots');
         $.when(moves.fetch(), spots.fetch()).done(function(){
             var layoutView = new LayoutView({
                 model: move,
                 collection: moves.groupBySpot()
             });
-        
+
             mainRegion.show(layoutView);
         });
     },
     edit: function(){
         var move = channel.request('entities:move');
         var spots = channel.request('entities:spots');
-        
+
         var callback = function(){
+            
             var ViewClass = move.get('user') ? MoveFormView : NameView;
             var view = new ViewClass({model: move});
-            channel.request('show:modal', view);
+            var mainRegion = channel.request('get:region', 'main');
+            mainRegion.show(view);
+            // channel.request('show:modal', view);
         };
-        
+
         if (spots.length) {
             callback();
         } else {
