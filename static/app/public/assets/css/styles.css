@@ -11805,12 +11805,12 @@ header.main-header {
         cursor: pointer;
         border-color: #d9534f;
         color: #d9534f; }
+    .move-row .spot-moves .move.background-flash {
+      border-color: #d9534f !important;
+      color: #d9534f; }
   .move-row.your-move {
     margin-top: 30px;
     margin-bottom: 30px; }
-
-.background-flash {
-  background-color: yellow; }
 
 #app, #modal {
   font-weight: 200; }
