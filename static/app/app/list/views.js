@@ -42,7 +42,8 @@ var LunchMoveView = Marionette.ItemView.extend({
         }
     },
     recentSaveAlert: function() {
-        var $moveBox = this.$el.find('.own-move');
+        debugger
+        var $moveBox = this.ui.editMove;
         $moveBox.addClass('background-flash');
         setTimeout(function(){
             $moveBox.removeClass('background-flash');
