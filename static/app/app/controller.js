@@ -3,6 +3,7 @@ var $ = require('jquery');
 var Backbone = require('backbone');
 var Marionette = require('backbone.marionette');
 var Radio = require('backbone.radio');
+var _ = require('underscore');
 
 //App
 var channel = Radio.channel('global');
@@ -14,9 +15,9 @@ var NameView = require('app/edit/views').NameView;
 
 var Controller = Marionette.Object.extend({
     initialize: function(){
-        channel.on('call:method', function(methodName){
+        channel.on('call:method', function(methodName, arg){
             if (this[methodName]) {
-                this[methodName]();
+                this[methodName](arg);
             }
         }, this);
     },
@@ -56,6 +57,27 @@ var Controller = Marionette.Object.extend({
             mainRegion.show(new LoadingView());
             spots.fetch().done(callback);
         }
+
+    },
+    join: function(moveId) {
+      var moves = channel.request('entities:moves');
+      $.when(moves.fetch()).done(function(){
+        var moveToJoin = channel.request('entities:moves').find({id: parseInt(moveId)});
+        var move = new Move();
+        move.set('spot', moveToJoin.get('spot'));
+        move.set('time', moveToJoin.get('time'));
+        move.set('user', channel.request('entities:move').get('user'));
+
+        move.save({}, {
+          success: function(model) {
+            // channel.request("entities:moves").add(model);
+            channel.trigger('list');
+          },
+          error: function(model, resp) {
+            console.log(resp)
+          }
+        });
+      });
 
     }
 });

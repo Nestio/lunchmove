@@ -13,7 +13,11 @@ var API = {
     },
     list: function() {
         channel.trigger('call:method', 'list');
+    },
+    join: function(moveId) {
+        channel.trigger('call:method', 'join', moveId);
     }
+
 };
 
 channel.on('edit', function(){
@@ -29,13 +33,17 @@ channel.on('list', function(){
 var Router = Backbone.Router.extend({
     routes: {
         "": "list",
-        "edit": "edit"
+        "edit": "edit",
+        "move/:moveId/join": "join"
     },
     edit: function(){
         API.edit();
     },
     list: function() {
         API.list();
+    },
+    join: function(moveId) {
+      API.join(moveId);
     }
 });
 

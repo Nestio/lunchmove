@@ -4,6 +4,9 @@ var Backbone = require('backbone');
 var Marionette = require('backbone.marionette');
 var Radio = require('backbone.radio');
 require('bootstrap');
+$(function(){
+  require('app/lib/ajax-csrf');
+});
 
 new (require('app/constants').API);
 new (require('app/entities').API);

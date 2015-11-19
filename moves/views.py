@@ -11,8 +11,12 @@ from rest_framework.decorators import list_route
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .serializers import MoveSerializer, SpotSerializer
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import ensure_csrf_cookie
 
+@ensure_csrf_cookie
 def index(request):
+
     user_uuid = request.session.get('user_uuid') or str(uuid.uuid4())
     request.session['user_uuid'] = user_uuid
     request.session.set_expiry(None)
