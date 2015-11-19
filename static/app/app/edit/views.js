@@ -99,7 +99,7 @@ var MoveFormView = BaseFormView.extend({
         this.renderTypeahead();
     },
     onSubmitSuccess: function(e){
-      channel.trigger('list');
+      channel.trigger('list', true);
     },
     onSpotBlur: function(){
         var spots = channel.request('entities:spots');

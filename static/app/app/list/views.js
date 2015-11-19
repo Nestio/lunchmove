@@ -27,11 +27,26 @@ var LunchMoveView = Marionette.ItemView.extend({
         'editMove': '.own-move',
         'addMove': '[data-ui="addMove"]'
     },
+    initialize: function(params) {
+        this.recentlySaved = params.recentlySaved;
+    },
     addMove: function(e){
         e.preventDefault();
         channel.request('entities:move').set('spot', this.model.id);
         channel.trigger('edit');
         return false;
+    },
+    onShow: function() {
+        if (this.recentlySaved) {
+           this.recentSaveAlert();
+        }
+    },
+    recentSaveAlert: function() {
+        var $moveBox = this.$el.find('.own-move');
+        $moveBox.addClass('background-flash');
+        setTimeout(function(){
+            $moveBox.removeClass('background-flash');
+        }.bind(this), 600)
     },
     className: 'row move-row',
     template: _.template(LunchMoveTpl),
@@ -59,8 +74,15 @@ var LunchMovesView = Marionette.CompositeView.extend({
     },
     template: _.template(LunchMovesTpl),
     childView: LunchMoveView,
+    childViewOptions: function(params) {
+      return { recentlySaved: this.recentlySaved };
+    },
     emptyView: EmptyView,
     childViewContainer: '.moves-container',
+    initialize:function(params) {
+        this.recentlySaved = params.recentlySaved;
+        this.childViewOptions();
+    },
     recalculateMoves: function(){
         this.collection = channel.request('entities:moves').groupBySpot();
         this.render();
@@ -100,6 +122,9 @@ var LayoutView = Marionette.LayoutView.extend({
         'yourMove': '[data-region="yourMove"]',
         'moves': '[data-region="moves"]'
     },
+    initialize: function(params) {
+        this.recentlySaved = params.recentSave
+    },
     onShow: function(){
         if (!this.model.get('spot')) {
             this.showChildView('yourMove', new YourMoveView({
@@ -109,7 +134,8 @@ var LayoutView = Marionette.LayoutView.extend({
 
         this.showChildView('moves', new LunchMovesView({
             model: this.model,
-            collection: this.collection
+            collection: this.collection,
+            recentlySaved: this.recentlySaved
         }));
     }
 });
