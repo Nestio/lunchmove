@@ -68,14 +68,15 @@ var Controller = Marionette.Object.extend({
         var currentMove = channel.request("entities:move");
         var moveToJoin = channel.request('entities:moves').find({id: parseInt(moveId)});
         currentMove.set('spot', moveToJoin.get('spot'));
-        currentMove.set('time', moment(moveToJoin.get('time')));
+        currentMove.set('time', moveToJoin.get('time'));
         debugger
-        
+
         if (currentMove.get('user')) {
           channel.request('entities:move').save({}, {
-            // dataType: 'text',
-            success: function() {
+            dataType: 'text',
+            success: function(model, resp) {
               channel.trigger('list');
+              console.log(model);
             },
             error: function(model, resp) {
               console.log(resp);
