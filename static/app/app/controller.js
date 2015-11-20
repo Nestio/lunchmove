@@ -14,9 +14,9 @@ var NameView = require('app/edit/views').NameView;
 
 var Controller = Marionette.Object.extend({
     initialize: function(){
-        channel.on('call:method', function(methodName, saveAlert){
+        channel.on('call:method', function(methodName, arg){
             if (this[methodName]) {
-                this[methodName](saveAlert);
+                this[methodName](arg);
             }
         }, this);
     },
