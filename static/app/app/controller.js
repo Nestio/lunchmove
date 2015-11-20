@@ -12,6 +12,7 @@ var LoadingView = require('app/common/views').LoadingView;
 var LayoutView = require('app/list/views').LayoutView;
 var MoveFormView = require('app/edit/views').MoveFormView;
 var NameView = require('app/edit/views').NameView;
+var JoinView = require('app/edit/views').JoinView;
 
 var Controller = Marionette.Object.extend({
     initialize: function(){
@@ -60,23 +61,34 @@ var Controller = Marionette.Object.extend({
 
     },
     join: function(moveId) {
+      // option1: there is no current user
+
+      // option2: there is a current user
+        //      a: that current user has no recent move
+        //      b: that current user does have a recent move
       var moves = channel.request('entities:moves');
       $.when(moves.fetch()).done(function(){
+        var currentMove = channel.request("entities:move");
         var moveToJoin = channel.request('entities:moves').find({id: parseInt(moveId)});
-        var move = new Move();
-        move.set('spot', moveToJoin.get('spot'));
-        move.set('time', moveToJoin.get('time'));
-        move.set('user', channel.request('entities:move').get('user'));
+        // channel.request("entities:moves").remove(channel.request("entities:move"));
+        currentMove.set('spot', moveToJoin.get('spot'));
+        currentMove.set('time', moveToJoin.get('time'));
+        if (currentMove.get('user')) {
+          debugger
+          channel.request('entities:move').save({}, {
+            dataType: 'text',
+            success: function() {
+              channel.trigger('list');
+            },
+            error: function(model, resp) {
+              console.log(resp);
+            }
+          })
+        } else {
+          var mainRegion = channel.request('get:region', 'main');
+          mainRegion.show(new JoinView);
+        }
 
-        move.save({}, {
-          success: function(model) {
-            // channel.request("entities:moves").add(model);
-            channel.trigger('list');
-          },
-          error: function(model, resp) {
-            console.log(resp)
-          }
-        });
       });
 
     }
