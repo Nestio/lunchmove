@@ -39,10 +39,9 @@ var LunchMoveView = Marionette.ItemView.extend({
         }
     },
     recentSaveAlert: function() {
-        var $moveBox = this.ui.editMove;
-        $moveBox.addClass('background-flash');
+        this.ui.editMove.addClass('background-flash');
         setTimeout(function(){
-            $moveBox.removeClass('background-flash');
+            this.ui.editMove.removeClass('background-flash');
         }.bind(this), 600)
     },
     className: 'row move-row',
