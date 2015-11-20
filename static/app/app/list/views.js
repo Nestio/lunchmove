@@ -21,7 +21,8 @@ var LunchMoveView = Marionette.ItemView.extend({
     },
     events: {
         'click @ui.addMove': 'addMove',
-        'click @ui.editMove': 'addMove'
+        'click @ui.editMove': 'addMove',
+        'click .delete': 'deleteHandler'
     },
     ui: {
         'editMove': '.own-move',
@@ -32,6 +33,9 @@ var LunchMoveView = Marionette.ItemView.extend({
         channel.request('entities:move').set('spot', this.model.id);
         channel.trigger('edit');
         return false;
+    },
+    deleteHandler: function() {
+        debugger
     },
     onShow: function() {
         if (this.getOption('recentlySaved')) {
