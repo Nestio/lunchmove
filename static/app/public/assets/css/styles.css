@@ -11779,6 +11779,13 @@ header.main-header {
     text-align: right;
     font-size: 24px;
     line-height: 60px; }
+  .move-row .spot-moves .delete {
+    display: inline-block;
+    -webkit-transition: all .5s ease;
+            transition: all .5s ease; }
+    .move-row .spot-moves .delete:hover {
+      cursor: pointer;
+      color: #d9534f; }
   .move-row .spot-moves .move {
     display: inline-block;
     min-width: 60px;
