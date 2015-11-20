@@ -4,6 +4,7 @@ var Backbone = require('backbone');
 var Marionette = require('backbone.marionette');
 var Radio = require('backbone.radio');
 var _ = require('underscore');
+var moment = require('moment');
 
 //App
 var channel = Radio.channel('global');
@@ -61,22 +62,18 @@ var Controller = Marionette.Object.extend({
 
     },
     join: function(moveId) {
-      // option1: there is no current user
-
-      // option2: there is a current user
-        //      a: that current user has no recent move
-        //      b: that current user does have a recent move
       var moves = channel.request('entities:moves');
+
       $.when(moves.fetch()).done(function(){
         var currentMove = channel.request("entities:move");
         var moveToJoin = channel.request('entities:moves').find({id: parseInt(moveId)});
-        // channel.request("entities:moves").remove(channel.request("entities:move"));
         currentMove.set('spot', moveToJoin.get('spot'));
-        currentMove.set('time', moveToJoin.get('time'));
+        currentMove.set('time', moment(moveToJoin.get('time')));
+        debugger
+        
         if (currentMove.get('user')) {
-          debugger
           channel.request('entities:move').save({}, {
-            dataType: 'text',
+            // dataType: 'text',
             success: function() {
               channel.trigger('list');
             },

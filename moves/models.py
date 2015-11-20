@@ -50,7 +50,8 @@ class Move(models.Model):
         print 'response from slack: %s' % r.text
 
     def __unicode__(self):
+        link = u'%s/%s/join|Join>' % ('<http://localhost:8080/move', self.id)
         root = u'%s is going to eat %s' % (self.user, self.spot.name)
         if self.time:
-            root = '%s at %s' % (root, self.time.strftime('%-I:%M'))
+            root = '%s at %s. %s' % (root, self.time.strftime('%-I:%M'), link)
         return root
