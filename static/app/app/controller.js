@@ -22,7 +22,6 @@ var Controller = Marionette.Object.extend({
         }, this);
     },
     list: function(saveAlert){
-
         var move = channel.request('entities:move');
         var spots = channel.request('entities:spots');
 

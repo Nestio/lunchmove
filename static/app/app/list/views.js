@@ -22,7 +22,7 @@ var LunchMoveView = Marionette.ItemView.extend({
     events: {
         'click @ui.addMove': 'addMove',
         'click @ui.editMove': 'addMove',
-        'click .delete': 'deleteHandler'
+        'click .delete': 'deleteMove'
     },
     ui: {
         'editMove': '.own-move',
@@ -34,8 +34,18 @@ var LunchMoveView = Marionette.ItemView.extend({
         channel.trigger('edit');
         return false;
     },
-    deleteHandler: function() {
-        debugger
+    deleteMove: function(e) {
+        e.preventDefault();
+        channel.request('entities:move').destroy({
+            success: function(model){
+                model.set({
+                    spot: null,
+
+                })
+                channel.request('entities:move', { replace: true })
+                channel.trigger('list');
+            }
+        })
     },
     onShow: function() {
         if (this.getOption('recentlySaved')) {
@@ -75,7 +85,10 @@ var LunchMovesView = Marionette.CompositeView.extend({
     template: _.template(LunchMovesTpl),
     childView: LunchMoveView,
     childViewOptions: function() {
-      return { recentlySaved: this.getOption('recentlySaved') };
+        return { recentlySaved: this.getOption('recentlySaved') };
+    },
+    onChildviewDeleteMove: function() {
+        channel.trigger('list');
     },
     emptyView: EmptyView,
     childViewContainer: '.moves-container',

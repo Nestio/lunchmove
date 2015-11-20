@@ -75,10 +75,14 @@ var API = Marionette.Object.extend({
             return moves;
         });
 
-        channel.reply('entities:move', function(){
+        channel.reply('entities:move', function(options){
+            options = options || {};
+            if (options.replace) {
+                move = new Move();
+            }
             return move;
         });
-    }, 
+    },
     onDestroy: function(){
         channel.stopReplying('entities:spots');
         channel.stopReplying('entities:moves');
