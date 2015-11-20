@@ -29,7 +29,7 @@ var Controller = Marionette.Object.extend({
         var mainRegion = channel.request('get:region', 'main');
         mainRegion.show(new LoadingView());
         var moves = channel.request('entities:moves');
-        $.when(saveAlert, moves.fetch(), spots.fetch()).done(function(saveAlert){
+        $.when(moves.fetch(), spots.fetch()).done(function(){
             var layoutView = new LayoutView({
                 model: move,
                 collection: moves.groupBySpot(),
