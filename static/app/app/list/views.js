@@ -27,9 +27,6 @@ var LunchMoveView = Marionette.ItemView.extend({
         'editMove': '.own-move',
         'addMove': '[data-ui="addMove"]'
     },
-    initialize: function(params) {
-        this.recentlySaved = params.recentlySaved;
-    },
     addMove: function(e){
         e.preventDefault();
         channel.request('entities:move').set('spot', this.model.id);
@@ -37,12 +34,11 @@ var LunchMoveView = Marionette.ItemView.extend({
         return false;
     },
     onShow: function() {
-        if (this.recentlySaved) {
+        if (this.getOption('recentlySaved')) {
            this.recentSaveAlert();
         }
     },
     recentSaveAlert: function() {
-        debugger
         var $moveBox = this.ui.editMove;
         $moveBox.addClass('background-flash');
         setTimeout(function(){
@@ -75,15 +71,11 @@ var LunchMovesView = Marionette.CompositeView.extend({
     },
     template: _.template(LunchMovesTpl),
     childView: LunchMoveView,
-    childViewOptions: function(params) {
-      return { recentlySaved: this.recentlySaved };
+    childViewOptions: function() {
+      return { recentlySaved: this.getOption('recentlySaved') };
     },
     emptyView: EmptyView,
     childViewContainer: '.moves-container',
-    initialize:function(params) {
-        this.recentlySaved = params.recentlySaved;
-        this.childViewOptions();
-    },
     recalculateMoves: function(){
         this.collection = channel.request('entities:moves').groupBySpot();
         this.render();
@@ -123,9 +115,6 @@ var LayoutView = Marionette.LayoutView.extend({
         'yourMove': '[data-region="yourMove"]',
         'moves': '[data-region="moves"]'
     },
-    initialize: function(params) {
-        this.recentlySaved = params.recentSave
-    },
     onShow: function(){
         if (!this.model.get('spot')) {
             this.showChildView('yourMove', new YourMoveView({
@@ -136,7 +125,7 @@ var LayoutView = Marionette.LayoutView.extend({
         this.showChildView('moves', new LunchMovesView({
             model: this.model,
             collection: this.collection,
-            recentlySaved: this.recentlySaved
+            recentlySaved: this.getOption('recentSave')
         }));
     }
 });
