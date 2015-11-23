@@ -31,7 +31,10 @@ var LunchMoveView = Marionette.ItemView.extend({
     },
     addMove: function(e){
         e.preventDefault();
-        channel.request('entities:move').set('spot', this.model.id);
+        channel.request('entities:move').set({
+            spot: this.model.id,
+            time: this.model.get('moves').last().get('time')
+        });
         channel.trigger('edit');
         return false;
     },
