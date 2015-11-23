@@ -62,33 +62,32 @@ var Controller = Marionette.Object.extend({
 
     },
     join: function(moveId) {
-      var moves = channel.request('entities:moves');
-
-      $.when(moves.fetch()).done(function(){
-        var currentMove = channel.request("entities:move");
-        var moveToJoin = channel.request('entities:moves').find({id: parseInt(moveId)});
-
-        currentMove.set('time', moveToJoin.get('time').format());
-        currentMove.set('spot', moveToJoin.get('spot'));
-
-        if (currentMove.get('user')) {
-          currentMove.save({}, {
-            dataType: 'text',
-            success: function(model, resp) {
-              channel.trigger('list');
-              console.log(model);
-            },
-            error: function(model, resp) {
-              console.log(resp);
+        var moves = channel.request('entities:moves');
+        
+        $.when(moves.fetch()).done(function(){
+            var currentMove = channel.request("entities:move");
+            var moveToJoin = channel.request('entities:moves')
+                                    .find({id: parseInt(moveId)});
+            
+            currentMove.set('time', moveToJoin.get('time').format());
+            currentMove.set('spot', moveToJoin.get('spot'));
+            
+            if (currentMove.get('user')) {
+                currentMove.save({}, {
+                    dataType: 'text',
+                    success: function(model, resp) {
+                        channel.trigger('list');
+                        console.log(model);
+                    },
+                    error: function(model, resp) {
+                        console.log(resp);
+                    }
+                })
+            } else {
+                var mainRegion = channel.request('get:region', 'main');
+                mainRegion.show(new JoinView);
             }
-          })
-        } else {
-          var mainRegion = channel.request('get:region', 'main');
-          mainRegion.show(new JoinView);
-        }
-
-      });
-
+        });
     }
 });
 
