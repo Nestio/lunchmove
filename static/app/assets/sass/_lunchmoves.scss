@@ -46,7 +46,14 @@
     }
 
     .spot-moves {
-
+        .delete {
+            display: inline-block;
+            transition: all .5s ease;
+            &:hover {
+              cursor: pointer;
+              color: $brand-danger;
+            }
+        }
         .move {
             display: inline-block;
             min-width: 60px;
