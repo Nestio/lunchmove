@@ -16,11 +16,12 @@ var Controller = Marionette.Object.extend({
     initialize: function(){
         channel.on('call:method', function(methodName){
             if (this[methodName]) {
-                this[methodName]();
+                var args = Array.prototype.slice.call(arguments, 1);
+                this[methodName].apply(this, args);
             }
         }, this);
     },
-    list: function(){
+    list: function(saveAlert){
 
         var move = channel.request('entities:move');
         var spots = channel.request('entities:spots');
@@ -31,7 +32,8 @@ var Controller = Marionette.Object.extend({
         $.when(moves.fetch(), spots.fetch()).done(function(){
             var layoutView = new LayoutView({
                 model: move,
-                collection: moves.groupBySpot()
+                collection: moves.groupBySpot(),
+                recentSave: saveAlert
             });
 
             mainRegion.show(layoutView);

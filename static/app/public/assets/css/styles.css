@@ -11782,7 +11782,9 @@ header.main-header {
   .move-row .spot-moves .move {
     display: inline-block;
     min-width: 60px;
-    border: 1px solid transparent; }
+    border: 1px solid transparent;
+    -webkit-transition: all 0.5s ease;
+            transition: all 0.5s ease; }
     .move-row .spot-moves .move > div {
       height: 30px;
       line-height: 30px;
@@ -11803,6 +11805,9 @@ header.main-header {
         cursor: pointer;
         border-color: #d9534f;
         color: #d9534f; }
+    .move-row .spot-moves .move.background-flash {
+      border-color: #d9534f !important;
+      color: #d9534f; }
   .move-row.your-move {
     margin-top: 30px;
     margin-bottom: 30px; }
