@@ -11,11 +11,11 @@ var API = {
     edit: function(){
         channel.trigger('call:method', 'edit');
     },
-    list: function() {
-        channel.trigger('call:method', 'list');
-    },
     join: function(moveId) {
         channel.trigger('call:method', 'join', moveId);
+    },
+    list: function(saveAlert) {
+        channel.trigger('call:method', 'list', saveAlert);
     }
 
 };
@@ -25,9 +25,9 @@ channel.on('edit', function(){
     API.edit();
 });
 
-channel.on('list', function(){
+channel.on('list', function(saveAlert){
     Backbone.history.navigate('');
-    API.list();
+    API.list(saveAlert);
 });
 
 var Router = Backbone.Router.extend({

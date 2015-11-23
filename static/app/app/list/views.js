@@ -33,6 +33,17 @@ var LunchMoveView = Marionette.ItemView.extend({
         channel.trigger('edit');
         return false;
     },
+    onShow: function() {
+        if (this.getOption('recentlySaved')) {
+           this.recentSaveAlert();
+        }
+    },
+    recentSaveAlert: function() {
+        this.ui.editMove.addClass('background-flash');
+        setTimeout(function(){
+            this.ui.editMove.removeClass('background-flash');
+        }.bind(this), 600)
+    },
     className: 'row move-row',
     template: _.template(LunchMoveTpl),
     templateHelpers: function(){
@@ -59,6 +70,9 @@ var LunchMovesView = Marionette.CompositeView.extend({
     },
     template: _.template(LunchMovesTpl),
     childView: LunchMoveView,
+    childViewOptions: function() {
+      return { recentlySaved: this.getOption('recentlySaved') };
+    },
     emptyView: EmptyView,
     childViewContainer: '.moves-container',
     recalculateMoves: function(){
@@ -109,7 +123,8 @@ var LayoutView = Marionette.LayoutView.extend({
 
         this.showChildView('moves', new LunchMovesView({
             model: this.model,
-            collection: this.collection
+            collection: this.collection,
+            recentlySaved: this.getOption('recentSave')
         }));
     }
 });

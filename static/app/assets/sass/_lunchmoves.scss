@@ -51,6 +51,7 @@
             display: inline-block;
             min-width: 60px;
             border: 1px solid transparent;
+            transition: all 0.5s ease;
 
             > div {
                 height: 30px;
@@ -87,6 +88,11 @@
                     color: $brand-danger;
 
                 }
+            }
+
+            &.background-flash {
+              border-color: $brand-danger !important;
+              color: $brand-danger;
             }
         }
 

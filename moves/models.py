@@ -29,6 +29,8 @@ class Move(models.Model):
     uuid = models.UUIDField(blank=True, null=True)
 
     def save(self, *args, **kwargs):
+        if not settings.DEBUG:
+            self.post_to_slack()
         super(Move, self).save(*args, **kwargs)
         self.post_to_slack()
 
