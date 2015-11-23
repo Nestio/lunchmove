@@ -67,12 +67,12 @@ var Controller = Marionette.Object.extend({
       $.when(moves.fetch()).done(function(){
         var currentMove = channel.request("entities:move");
         var moveToJoin = channel.request('entities:moves').find({id: parseInt(moveId)});
-        currentMove.set('spot', moveToJoin.get('spot'));
-        currentMove.set('time', moveToJoin.get('time'));
         debugger
+        currentMove.set('time', moveToJoin.get('time')._d);
+        currentMove.set('spot', moveToJoin.get('spot'));
 
         if (currentMove.get('user')) {
-          channel.request('entities:move').save({}, {
+          currentMove.save({}, {
             dataType: 'text',
             success: function(model, resp) {
               channel.trigger('list');

@@ -29,8 +29,8 @@ class Move(models.Model):
     uuid = models.UUIDField(blank=True, null=True)
 
     def save(self, *args, **kwargs):
-        self.post_to_slack()
         super(Move, self).save(*args, **kwargs)
+        self.post_to_slack()
 
     def post_to_hipchat(self):
         root = 'https://api.hipchat.com/v2/room/%s/notification' % settings.HIPCHAT_ROOM_ID
