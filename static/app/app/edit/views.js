@@ -172,7 +172,6 @@ var JoinView = NameView.extend({
     onSubmit: function(e, data) {
       e.preventDefault();
       channel.request('entities:move').set(data);
-      debugger
       channel.request('entities:move').save({}, {
         dataType: 'text',
         success: function() {
