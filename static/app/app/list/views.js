@@ -36,9 +36,7 @@ var LunchMoveView = Marionette.ItemView.extend({
         return false;
     },
     activateTooltips: function() {
-        $(function () {
-            $('[data-toggle="tooltip"]').tooltip()
-        })
+        $('[data-toggle="tooltip"]').tooltip();
     },
     deleteMove: function(e) {
         e.preventDefault();
