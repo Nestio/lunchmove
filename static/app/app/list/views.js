@@ -42,12 +42,11 @@ var LunchMoveView = Marionette.ItemView.extend({
     },
     deleteMove: function(e) {
         e.preventDefault();
-        channel.request('entities:move').destroy({
-            success: function(){
-                channel.request('entities:move', { replace: true });
+        channel.request('entities:move:reset', {
+            success: function() {
                 channel.trigger('list');
             }
-        })
+        });
     },
     onShow: function() {
         if (this.getOption('recentlySaved')) {
