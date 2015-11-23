@@ -68,7 +68,7 @@ var Controller = Marionette.Object.extend({
         var currentMove = channel.request("entities:move");
         var moveToJoin = channel.request('entities:moves').find({id: parseInt(moveId)});
         debugger
-        currentMove.set('time', moveToJoin.get('time')._d);
+        currentMove.set('time', moveToJoin.get('time').format());
         currentMove.set('spot', moveToJoin.get('spot'));
 
         if (currentMove.get('user')) {
