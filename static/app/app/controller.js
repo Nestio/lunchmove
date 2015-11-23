@@ -3,8 +3,6 @@ var $ = require('jquery');
 var Backbone = require('backbone');
 var Marionette = require('backbone.marionette');
 var Radio = require('backbone.radio');
-var _ = require('underscore');
-var moment = require('moment');
 
 //App
 var channel = Radio.channel('global');
@@ -67,7 +65,7 @@ var Controller = Marionette.Object.extend({
       $.when(moves.fetch()).done(function(){
         var currentMove = channel.request("entities:move");
         var moveToJoin = channel.request('entities:moves').find({id: parseInt(moveId)});
-        debugger
+
         currentMove.set('time', moveToJoin.get('time').format());
         currentMove.set('spot', moveToJoin.get('spot'));
 
