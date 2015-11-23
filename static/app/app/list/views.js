@@ -27,13 +27,18 @@ var LunchMoveView = Marionette.ItemView.extend({
     ui: {
         'delete': '[data-ui="delete"]',
         'editMove': '.own-move',
-        'addMove': '[data-ui="addMove"]'
+        'addMove': '[data-ui="addMove"]',
     },
     addMove: function(e){
         e.preventDefault();
         channel.request('entities:move').set('spot', this.model.id);
         channel.trigger('edit');
         return false;
+    },
+    activateTooltips: function() {
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
     },
     deleteMove: function(e) {
         e.preventDefault();
@@ -48,6 +53,7 @@ var LunchMoveView = Marionette.ItemView.extend({
         if (this.getOption('recentlySaved')) {
            this.recentSaveAlert();
         }
+        this.activateTooltips();
     },
     recentSaveAlert: function() {
         this.ui.editMove.addClass('background-flash');
