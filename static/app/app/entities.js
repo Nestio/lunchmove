@@ -78,7 +78,9 @@ var API = Marionette.Object.extend({
         channel.reply('entities:move', function(options){
             options = options || {};
             if (options.replace) {
-                move = new Move();
+                move = new Move({
+                    user: move.get('user')
+                });
             }
             return move;
         });

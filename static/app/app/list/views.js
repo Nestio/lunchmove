@@ -37,12 +37,8 @@ var LunchMoveView = Marionette.ItemView.extend({
     deleteMove: function(e) {
         e.preventDefault();
         channel.request('entities:move').destroy({
-            success: function(model){
-                model.set({
-                    spot: null,
-
-                })
-                channel.request('entities:move', { replace: true })
+            success: function(){
+                channel.request('entities:move', { replace: true });
                 channel.trigger('list');
             }
         })
