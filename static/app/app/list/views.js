@@ -22,9 +22,10 @@ var LunchMoveView = Marionette.ItemView.extend({
     events: {
         'click @ui.addMove': 'addMove',
         'click @ui.editMove': 'addMove',
-        'click .delete': 'deleteMove'
+        'click @ui.delete': 'deleteMove'
     },
     ui: {
+        'delete': '[data-ui="delete"]',
         'editMove': '.own-move',
         'addMove': '[data-ui="addMove"]'
     },

@@ -18,8 +18,8 @@
             </div>
         </div>
         <% if (isOwnMove(move)) { %>
-            <div class="delete">
-                <span>Delete</span>
+            <div data-toggle="tooltip" data-placement="bottom" title="Delete"
+              class="delete" data-ui="delete">
                 <span class="glyphicon glyphicon-trash"></span>
             </div>
         <% } %>
