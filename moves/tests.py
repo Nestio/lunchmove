@@ -34,13 +34,22 @@ class IndexTests(TestCase):
         self.assertEqual(uuid, recent_move['uuid'])
         self.assertEqual(len(recent_move), 5)
 
-    # @override_settings(DEBUG=True)
-    # def users_name_bootrapped_if_model_beyond_six_hours_ago_exists(self):
-    #     self.get.client('/')
-    #
-    # @override_settings(DEBUG=True)
-    # def empty_model_bootstrapped_if_no_model_matches(self):
-    #     responce = self.get.client('/')
+    @override_settings(DEBUG=True)
+    def test_users_name_bootrapped_if_model_beyond_six_hours_ago_exists(self):
+        self.client.get('/')
+        uuid = self.client.session.get('user_uuid')
+        self.client.post('/json/spots/', { 'name': 'The Spot' })
+        self.client.post('/json/moves/', {
+            'user':'user',
+            'spot': Spot.objects.first().id,
+            'time': timezone.now() - datetime.timedelta(hours=9)
+        })
+        recent_move = json.loads(self.client.get('/').context['recent_move'])
+        self.assertEqual(len(recent_move), 1)
+
+    def test_empty_model_bootstrapped_if_no_model_matches(self):
+        recent_move = json.loads(self.client.get('/').context['recent_move'])
+        self.assertEqual(len(recent_move), 0)
 
 class MoveViewSetTests(TestCase):
     @override_settings(DEBUG=True)

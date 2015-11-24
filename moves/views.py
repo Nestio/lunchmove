@@ -18,7 +18,7 @@ def index(request):
     request.session.set_expiry(None)
 
     move = Move.objects.filter(uuid=user_uuid).order_by('-time').first()
-    if move and move.updated_at >= timezone.now() - datetime.timedelta(hours=6):
+    if move and move.time >= timezone.now() - datetime.timedelta(hours=6):
         move = MoveSerializer(move).data
     elif move:
         move = {'user': move.user}
