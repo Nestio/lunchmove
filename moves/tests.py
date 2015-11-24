@@ -37,7 +37,6 @@ class IndexTests(TestCase):
     @override_settings(DEBUG=True)
     def test_users_name_bootrapped_if_model_beyond_six_hours_ago_exists(self):
         self.client.get('/')
-        uuid = self.client.session.get('user_uuid')
         self.client.post('/json/spots/', { 'name': 'The Spot' })
         self.client.post('/json/moves/', {
             'user':'user',
