@@ -77,10 +77,6 @@ var Controller = Marionette.Object.extend({
                     dataType: 'text',
                     success: function(model, resp) {
                         channel.trigger('list');
-                        console.log(model);
-                    },
-                    error: function(model, resp) {
-                        console.log(resp);
                     }
                 })
             } else {

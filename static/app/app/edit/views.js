@@ -176,9 +176,6 @@ var JoinView = NameView.extend({
         dataType: 'text',
         success: function() {
           channel.trigger('list');
-        },
-        error: function(model, resp) {
-          console.log(resp)
         }
       })
     }
