@@ -3,6 +3,8 @@ var assert = require('chai').assert;
 var sinon = require('sinon');
 var Factory = require('factory_girl');
 
+// App
+var Marionette = require('backbone.marionette');
 
 // Fixtures
 var fs = require('fs');
