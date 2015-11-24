@@ -17,6 +17,7 @@ var BaseRegionsFixt = fs.readFileSync(__dirname + '/../../fixtures/base-regions.
 var Controller = require('app/controller');
 var EntitiesAPI = require('app/entities').API;
 var NameView = require('app/edit/views').NameView;
+var MoveFormView = require('app/edit/views').MoveFormView;
 var Move = require('app/entities').Move;
 var Moves = require('app/entities').Moves;
 var Spots = require('app/entities').Spots;
