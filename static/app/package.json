@@ -8,8 +8,7 @@
   },
   "scripts": {
     "setup": "ln -nsf ../app node_modules/app && gulp build",
-    "test": "mochify --recursive --transform [ brfs ]",
-    "test:cover": "mochify --recursive --transform [ brfs ] --plugin [ mochify-istanbul --report text ]"
+    "test": "mochify --recursive --transform [ brfs ]"
   },
   "devDependencies": {
     "brfs": "^1.2.0",
@@ -51,5 +50,8 @@
     "numeral": "^1.5.3",
     "spinkit": "^1.2.2",
     "vinyl-buffer": "^1.0.0"
+  },
+  "browser": {
+    "fixtures": "./test/utils/fixtures.js"
   }
 }

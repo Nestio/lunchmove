@@ -12,11 +12,14 @@ var Constants = {
 var API = Marionette.Object.extend({
     initialize: function(){
         channel.reply('get:constant', function(name){
-            return Constants[name];
-        });
+            return this.replyConstants(name);
+        }, this);
     },
     onDestroy: function(){
         channel.stopReplying('get:constant');
+    },
+    replyConstants: function(name){
+        return Constants[name];
     }
 });
 

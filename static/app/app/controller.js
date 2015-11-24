@@ -21,6 +21,9 @@ var Controller = Marionette.Object.extend({
             }
         }, this);
     },
+    destroy: function(){
+        channel.off('call:method');
+    },
     list: function(saveAlert){
         var move = channel.request('entities:move');
         var spots = channel.request('entities:spots');
@@ -43,7 +46,6 @@ var Controller = Marionette.Object.extend({
         var spots = channel.request('entities:spots');
 
         var callback = function(){
-
             var ViewClass = move.get('user') ? MoveFormView : NameView;
             var view = new ViewClass({model: move});
             var mainRegion = channel.request('get:region', 'main');
