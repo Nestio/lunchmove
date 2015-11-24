@@ -85,8 +85,10 @@ class MoveViewSetTests(TestCase):
             Move.objects.create(user=username, spot=spot, time=time)
         self.client.get('/')
         moves = json.loads(self.client.get('/json/moves/').content)['results']
+        request_time = datetime.datetime.now()
         for move in moves:
             move_time = datetime.datetime.strptime(move['time'], "%Y-%m-%dT%H:%M:%S.%fZ")
             if move_time < datetime.datetime.now():
-                difference = datetime.datetime.now() - move_time
-                self.assertFalse(difference.seconds/3600 > 6)
+                difference = request_time - move_time
+                seconds_in_hour = 60 ** 2
+                self.assertTrue(difference.seconds/seconds_in_hour <= 6)
