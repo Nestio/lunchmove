@@ -32,7 +32,10 @@ class IndexTests(TestCase):
         })
         recent_move = json.loads(self.client.get('/').context['recent_move'])
         self.assertEqual(uuid, recent_move['uuid'])
-        self.assertEqual(len(recent_move), 5)
+        self.assertIn('time',recent_move)
+        self.assertIn('id', recent_move)
+        self.assertIn('spot', recent_move)
+        self.assertIn('user', recent_move)
 
     @override_settings(DEBUG=True)
     def test_users_name_bootrapped_if_model_beyond_six_hours_ago_exists(self):
@@ -44,11 +47,19 @@ class IndexTests(TestCase):
             'time': timezone.now() - datetime.timedelta(hours=9)
         })
         recent_move = json.loads(self.client.get('/').context['recent_move'])
-        self.assertEqual(len(recent_move), 1)
+        self.assertIn('user', recent_move)
+        self.assertNotIn('time', recent_move)
+        self.assertNotIn('id', recent_move)
+        self.assertNotIn('spot', recent_move)
+        self.assertNotIn('uuid', recent_move)
 
     def test_empty_model_bootstrapped_if_no_model_matches(self):
         recent_move = json.loads(self.client.get('/').context['recent_move'])
-        self.assertEqual(len(recent_move), 0)
+        self.assertNotIn('user', recent_move)
+        self.assertNotIn('time', recent_move)
+        self.assertNotIn('id', recent_move)
+        self.assertNotIn('spot', recent_move)
+        self.assertNotIn('uuid', recent_move)
 
 class MoveViewSetTests(TestCase):
     @override_settings(DEBUG=True)
