@@ -35,6 +35,7 @@ describe('Constants', function(){
             assert.isTrue(this.replyConstantsStub.calledOnce, 'replyConstants is called');
             assert.isTrue(this.replyConstantsStub.calledWith(name), 'replyConstants is passed argument');
             assert.equal(name, result, 'the request handler returns the result of replyConstants');
+            constantsAPI.destroy();
         });
     });
 
