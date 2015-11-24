@@ -8,7 +8,6 @@ from .models import Move, Spot
 
 # Create your tests here.
 class IndexTests(TestCase):
-
     def test_uuid_is_set_after_navigating_to_the_index_page(self):
         self.assertIsNone(self.client.session.get('user_uuid'))
         self.client.get('/')
@@ -21,21 +20,40 @@ class IndexTests(TestCase):
         self.client.get('/')
         self.assertEqual(self.client.session.get('user_uuid'), uuid)
 
+    @override_settings(DEBUG=True)
+    def test_bootstrap_model_on_page_if_model_with_uuid_with_past_six_hours_exists(self):
+        self.client.get('/')
+        uuid = self.client.session.get('user_uuid')
+        self.client.post('/json/spots/', { 'name': 'The Spot' })
+        self.client.post('/json/moves/', {
+            'user':'user',
+            'spot': Spot.objects.first().id,
+            'time': timezone.now() - datetime.timedelta(hours=3)
+        })
+        recent_move = json.loads(self.client.get('/').context['recent_move'])
+        self.assertEqual(uuid, recent_move['uuid'])
+        self.assertEqual(len(recent_move), 5)
+
+    # @override_settings(DEBUG=True)
+    # def users_name_bootrapped_if_model_beyond_six_hours_ago_exists(self):
+    #     self.get.client('/')
+    #
+    # @override_settings(DEBUG=True)
+    # def empty_model_bootstrapped_if_no_model_matches(self):
+    #     responce = self.get.client('/')
+
 class MoveViewSetTests(TestCase):
     @override_settings(DEBUG=True)
     def test_move_uuid_matches_user_uuid(self):
         self.client.get('/')
         uuid = self.client.session.get('user_uuid')
         self.client.post('/json/spots/', { 'name': 'The Spot' })
-        spot = json.loads(self.client.get('/json/spots/').content)['results'][0]
-        self.assertEqual(spot['id'], 1)
         self.client.post('/json/moves/', {
             'user':'User',
-            'spot': 1,
+            'spot': Spot.objects.first().id,
             'time': timezone.now()
         })
         move = json.loads(self.client.get('/json/moves/').content)['results'][0]
-        self.assertEqual(move['id'], 1)
         self.assertEqual(move['uuid'], uuid)
 
     @override_settings(DEBUG=True)
