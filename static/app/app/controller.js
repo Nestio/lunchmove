@@ -66,6 +66,8 @@ var Controller = Marionette.Object.extend({
         
         $.when(moves.fetch()).done(function(){
             var currentMove = channel.request("entities:move");
+            debugger
+            //  moveToJoin = channel.request('entities:moves').get(moveId)
             var moveToJoin = channel.request('entities:moves')
                                     .find({id: parseInt(moveId)});
             
