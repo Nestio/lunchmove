@@ -9,9 +9,9 @@ from .models import Move, Spot
 # Create your tests here.
 class IndexTests(TestCase):
     def test_uuid_is_set_after_navigating_to_the_index_page(self):
-        self.assertIsNone(self.client.session.get('user_uuid'))
+        self.assertNotIn('user_uuid', self.client.session)
         self.client.get('/')
-        self.assertTrue(bool(self.client.session.get('user_uuid')))
+        self.assertIn('user_uuid', self.client.session)
 
     def test_user_uuid_is_not_reset_upon_navigation_to_index_page_if_set(self):
         self.client.get('/')
