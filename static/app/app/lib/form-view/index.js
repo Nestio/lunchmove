@@ -8,6 +8,8 @@ Backbone.Syphon = require('backbone.syphon');
 require('backbone.radio');
 require('backbone.babysitter');
 var Marionette = require('backbone.marionette');
+require('bootstrap/js/tooltip');
+require('bootstrap/js/popover');
 
 // App
 var fs = require('fs');
@@ -35,7 +37,7 @@ InputWriterSet.registerDefault(function(el, value){
     }
 });
 
-InputReaderSet.registerDefault(function(el){    
+InputReaderSet.registerDefault(function(el){
     return el.val();
 });
 
@@ -92,7 +94,7 @@ var FormView = Marionette.ItemView.extend({
 
     // Object of fields
     fields: {},
-    
+
     // (Optional) Widgets which will apply to groups of inputs
     inputGroups: {},
 
@@ -193,7 +195,7 @@ var FormView = Marionette.ItemView.extend({
         // Returns the input field el
         return this.$('[data-field="'+fieldName+'"]');
     },
-    
+
     getInputGroupEl: function(fieldName){
         // Returns the input group el
         return this.$('[data-input-group="' + fieldName + '"]');
@@ -212,13 +214,13 @@ var FormView = Marionette.ItemView.extend({
         }, this);
 
         this.className = this._className + ' ' + (this.className || '');
-        
+
         // Extend default ui hash
         this.ui = _.extend({}, this._defaultUI, this.ui);
 
         // Extend default events hash
         this.events = _.extend({}, this._defaultEvents, this.events);
-        
+
         Marionette.ItemView.prototype.constructor.apply(this, arguments);
 
         if (!this.model) { this.model = new Backbone.Model(); }
@@ -240,8 +242,8 @@ var FormView = Marionette.ItemView.extend({
         this.once('show', function(){
             this.prepareFormState();
             this.on('render', this.prepareFormState, this);
-        }, this);    
-        
+        }, this);
+
         this.once('before:destroy', this.disablePlugins, this);
         this.once('before:destroy', this.destroyWidgets, this);
     },
@@ -250,7 +252,7 @@ var FormView = Marionette.ItemView.extend({
         if (this._widgetViews.length) {
             this.destroyWidgets();
         }
-        
+
         this.renderInputWidgets();
         this.renderInputGroupWidgets();
 
@@ -258,10 +260,10 @@ var FormView = Marionette.ItemView.extend({
     },
     // Data Serializers, Encoders, and Cleaners
 
-    _encode: function(data, encodeDirection){        
-        var encodedData = _.mapObject(data, function(val, key){            
+    _encode: function(data, encodeDirection){
+        var encodedData = _.mapObject(data, function(val, key){
             var fieldOptions = this.fields[key];
-            
+
             if (!_.isString(fieldOptions) && !_.isObject(fieldOptions)) {
                 throw new Error('Field options must be a string of the encoder type, or an object of options.');
             }
@@ -276,7 +278,7 @@ var FormView = Marionette.ItemView.extend({
                 encoderName = fieldOptions.encoder.name || encoderName;
                 encoderOptions = _.omit(fieldOptions.encoder, 'name');
             }
-            
+
             var encoder = this.encoders[encoderName];
 
             if (encoder) {
@@ -313,13 +315,13 @@ var FormView = Marionette.ItemView.extend({
         this.deserializing = true;
 
         Backbone.Syphon.deserialize(this, decodedData, {include: inputElKeys});
-        
+
         this.deserializing = false;
         this.triggerMethod('deserialize');
     },
     _getFieldKeys: function(options){
         options = options || {};
-        
+
         // Convert fields to an array of key
         return _.reduce(this.fields, function(keys, val, key){
             if (val.nested) {
@@ -391,7 +393,7 @@ var FormView = Marionette.ItemView.extend({
         // If rule is an object, get first property for name/values (only one key/val set allowed)
         var ruleName = _.isObject(rule) ? _.first(_.keys(rule)) : rule;
 
-        // If not required, not a local rule, and value is null/empty, do not validate. 
+        // If not required, not a local rule, and value is null/empty, do not validate.
         if (ruleName !== 'required' && !this.rules[ruleName] && !value) {
             return;
         }
@@ -440,7 +442,7 @@ var FormView = Marionette.ItemView.extend({
         return null;
     },
 
-    _cleanFormData: function(data){        
+    _cleanFormData: function(data){
         if (this.getOption('hasFiles')) {
             // Remove file fields from serialized data
             _.each(this.fields, function(field, fieldName){
@@ -457,7 +459,7 @@ var FormView = Marionette.ItemView.extend({
         // Unset non-attribute values saved to model on an iframe submit
         _.each(['_method','csrfmiddlewaretoken'], function(fieldName){
             model.unset(fieldName, {silent: true});
-        });     
+        });
     },
 
     // Submit Handlers & Methods
@@ -486,11 +488,11 @@ var FormView = Marionette.ItemView.extend({
 
     onSubmit: function(e, data){
         e.preventDefault();
-        
+
         this.clearAlerts();
         this.clearErrors();
         this.disableSaving();
-        
+
         data = this._cleanFormData(data);
 
         var options = {
@@ -505,7 +507,7 @@ var FormView = Marionette.ItemView.extend({
                     this.handleSubmitError(responseData);
                     return;
                 }
-                
+
                 this.handleSubmitSuccess();
                 this.triggerMethod('submit:success');
             }, this),
@@ -544,7 +546,7 @@ var FormView = Marionette.ItemView.extend({
     disableSaving: function(){
         var defaultText = this.ui.saveButton.text();
         var savingText = this.ui.saveButton.data('saving-text') || defaultText;
-        
+
         this.ui.saveButton
             .prop('disabled', true)
             .addClass('disabled').blur()
@@ -577,7 +579,7 @@ var FormView = Marionette.ItemView.extend({
     handleSubmitError: function(response){
         this.enableSaving();
         var errorAlert = {alertType: 'error', message: this.messages.saveError};
-        
+
         if (response && response.status_code >= 400) {
             // Form has validation errors
             this.showErrors(response.errors);
@@ -670,9 +672,9 @@ var FormView = Marionette.ItemView.extend({
                 var widgetName = _.isObject(fieldOptions.widget) ? fieldOptions.widget.name : fieldOptions.widget;
 
                 var WidgetView = this.getOption('inputWidgetViews')[widgetName];
-                
+
                 var widgetEl = this.getFieldEl(key);
-                
+
                 if (WidgetView && widgetEl.length) {
                     var options = _.extend({
                         fieldOptions: _.omit(fieldOptions, 'widget'),
@@ -701,12 +703,12 @@ var FormView = Marionette.ItemView.extend({
         _.each(this.inputGroups, _.bind(function(inputGroupOptions, key){
             var inputGroupName = _.isObject(inputGroupOptions) ? inputGroupOptions.name : inputGroupOptions;
             var WidgetView = this.getOption('inputGroupWidgetViews')[inputGroupName];
-            
+
             if (WidgetView) {
                 var widgetView = new WidgetView(_.extend({
                     el: this.getInputGroupEl(key),
                 }, inputGroupOptions.options));
-                
+
                 widgetView.render();
 
                 // Store widgetView for later destruction
