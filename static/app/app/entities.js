@@ -63,7 +63,7 @@ var Spots = Backbone.Collection.extend({
 
 var spots = new Spots();
 var moves = new Moves();
-var move = new Move(lunchmove ? lunchmove.recent_move : {});
+var move = new Move(window.lunchmove ? window.lunchmove.recent_move : {});
 
 var API = Marionette.Object.extend({
     initialize: function(){

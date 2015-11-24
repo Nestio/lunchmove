@@ -1,5 +1,4 @@
 var Factory = require('factory_girl');
 
-Factory.define('Move', function(){
-
+Factory.define('Moves', function(){
 });
