@@ -11,7 +11,6 @@ var LoadingView = require('app/common/views').LoadingView;
 var LayoutView = require('app/list/views').LayoutView;
 var MoveFormView = require('app/edit/views').MoveFormView;
 var NameView = require('app/edit/views').NameView;
-var JoinView = require('app/edit/views').JoinView;
 
 var Controller = Marionette.Object.extend({
     initialize: function(){
@@ -79,8 +78,7 @@ var Controller = Marionette.Object.extend({
                     }
                 })
             } else {
-                var mainRegion = channel.request('get:region', 'main');
-                mainRegion.show(new JoinView);
+                channel.trigger('edit')
             }
         });
     }

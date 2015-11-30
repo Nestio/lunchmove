@@ -168,20 +168,7 @@ var NameView = BaseFormView.extend({
     }
 });
 
-var JoinView = NameView.extend({
-    onSubmit: function(e, data) {
-      e.preventDefault();
-      channel.request('entities:move').set(data);
-      channel.request('entities:move').save({}, {
-        success: function() {
-          channel.trigger('list');
-        }
-      })
-    }
-});
-
 module.exports = {
     NameView: NameView,
     MoveFormView: MoveFormView,
-    JoinView: JoinView
 };
