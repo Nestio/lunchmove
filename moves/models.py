@@ -30,8 +30,8 @@ class Move(models.Model):
 
     def save(self, *args, **kwargs):
         super(Move, self).save(*args, **kwargs)
-        if not settings.DEBUG:
-            self.post_to_slack()
+        # if not settings.DEBUG:
+        self.post_to_slack()
 
     def post_to_hipchat(self):
         root = 'https://api.hipchat.com/v2/room/%s/notification' % settings.HIPCHAT_ROOM_ID

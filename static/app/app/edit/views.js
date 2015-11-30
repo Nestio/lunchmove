@@ -173,7 +173,6 @@ var JoinView = NameView.extend({
       e.preventDefault();
       channel.request('entities:move').set(data);
       channel.request('entities:move').save({}, {
-        dataType: 'text',
         success: function() {
           channel.trigger('list');
         }
