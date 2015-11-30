@@ -170,5 +170,5 @@ var NameView = BaseFormView.extend({
 
 module.exports = {
     NameView: NameView,
-    MoveFormView: MoveFormView,
+    MoveFormView: MoveFormView
 };
