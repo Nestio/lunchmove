@@ -8,6 +8,8 @@ Backbone.Syphon = require('backbone.syphon');
 require('backbone.radio');
 require('backbone.babysitter');
 var Marionette = require('backbone.marionette');
+require('bootstrap/js/tooltip');
+require('bootstrap/js/popover');
 
 // App
 var fs = require('fs');
