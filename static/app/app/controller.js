@@ -66,7 +66,7 @@ var Controller = Marionette.Object.extend({
         
         $.when(moves.fetch()).done(function(){
             var currentMove = channel.request('entities:move');
-            var moveToJoin = channel.request('entities:moves').get(moveId)
+            var moveToJoin = channel.request('entities:moves').get(moveId);
             
             currentMove.set('time', moveToJoin.get('time').format());
             currentMove.set('spot', moveToJoin.get('spot'));
@@ -78,7 +78,7 @@ var Controller = Marionette.Object.extend({
                     }
                 })
             } else {
-                channel.trigger('edit')
+                channel.trigger('edit');
             }
         });
     }
