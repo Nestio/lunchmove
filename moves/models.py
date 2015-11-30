@@ -29,9 +29,8 @@ class Move(models.Model):
     uuid = models.UUIDField(blank=True, null=True)
 
     def save(self, *args, **kwargs):
-        if not settings.DEBUG:
-            self.post_to_slack()
         super(Move, self).save(*args, **kwargs)
+        self.post_to_slack()
 
     def post_to_hipchat(self):
         root = 'https://api.hipchat.com/v2/room/%s/notification' % settings.HIPCHAT_ROOM_ID
@@ -51,7 +50,8 @@ class Move(models.Model):
         print 'response from slack: %s' % r.text
 
     def __unicode__(self):
+        link = u'%s/%s/join|Join>' % ('<http://lunchmove.info/move', self.id)
         root = u'%s is going to eat %s' % (self.user, self.spot.name)
         if self.time:
-            root = '%s at %s' % (root, self.time.strftime('%-I:%M'))
+            root = '%s at %s. %s' % (root, self.time.strftime('%-I:%M '), link)
         return root

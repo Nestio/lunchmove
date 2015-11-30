@@ -10,4 +10,5 @@ urlpatterns = [
     url(r'^$', index, name='index'),
     url(r'^edit$', index, name='index'),
     url(r'^json/', include(router.urls)),
+    url('move/[0-9]+/join', index, name='index')
 ]

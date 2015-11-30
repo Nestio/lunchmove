@@ -60,6 +60,27 @@ var Controller = Marionette.Object.extend({
             spots.fetch().done(callback);
         }
 
+    },
+    join: function(moveId) {
+        var moves = channel.request('entities:moves');
+        
+        $.when(moves.fetch()).done(function(){
+            var currentMove = channel.request('entities:move');
+            var moveToJoin = channel.request('entities:moves').get(moveId);
+            
+            currentMove.set('time', moveToJoin.get('time').format());
+            currentMove.set('spot', moveToJoin.get('spot'));
+            
+            if (currentMove.get('user')) {
+                currentMove.save({}, {
+                    success: function(model, resp) {
+                        channel.trigger('list');
+                    }
+                })
+            } else {
+                channel.trigger('edit');
+            }
+        });
     }
 });
 

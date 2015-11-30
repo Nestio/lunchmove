@@ -535,7 +535,7 @@ var FormView = Marionette.ItemView.extend({
                 })
             });
         }
-
+        
         this.model.save(data, options);
     },
 
