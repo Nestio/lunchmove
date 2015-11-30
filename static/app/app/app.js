@@ -3,6 +3,7 @@ var $ = global.jQuery = require('jquery');
 var Backbone = require('backbone');
 var Marionette = require('backbone.marionette');
 var Radio = require('backbone.radio');
+require('bootstrap/js/tooltip');
 require('bootstrap');
 $(function(){
   require('app/lib/ajax-csrf');

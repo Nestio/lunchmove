@@ -63,26 +63,47 @@ var Spots = Backbone.Collection.extend({
 
 var spots = new Spots();
 var moves = new Moves();
-var move = new Move(lunchmove.recent_move);
+var move = new Move(window.lunchmove ? window.lunchmove.recent_move : {});
 
 var API = Marionette.Object.extend({
     initialize: function(){
         channel.reply('entities:spots', function(){
-            return spots;
-        });
+            return this.replySpots();
+        }, this);
 
         channel.reply('entities:moves', function(){
-            return moves;
-        });
+            return this.replyMoves();
+        }, this);
 
         channel.reply('entities:move', function(){
-            return move;
+            return this.replyMove();
+        }, this);
+
+        channel.reply('entities:move:reset', function(options){
+            this.resetMove(options);
+        }, this);
+    },
+    replySpots: function(){
+        return spots;
+    },
+    replyMoves: function(){
+        return moves;
+    },
+    replyMove: function(){
+        return move;
+    },
+    resetMove: function(options){
+        options = options || {};
+        move.destroy(options);
+        move = new Move({
+            user: move.get('user')
         });
-    }, 
+    },
     onDestroy: function(){
         channel.stopReplying('entities:spots');
         channel.stopReplying('entities:moves');
         channel.stopReplying('entities:move');
+        channel.stopReplying('entities:move:reset');
     }
 });
 

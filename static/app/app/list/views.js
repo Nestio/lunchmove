@@ -21,22 +21,39 @@ var LunchMoveView = Marionette.ItemView.extend({
     },
     events: {
         'click @ui.addMove': 'addMove',
-        'click @ui.editMove': 'addMove'
+        'click @ui.editMove': 'addMove',
+        'click @ui.delete': 'deleteMove'
     },
     ui: {
+        'delete': '[data-ui="delete"]',
         'editMove': '.own-move',
-        'addMove': '[data-ui="addMove"]'
+        'addMove': '[data-ui="addMove"]',
     },
     addMove: function(e){
         e.preventDefault();
-        channel.request('entities:move').set('spot', this.model.id);
+        channel.request('entities:move').set({
+            spot: this.model.id,
+            time: this.model.get('moves').last().get('time')
+        });
         channel.trigger('edit');
         return false;
+    },
+    activateTooltips: function() {
+        $('[data-toggle="tooltip"]').tooltip();
+    },
+    deleteMove: function(e) {
+        e.preventDefault();
+        channel.request('entities:move:reset', {
+            success: function() {
+                channel.trigger('list');
+            }
+        });
     },
     onShow: function() {
         if (this.getOption('recentlySaved')) {
            this.recentSaveAlert();
         }
+        this.activateTooltips();
     },
     recentSaveAlert: function() {
         this.ui.editMove.addClass('background-flash');
@@ -71,7 +88,10 @@ var LunchMovesView = Marionette.CompositeView.extend({
     template: _.template(LunchMovesTpl),
     childView: LunchMoveView,
     childViewOptions: function() {
-      return { recentlySaved: this.getOption('recentlySaved') };
+        return { recentlySaved: this.getOption('recentlySaved') };
+    },
+    onChildviewDeleteMove: function() {
+        channel.trigger('list');
     },
     emptyView: EmptyView,
     childViewContainer: '.moves-container',
