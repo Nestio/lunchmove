@@ -66,9 +66,8 @@ var Controller = Marionette.Object.extend({
         var moves = channel.request('entities:moves');
         
         $.when(moves.fetch()).done(function(){
-            var currentMove = channel.request("entities:move");
-            var moveToJoin = channel.request('entities:moves')
-                                    .find({id: parseInt(moveId)});
+            var currentMove = channel.request('entities:move');
+            var moveToJoin = channel.request('entities:moves').get(moveId)
             
             currentMove.set('time', moveToJoin.get('time').format());
             currentMove.set('spot', moveToJoin.get('spot'));
@@ -77,7 +76,6 @@ var Controller = Marionette.Object.extend({
                 currentMove.save({}, {
                     success: function(model, resp) {
                         channel.trigger('list');
-                        
                     }
                 })
             } else {
