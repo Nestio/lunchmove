@@ -23,14 +23,15 @@ class Move(models.Model):
 
     user = models.CharField(max_length=50)
     spot = models.ForeignKey(Spot)
-    time = models.DateTimeField(blank=True, null=True)
+    time = models.DateTimeField(blank=True, null=True, default=timezone.now)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     uuid = models.UUIDField(blank=True, null=True)
 
-    def save(self, *args, **kwargs):
+    def save(self, broadcast=True, *args, **kwargs):
         super(Move, self).save(*args, **kwargs)
-        self.post_to_slack()
+        if broadcast:
+            self.post_to_slack()
 
     def post_to_hipchat(self):
         root = 'https://api.hipchat.com/v2/room/%s/notification' % settings.HIPCHAT_ROOM_ID

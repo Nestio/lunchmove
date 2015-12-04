@@ -7,6 +7,18 @@ from django.test import TestCase
 from .models import Move, Spot
 
 # Create your tests here.
+class MoveTestCase(TestCase):
+    """
+    tests functionality in the Move model class
+    """
+    def test_move_saved_with_no_time_defaults_to_now(self):
+        spot = Spot.objects.create(name='somewhere over the rainbow')
+        move = Move(user="some dude", spot=spot)
+        move.save(broadcast=False)
+        
+        time_diff = timezone.now() - move.time
+        self.assertAlmostEqual(time_diff.seconds, 0)
+
 class IndexTests(TestCase):
     def test_uuid_is_set_after_navigating_to_the_index_page(self):
         self.assertNotIn('user_uuid', self.client.session)
