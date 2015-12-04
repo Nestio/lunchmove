@@ -35,6 +35,9 @@ class MoveViewSet(viewsets.ModelViewSet):
     queryset = Move.objects.recent()
     serializer_class = MoveSerializer
 
+    def perform_create(self, serializer):
+        serializer.save()
+
     def create(self, request):
         data = request.data.copy()
         data.update({'uuid': request.session['user_uuid']})

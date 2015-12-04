@@ -14,9 +14,9 @@ class MoveTestCase(TestCase):
     def test_move_saved_with_no_time_defaults_to_now(self):
         spot = Spot.objects.create(name='somewhere over the rainbow')
         move = Move(user="some dude", spot=spot)
-        move.save()
+        move.save(broadcast=False)
         
-        time_diff = datetime.datetime.now() - move.time
+        time_diff = timezone.now() - move.time
         self.assertAlmostEqual(time_diff.seconds, 0)
 
 class IndexTests(TestCase):
