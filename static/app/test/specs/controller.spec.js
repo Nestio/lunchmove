@@ -4,7 +4,6 @@ var sinon = require('sinon');
 var Factory = require('factory_girl');
 
 // Dependencies
-var _ = require('underscore');
 var Marionette = require('backbone.marionette');
 var Radio = require('backbone.radio');
 
