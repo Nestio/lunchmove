@@ -4,6 +4,7 @@ var sinon = require('sinon');
 var Factory = require('factory_girl');
 
 // Dependencies
+var _ = require('underscore');
 var Marionette = require('backbone.marionette');
 var Radio = require('backbone.radio');
 
@@ -22,6 +23,7 @@ var MoveFormView = require('app/edit/views').MoveFormView;
 var Move = require('app/entities').Move;
 var Moves = require('app/entities').Moves;
 var Spots = require('app/entities').Spots;
+var Spot = require('app/entities').Spot;
 
 var channel = Radio.channel('global');
 
@@ -60,7 +62,7 @@ describe('Controller', function(){
 
         this.server = sinon.fakeServer.create();
         this.server.respondWith(moves.url, JSON.stringify({results: []}));
-        this.server.respondWith(spots.url, JSON.stringify({results: []}));
+        this.server.respondWith(spots.url, JSON.stringify(new Spot({id: 1, name: 'food'})));
         
         this.controller = new Controller();
     });
@@ -124,10 +126,10 @@ describe('Controller', function(){
 
     describe('edit', function(){
         it('inserts view immediately if spots have already been fetched', function(){
-            this.spots.fetch().done(function(){
-                this.controller.edit();
-                assert.isTrue(this.mainRegion.currentView instanceof NameView, 'view in mainRegion is NameView');
-            });
+            this.spots.fetch();
+            this.server.respond();
+            this.controller.edit();
+            assert.isTrue(this.mainRegion.currentView instanceof NameView, 'view in mainRegion is NameView');
         });
         it('inserts loading view first if spots have not already been fetched', function(){
             this.controller.edit();
