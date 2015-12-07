@@ -23,9 +23,14 @@ def yelp_suggestion(request):
     if token != THE_TOKEN:
         return HttpResponse('bogus dude', status=403)
 
-    yelp = YelpAPI()
+    # parse the request for 'text' which is the search term to submit to yelp
+    search_term = request.GET.get('text')
+    params = {
+        'term': search_term
+    }
 
-    yelp_response = yelp.query()
+    yelp = YelpAPI()
+    yelp_response = yelp.query(params)
     if yelp_response.status_code == 200:
         # TODO: this is fragile. make it more better
         recommendation_url = yelp_response.json()['businesses'][0]['url']

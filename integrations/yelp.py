@@ -9,18 +9,6 @@ class YelpAPI(object):
 
     SEARCH_ENDPOINT_URL = "https://api.yelp.com/v2/search"
 
-    def __init__(self, *args, **kwargs):
-        DEFAULT_PARAMS = {
-            'term': 'lunch',
-            'location': '10010', # zipcode
-            'limit': 3,
-            'category_filter': 'food,restaurants',
-            'radius_filter': 1000, # 1000 meter radius
-            'sort': 2 # 2 is the code for sort by highest rated
-        }
-        defaults = kwargs.pop('default_params', None)
-        self.default_params = DEFAULT_PARAMS if defaults is None else defaults
-
     def get_auth(self):
         auth = OAuth1(
             self.OAUTH_CONSUMER_KEY,
@@ -34,7 +22,18 @@ class YelpAPI(object):
         return self.SEARCH_ENDPOINT_URL
 
     def get_params(self, params=None):
-        return params or self.default_params
+        query_params = {
+            # some sensible defaults
+            'term': 'lunch',
+            'location': '10010', # zipcode
+            'limit': 3,
+            'category_filter': 'food,restaurants',
+            'radius_filter': 1000, # 1000 meter radius
+            'sort': 2 # 2 is the code for sort by highest rated
+        }
+        if params is not None:
+            query_params.update(params)
+        return query_params
 
     def query(self, params=None):
         """
