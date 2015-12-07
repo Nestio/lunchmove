@@ -90,7 +90,7 @@ describe('Entities', function(){
             });
             it('resets move with a new move', function(){
                 var move = channel.request('entities:move');
-                this.resetMoveStub = sinon.stub(this.entitiesAPI, 'resetMove', function(){
+                var resetMoveStub = sinon.stub(this.entitiesAPI, 'resetMove', function(){
                     move.destroy();
                     return new Move({ user: move.get('user') });
                 });
