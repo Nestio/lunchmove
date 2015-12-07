@@ -50,6 +50,7 @@ describe('Edit', function(){
 
             this.server = sinon.fakeServer.create();
             this.server.respondWith(moves.url, JSON.stringify({results:[]}));
+            this.server.respondWith(spots.url, JSON.stringify({ "name":"new place","id":2 }));
         });
 
         afterEach(function(){
@@ -149,15 +150,44 @@ describe('Edit', function(){
             });
 
             describe('onSpotBlur', function(){
-                it('sets spotId if there is no spotId but val of spotName matches the name of a spot ');
-                it('clears spotName if there is no spotId and the val of spotName does not match the name of a spot');
-                it('sets spotName if there is a spotId');
+                beforeEach(function(){
+                    this.mainRegion.show(this.view);
+                });
+                it('sets spotId if there is no spotId but val of spotName matches the name of a spot ', function(){
+                    assert.equal(this.view.ui.spot.val(), '');
+                    this.view.ui.spotName.val('something').trigger('input');
+                    this.view.onSpotBlur();
+                    assert.equal(this.view.ui.spot.val(), '1');
+                });
+                it('clears spotName if there is no spotId and the val of spotName does not match the name of a spot', function(){
+                    this.view.ui.spotName.val('somethin').trigger('input');
+                    this.view.onSpotBlur();
+                    assert.equal(this.view.ui.spotName.val(), '');
+                });
+                it('sets spotName if there is a spotId', function(){
+                    this.view.ui.spot.val('1');
+                    this.view.onSpotBlur();
+                    assert.equal(this.view.ui.spotName.val(), 'something');
+                });
             });
 
             describe('addSpot', function(){
                 //NOTE: you'll need to create a fakeServer response for these to work. See http://sinonjs.org/docs/#server
-                it('adds a new spot to the spots collection with the name of the value of spotName');
-                it('sets spotId to be the value of the newly created spot');
+                beforeEach(function(){
+                    this.mainRegion.show(this.view);
+                    this.view.ui.spotName.val("new place").trigger('input');
+                    var addSpot = this.view.$('[data-action="addSpot"]');
+                    addSpot.click();
+                    this.server.respond();
+                });
+                it('adds a new spot to the spots collection with the name of the value of spotName', function(){
+                    var newSpot = channel.request('entities:spots').findWhere({name: "new place"});
+                    assert.equal(newSpot.get('name'), "new place");
+                });
+                it('sets spotId to be the value of the newly created spot', function(){
+                    var newSpot = channel.request('entities:spots').findWhere({name: "new place"});
+                    assert.equal(newSpot.id, this.view.ui.spot.val());
+                });
             });
         });
     });
