@@ -146,7 +146,7 @@ var MoveFormView = BaseFormView.extend({
     templateHelpers: function(){
         return {
             spots: channel.request('entities:spots').toJSON()
-        }
+        };
     }
 });
 

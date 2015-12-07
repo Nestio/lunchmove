@@ -42,12 +42,14 @@ describe('Edit', function(){
                 return Factory.create('Spot').toJSON();
             });
             var spots = this.spots = new Spots(spotsData);
-
+            var moves = this.moves = new Moves();
+            
             this.replySpotsStub = sinon.stub(this.entitiesAPI, 'replySpots', function(){
                 return spots;
             });
 
             this.server = sinon.fakeServer.create();
+            this.server.respondWith(moves.url, JSON.stringify({results:[]}));
         });
 
         afterEach(function(){
@@ -129,13 +131,22 @@ describe('Edit', function(){
 
             it('sets the value of spotName on deserialize if spotId has a value', function(){
                 this.model.set({spot: '1'});
-                var spot = this.model.get('spot');
                 this.mainRegion.show(this.view);
                 assert.isTrue(this.view.ui.spotName.val() === 'something');
             });
 
             //NOTE: you'll need to create a fakeServer response for this to work. See http://sinonjs.org/docs/#server
-            it('triggers list on submit');
+            it('triggers list on submit', function(){
+                var triggerSpy = sinon.spy(channel, 'trigger');
+                this.mainRegion.show(this.view);
+                this.view.getInputEl('spot').val('1').trigger('input');
+                this.view.getInputEl('time').val('11:00').trigger('input');
+                
+                this.view.ui.form.submit();
+                this.server.respond();
+
+                assert.isTrue(triggerSpy.called);
+            });
 
             describe('onSpotBlur', function(){
                 it('sets spotId if there is no spotId but val of spotName matches the name of a spot ');
