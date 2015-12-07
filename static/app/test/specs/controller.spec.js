@@ -17,6 +17,8 @@ var Controller = require('app/controller');
 var EntitiesAPI = require('app/entities').API;
 var LayoutView = require('app/list/views').LayoutView;
 var LoadingView = require('app/common/views').LoadingView;
+var NameView = require('app/edit/views').NameView;
+var MoveFormView = require('app/edit/views').MoveFormView;
 var Move = require('app/entities').Move;
 var Moves = require('app/entities').Moves;
 var Spots = require('app/entities').Spots;
@@ -78,11 +80,24 @@ describe('Controller', function(){
     });
 
     describe('initialize', function(){
-        it('registers call:method request handler');
+        it('registers call:method request handler', function(){
+            var controller = new Controller();
+            var args = 'something';
+            var editStub = sinon.stub(controller, 'edit');
+            channel.trigger('call:method', 'edit', args);
+            assert.isTrue(editStub.calledOnce, 'editStub is called');
+            assert.isTrue(editStub.calledWith(args), 'editStub is passed an argument');
+        });
     });
 
     describe('destroy', function(){
-        it('unregisters call:method request handler');
+        it('unregisters call:method request handler', function(){
+            var controller = new Controller();
+            var editStub = sinon.stub(controller, 'edit');
+            controller.destroy();
+            channel.trigger('call:method', 'edit');
+            assert.isFalse(editStub.calledOnce, 'call:method does not call method');
+        });
     });
 
     describe('list', function(){
@@ -111,9 +126,32 @@ describe('Controller', function(){
     });
 
     describe('edit', function(){
-        it('inserts view immediately if spots have already been fetched');
-        it('inserts loading view first if spots have not already been fetched');
-        it('inserts NameView if move does not a have user name');
-        it('inserts MoveFormView if move does have a name');
+        it('inserts view immediately if spots have already been fetched', function(){
+            var controller = new Controller();
+            this.spots.fetch().done(function(){
+                controller.edit();
+                assert.isTrue(this.mainRegion.currentView instanceof NameView, 'view in mainRegion is NameView');
+            });
+        });
+        it('inserts loading view first if spots have not already been fetched', function(){
+            var controller = new Controller();
+            controller.edit();
+            assert.isTrue(this.mainRegion.currentView instanceof LoadingView, 'view in mainRegion is LoadingView');
+            this.server.respond();
+            assert.isTrue(this.mainRegion.currentView instanceof NameView, 'view in mainRegion is NameView');
+        });
+        it('inserts NameView if move does not a have user name', function(){
+            var controller = new Controller();
+            controller.edit();
+            this.server.respond();
+            assert.isTrue(this.mainRegion.currentView instanceof NameView, 'view in mainRegion is NameView');
+        });
+        it('inserts MoveFormView if move does have a name', function(){
+            var controller = new Controller();
+            this.move.set({user: "user"});
+            controller.edit();
+            this.server.respond();
+            assert.isTrue(this.mainRegion.currentView instanceof MoveFormView, 'view in mainRegion is MoveFormView');
+        });
     });
 });
