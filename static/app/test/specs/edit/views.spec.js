@@ -102,7 +102,7 @@ describe('Edit', function(){
         describe('MoveFormView', function(){
             beforeEach(function(){
                 this.model = new Move({
-                    user: 'User Name',
+                    user: 'User Name'
                 });
 
                 this.view = new MoveFormView({
