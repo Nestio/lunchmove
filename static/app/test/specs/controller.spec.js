@@ -61,7 +61,7 @@ describe('Controller', function(){
 
         this.server = sinon.fakeServer.create();
         this.server.respondWith(moves.url, JSON.stringify({results: []}));
-        this.server.respondWith(spots.url, JSON.stringify(new Spot({id: 1, name: 'food'})));
+        this.server.respondWith(spots.url, JSON.stringify(new Spots(new Spot({id: 1, name: 'food'}))));
         
         this.controller = new Controller();
     });
