@@ -21,6 +21,7 @@ var MoveFormView = require('app/edit/views').MoveFormView;
 var Move = require('app/entities').Move;
 var Moves = require('app/entities').Moves;
 var Spots = require('app/entities').Spots;
+var Spot = require('app/entities').Spot;
 
 var channel = Radio.channel('global');
 
@@ -75,7 +76,7 @@ describe('Edit', function(){
                 this.view.getInputEl('user').val('User Name').trigger('input');
                 assert.isFalse(this.view.ui.saveButton.hasClass('disabled'));
             });
-
+        
             it('sets the user name on the model when it is submitted', function(){
                 var userName = 'User Name';
                 this.view.getInputEl('user').val(userName).trigger('input');
@@ -83,7 +84,7 @@ describe('Edit', function(){
                 this.view.ui.form.submit();
                 assert.equal(this.model.get('user'), userName);
             });
-
+            
             it('triggers the edit route when it is submitted', function(){
                 var triggerSpy = sinon.spy(channel, 'trigger');
                 this.view.getInputEl('user').val('user name').trigger('input');
@@ -98,21 +99,40 @@ describe('Edit', function(){
         describe('MoveFormView', function(){
             beforeEach(function(){
                 this.model = new Move({
-                    user: 'User Name'
+                    user: 'User Name',
                 });
 
                 this.view = new MoveFormView({
                     model: this.model
                 });
-
-                this.mainRegion.show(this.view);
+                
+                var spot = new Spot({
+                    id: 1,
+                    name: 'something'
+                });
+                this.spots.add(spot);
             });
 
-            it('enables the submit button when spot and time are filled in');
+            it('enables the submit button when spot and time are filled in', function(){
+                this.mainRegion.show(this.view);
+                assert.isTrue(this.view.ui.saveButton.hasClass('disabled'));
+                this.view.getInputEl('spot').val('Somewhere').trigger('input');
+                this.view.getInputEl('time').val('11:00').trigger('input');
+                assert.isFalse(this.view.ui.saveButton.hasClass('disabled'));
+            });
+            
+            it('calls render typeahead on show', function(){
+                var renderTypeaheadStub = sinon.spy(this.view, 'renderTypeahead');
+                this.mainRegion.show(this.view);
+                assert.isTrue(renderTypeaheadStub.called, 'renderTypeahead is called');
+            });
 
-            it('calls render typeahead on show');
-
-            it('sets the value of spotName on deserialize if spotId has a value');
+            it('sets the value of spotName on deserialize if spotId has a value', function(){
+                this.model.set({spot: '1'});
+                var spot = this.model.get('spot');
+                this.mainRegion.show(this.view);
+                assert.isTrue(this.view.ui.spotName.val() === 'something');
+            });
 
             //NOTE: you'll need to create a fakeServer response for this to work. See http://sinonjs.org/docs/#server
             it('triggers list on submit');
