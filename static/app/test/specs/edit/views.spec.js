@@ -79,7 +79,7 @@ describe('Edit', function(){
                 this.view.getInputEl('user').val('User Name').trigger('input');
                 assert.isFalse(this.view.ui.saveButton.hasClass('disabled'));
             });
-        
+
             it('sets the user name on the model when it is submitted', function(){
                 var userName = 'User Name';
                 this.view.getInputEl('user').val(userName).trigger('input');
@@ -87,7 +87,7 @@ describe('Edit', function(){
                 this.view.ui.form.submit();
                 assert.equal(this.model.get('user'), userName);
             });
-            
+
             it('triggers the edit route when it is submitted', function(){
                 var triggerSpy = sinon.spy(channel, 'trigger');
                 this.view.getInputEl('user').val('user name').trigger('input');
