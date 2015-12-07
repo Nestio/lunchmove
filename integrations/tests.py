@@ -1,3 +1,9 @@
 from django.test import TestCase
 
-# Create your tests here.
+class YelpAPITestCase(TestCase):
+    "tests the YelpAPI class"
+    pass
+
+class YelpSuggestionTestCase(TestCase):
+    "tests the yelp_suggestion endpoint"
+    pass
