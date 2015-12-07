@@ -25,33 +25,33 @@ describe('Entities', function(){
             
             it('registers an entities:spots request handler', function(){
                 var spots = "something";
-                this.replySpotsStub = sinon.stub(this.entitiesAPI, 'replySpots', function(){ return spots });
+                var replySpotsStub = sinon.stub(this.entitiesAPI, 'replySpots', function(){ return spots; });
                 var result = channel.request('entities:spots');
-                assert.isTrue(this.replySpotsStub.calledOnce, 'replySpots is called');
+                assert.isTrue(replySpotsStub.calledOnce, 'replySpots is called');
                 assert.equal(spots, result, 'the request handler returns the result of replySpots');
-                this.replySpotsStub.restore();
+                replySpotsStub.restore();
             });
             it('registers an entities:moves request handler', function(){
                 var moves = "something";
-                this.replyMovesStub = sinon.stub(this.entitiesAPI, 'replyMoves', function(){ return moves });
+                var replyMovesStub = sinon.stub(this.entitiesAPI, 'replyMoves', function(){ return moves; });
                 var result = channel.request('entities:moves');
-                assert.isTrue(this.replyMovesStub.calledOnce, 'replyMoves is called');
+                assert.isTrue(replyMovesStub.calledOnce, 'replyMoves is called');
                 assert.equal(moves, result, 'the request handled returns the result of replyMoves');
-                this.replyMovesStub.restore();
+                replyMovesStub.restore();
             });
             it('registers an entities:move request handler', function(){
                 var move = "something";
-                this.replyMoveStub = sinon.stub(this.entitiesAPI, 'replyMove', function(){ return move });
+                var replyMoveStub = sinon.stub(this.entitiesAPI, 'replyMove', function(){ return move; });
                 var result = channel.request('entities:move');
-                assert.isTrue(this.replyMoveStub.calledOnce, 'replyMove is called');
+                assert.isTrue(replyMoveStub.calledOnce, 'replyMove is called');
                 assert.equal(move, result, 'the request handler returns the result of replyMove');
-                this.replyMoveStub.restore();
+                replyMoveStub.restore();
             });
             it('registers an entities:move:reset request handler', function(){
-                this.resetMoveStub = sinon.stub(this.entitiesAPI, 'resetMove', function(){});
+                var resetMoveStub = sinon.stub(this.entitiesAPI, 'resetMove', function(){});
                 this.entitiesAPI.resetMove();
-                assert.isTrue(this.resetMoveStub.calledOnce, 'resetMove is called');
-                this.resetMoveStub.restore();
+                assert.isTrue(resetMoveStub.calledOnce, 'resetMove is called');
+                resetMoveStub.restore();
             });
         });
         
@@ -97,7 +97,7 @@ describe('Entities', function(){
                 
                 var result = this.entitiesAPI.resetMove();
                 assert.notEqual(move, result, 'resetMove resets with a new move');
-                this.resetMoveStub.restore();
+                resetMoveStub.restore();
             });
         });
     });
