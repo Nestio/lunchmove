@@ -24,12 +24,12 @@ def yelp_suggestion(request):
         return HttpResponse('bogus dude', status=403)
 
     yelp = YelpAPI()
-    params = {
-        'term': request.GET.get('text')
-        'limit': 1
-    }
-    yelp_response = yelp.query(params)
-    if yelp_response.status == 200:
+
+    yelp_response = yelp.query()
+    if yelp_response.status_code == 200:
         # TODO: this is fragile. make it more better
         recommendation_url = yelp_response.json()['businesses'][0]['url']
         post_to_slack(recommendation_url)
+        return HttpResponse(recommendation_url, status=200)
+
+    return HttpResponse(status=400)
