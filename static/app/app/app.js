@@ -1,3 +1,11 @@
-require('assets/sass/styles.scss');
+import 'babel-polyfill'
+import 'assets/sass/styles.scss';
 
-console.log('HI');
+import React from 'react'
+import { render } from 'react-dom'
+import Root from './containers/Root'
+
+render(
+  <Root />,
+  document.getElementById('app')
+)
