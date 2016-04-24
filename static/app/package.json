@@ -7,8 +7,7 @@
     "url": "http://github.com/bnjmnhndrsn/lunchmove.git"
   },
   "scripts": {
-    "setup": "ln -nsf ../app node_modules/app && gulp build",
-    "test": "mochify --recursive --transform [ brfs ]"
+    "setup:fonts": "mkdir -p dist/assets/fonts/ && cp -r assets/fonts/* dist/assets/fonts/"
   },
   "devDependencies": {
     "babel-core": "^6.3.15",

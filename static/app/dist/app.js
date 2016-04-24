@@ -29053,6 +29053,8 @@
 	    var user = _ref.user;
 	
 	    var moveName = void 0;
+	    var deleteButton = void 0;
+	
 	    if (isOwnMove) {
 	        moveName = _react2.default.createElement(
 	            'span',
@@ -29064,18 +29066,9 @@
 	        moveName = user;
 	    }
 	
-	    var deleteButton = void 0;
-	    if (isOwnMove) {
-	        deleteButton = _react2.default.createElement(
-	            'div',
-	            { className: 'delete' },
-	            _react2.default.createElement('span', { className: 'glyphicon glyphicon-trash' })
-	        );
-	    }
-	
 	    return _react2.default.createElement(
 	        'div',
-	        { className: (0, _classnames2.default)("moves", { "own-move": isOwnMove }) },
+	        { className: (0, _classnames2.default)("move", { "own-move": isOwnMove }) },
 	        _react2.default.createElement(
 	            'div',
 	            { className: 'move-time' },
@@ -29093,8 +29086,7 @@
 	                null,
 	                moveName
 	            )
-	        ),
-	        deleteButton
+	        )
 	    );
 	};
 	

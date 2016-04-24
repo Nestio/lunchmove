@@ -4,23 +4,16 @@ import classNames from 'classnames';
 
 const Move = ({isOwnMove, time, user }) => {
     let moveName;
+    let deleteButton;
+    
     if (isOwnMove) {
         moveName = (<span>You <span className="glyphicon glyphicon-pencil" /></span>);
     } else {
         moveName = user;
     }
 
-    let deleteButton;
-    if (isOwnMove) {
-        deleteButton = (
-            <div className="delete">
-                <span className="glyphicon glyphicon-trash"></span>
-            </div>
-        );
-    }
-
     return (
-        <div className={classNames("moves", {"own-move": isOwnMove})}>
+        <div className={classNames("move", {"own-move": isOwnMove})}>
             <div className="move-time">
                 <span>{ moment(time).format('h:mm') }</span>
             </div>
@@ -29,8 +22,7 @@ const Move = ({isOwnMove, time, user }) => {
                     {moveName}
                 </span>
             </div>
-            {deleteButton}
-        </div>
+        </div>        
     );
 };
 
