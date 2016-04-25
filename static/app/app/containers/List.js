@@ -1,14 +1,16 @@
 import { connect } from 'react-redux'
 import LunchMoves from '../components/LunchMoves'
-import { values } from 'lodash';
+import { values, find } from 'lodash';
 
 function groupMovesBySpots (state) {
   var spotsById = state.moves.items.reduce((acc, move) => {
     let spotId = move.spot_id;
     
     if (!acc[spotId]) {
+      let spot = find(state.spots.items, {id: spotId});
+      
       acc[spotId] = {
-        name: state.spots[spotId].name,
+        name: spot.name,
         hasOwnMove: false,
         moves: []
       }
@@ -27,18 +29,14 @@ function groupMovesBySpots (state) {
 } 
 
 const mapStateToProps = (state) => {
-  return {
-    spots: groupMovesBySpots(state)
+  let spots = null;
+  if (state.moves.items && state.spots.items) {
+    spots = groupMovesBySpots(state);
   }
+  return {
+    spots
+  };
 }
-
-// const mapDispatchToProps = (dispatch) => {
-//   return {
-//     onTodoClick: (id) => {
-//       dispatch(toggleTodo(id))
-//     }
-//   }
-// }
 
 const ListContainer = connect(
   mapStateToProps

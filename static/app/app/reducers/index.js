@@ -1,5 +1,8 @@
 import { combineReducers } from 'redux'
-import {REQUEST_MOVES, RECEIVE_MOVES} from './actions'
+import {
+  REQUEST_MOVES, RECEIVE_MOVES,
+  REQUEST_SPOTS, RECEIVE_SPOTS
+} from '../actions'
 
 function moves(state = {
   isFetching: false,
@@ -10,7 +13,7 @@ function moves(state = {
       return Object.assign({}, state, {
         isFetching: true
       })
-    case RECEIVE_POSTS:
+    case RECEIVE_MOVES:
       return Object.assign({}, state, {
         isFetching: false,
         items: action.moves
@@ -20,8 +23,28 @@ function moves(state = {
   }
 }
 
+function spots(state = {
+  isFetching: false,
+  items: null
+}, action) {
+  switch (action.type) {
+    case REQUEST_SPOTS:
+      return Object.assign({}, state, {
+        isFetching: true
+      })
+    case RECEIVE_SPOTS:
+      return Object.assign({}, state, {
+        isFetching: false,
+        items: action.spots
+      })
+    default:
+      return state
+  }
+}
+
 const rootReducer = combineReducers({
-  moves
+  moves,
+  spots
 })
 
 export default rootReducer

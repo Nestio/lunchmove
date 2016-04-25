@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import moment from 'moment';
 import classNames from 'classnames';
+import { fetchSpotsIfNeeded, fetchMovesIfNeeded } from '../actions'
 
 const Move = ({isOwnMove, time, user }) => {
     let moveName;
@@ -56,14 +57,25 @@ const ListItem = ({name, moves, hasOwnMove}) => {
     );
 };
 
-const List = ({spots}) => {
-    let spotItems = spots.map((spot) => <ListItem {...spot} />);
+export default class List extends Component {
+    componentDidMount () {
+        this.props.dispatch(fetchSpotsIfNeeded());
+        this.props.dispatch(fetchMovesIfNeeded());
+    }
+    
+    render () {
+        if (!this.props.spots) {
+            return <div>LOADING</div>
+        }
+        
+        let spotItems = this.props.spots.map((spot) => <ListItem {...spot} />);
 
-    return (
-        <div className="container moves-container">
-            {spotItems}
-        </div>
-    );
+        return (
+            <div className="container moves-container">
+                {spotItems}
+            </div>
+        );
+    }
 }
 
 export default List

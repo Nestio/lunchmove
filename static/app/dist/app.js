@@ -27350,11 +27350,11 @@
 	
 	var _configureStore2 = _interopRequireDefault(_configureStore);
 	
-	var _List = __webpack_require__(483);
+	var _List = __webpack_require__(479);
 	
 	var _List2 = _interopRequireDefault(_List);
 	
-	var _fakeData = __webpack_require__(484);
+	var _fakeData = __webpack_require__(487);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -27365,10 +27365,13 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
 	var initialState = {
-	  spots: _fakeData.spots,
+	  spots: {
+	    isFetching: false,
+	    items: null
+	  },
 	  moves: {
 	    isFetching: false,
-	    items: _fakeData.moves
+	    items: null
 	  }
 	};
 	
@@ -28961,14 +28964,14 @@
 	
 	var _reduxThunk2 = _interopRequireDefault(_reduxThunk);
 	
+	var _reducers = __webpack_require__(489);
+	
+	var _reducers2 = _interopRequireDefault(_reducers);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var reducer = function reducer(state) {
-	  return state;
-	};
-	
 	function configureStore(initialState) {
-	  return (0, _redux.createStore)(reducer, initialState, (0, _redux.applyMiddleware)(_reduxThunk2.default));
+	  return (0, _redux.createStore)(_reducers2.default, initialState, (0, _redux.applyMiddleware)(_reduxThunk2.default));
 	}
 
 /***/ },
@@ -29001,22 +29004,93 @@
 	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _reactRedux = __webpack_require__(455);
+	
+	var _LunchMoves = __webpack_require__(480);
+	
+	var _LunchMoves2 = _interopRequireDefault(_LunchMoves);
+	
+	var _lodash = __webpack_require__(488);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function groupMovesBySpots(state) {
+	  debugger;
+	  var spotsById = state.moves.items.reduce(function (acc, move) {
+	    var spotId = move.spot_id;
+	
+	    if (!acc[spotId]) {
+	      var spot = (0, _lodash.find)(state.spots.items, { id: spotId });
+	
+	      acc[spotId] = {
+	        name: spot.name,
+	        hasOwnMove: false,
+	        moves: []
+	      };
+	    }
+	
+	    acc[spotId].moves.push(move);
+	
+	    if (move.isOwnMove) {
+	      acc[spotId].hasOwnMove = true;
+	    }
+	
+	    return acc;
+	  }, {});
+	
+	  return (0, _lodash.values)(spotsById);
+	}
+	
+	var mapStateToProps = function mapStateToProps(state) {
+	  var spots = null;
+	  if (state.moves.items && state.spots.items) {
+	    spots = groupMovesBySpots(state);
+	  }
+	  return {
+	    spots: spots
+	  };
+	};
+	
+	var ListContainer = (0, _reactRedux.connect)(mapStateToProps)(_LunchMoves2.default);
+	
+	exports.default = ListContainer;
+
+/***/ },
+/* 480 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
 	var _react = __webpack_require__(297);
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _moment = __webpack_require__(480);
+	var _moment = __webpack_require__(481);
 	
 	var _moment2 = _interopRequireDefault(_moment);
 	
-	var _classnames = __webpack_require__(482);
+	var _classnames = __webpack_require__(483);
 	
 	var _classnames2 = _interopRequireDefault(_classnames);
 	
+	var _actions = __webpack_require__(484);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
 	var Move = function Move(_ref) {
 	    var isOwnMove = _ref.isOwnMove;
@@ -29113,24 +29187,52 @@
 	    );
 	};
 	
-	var List = function List(_ref3) {
-	    var spots = _ref3.spots;
+	var List = function (_Component) {
+	    _inherits(List, _Component);
 	
-	    var spotItems = spots.map(function (spot) {
-	        return _react2.default.createElement(ListItem, spot);
-	    });
+	    function List() {
+	        _classCallCheck(this, List);
 	
-	    return _react2.default.createElement(
-	        'div',
-	        { className: 'container moves-container' },
-	        spotItems
-	    );
-	};
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(List).apply(this, arguments));
+	    }
 	
+	    _createClass(List, [{
+	        key: 'componentDidMount',
+	        value: function componentDidMount() {
+	            this.props.dispatch((0, _actions.fetchSpotsIfNeeded)());
+	            this.props.dispatch((0, _actions.fetchMovesIfNeeded)());
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            if (!this.props.spots) {
+	                return _react2.default.createElement(
+	                    'div',
+	                    null,
+	                    'LOADING'
+	                );
+	            }
+	
+	            var spotItems = this.props.spots.map(function (spot) {
+	                return _react2.default.createElement(ListItem, spot);
+	            });
+	
+	            return _react2.default.createElement(
+	                'div',
+	                { className: 'container moves-container' },
+	                spotItems
+	            );
+	        }
+	    }]);
+	
+	    return List;
+	}(_react.Component);
+	
+	exports.default = List;
 	exports.default = List;
 
 /***/ },
-/* 480 */
+/* 481 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(module) {//! moment.js
@@ -33173,10 +33275,10 @@
 	    return _moment;
 	
 	}));
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(481)(module)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(482)(module)))
 
 /***/ },
-/* 481 */
+/* 482 */
 /***/ function(module, exports) {
 
 	module.exports = function(module) {
@@ -33192,7 +33294,7 @@
 
 
 /***/ },
-/* 482 */
+/* 483 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -33246,7 +33348,7 @@
 
 
 /***/ },
-/* 483 */
+/* 484 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -33254,61 +33356,504 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
+	exports.RECEIVE_SPOTS = exports.REQUEST_SPOTS = exports.RECEIVE_MOVES = exports.REQUEST_MOVES = undefined;
+	exports.fetchSpotsIfNeeded = fetchSpotsIfNeeded;
+	exports.fetchMovesIfNeeded = fetchMovesIfNeeded;
 	
-	var _reactRedux = __webpack_require__(455);
+	var _isomorphicFetch = __webpack_require__(485);
 	
-	var _LunchMoves = __webpack_require__(479);
+	var _isomorphicFetch2 = _interopRequireDefault(_isomorphicFetch);
 	
-	var _LunchMoves2 = _interopRequireDefault(_LunchMoves);
-	
-	var _lodash = __webpack_require__(485);
+	var _fakeData = __webpack_require__(487);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	function groupMovesBySpots(state) {
-	  var spotsById = state.moves.items.reduce(function (acc, move) {
-	    var spotId = move.spot_id;
+	var REQUEST_MOVES = exports.REQUEST_MOVES = 'REQUEST_MOVES';
+	var RECEIVE_MOVES = exports.RECEIVE_MOVES = 'RECEIVE_MOVES';
+	var REQUEST_SPOTS = exports.REQUEST_SPOTS = 'REQUEST_SPOTS';
+	var RECEIVE_SPOTS = exports.RECEIVE_SPOTS = 'RECEIVE_SPOTS';
 	
-	    if (!acc[spotId]) {
-	      acc[spotId] = {
-	        name: state.spots[spotId].name,
-	        hasOwnMove: false,
-	        moves: []
-	      };
-	    }
-	
-	    acc[spotId].moves.push(move);
-	
-	    if (move.isOwnMove) {
-	      acc[spotId].hasOwnMove = true;
-	    }
-	
-	    return acc;
-	  }, {});
-	
-	  return (0, _lodash.values)(spotsById);
+	function requestSpots() {
+	  return {
+	    type: REQUEST_SPOTS
+	  };
 	}
 	
-	var mapStateToProps = function mapStateToProps(state) {
+	function receiveSpots(json) {
 	  return {
-	    spots: groupMovesBySpots(state)
+	    type: RECEIVE_SPOTS,
+	    spots: json
 	  };
-	};
+	}
 	
-	// const mapDispatchToProps = (dispatch) => {
-	//   return {
-	//     onTodoClick: (id) => {
-	//       dispatch(toggleTodo(id))
-	//     }
-	//   }
-	// }
+	function fetchSpots() {
+	  return function (dispatch) {
+	    dispatch(requestSpots());
+	    return (0, _isomorphicFetch2.default)('/json/spots/').then(function (response) {
+	      return response.json();
+	    }).then(function (json) {
+	      dispatch(receiveSpots(json.results));
+	    });
+	  };
+	}
 	
-	var ListContainer = (0, _reactRedux.connect)(mapStateToProps)(_LunchMoves2.default);
+	function shouldFetchSpots(state) {
+	  return !state.spots.items && !state.spots.isFetching;
+	}
 	
-	exports.default = ListContainer;
+	function fetchSpotsIfNeeded() {
+	  return function (dispatch, getState) {
+	    if (shouldFetchSpots(getState())) {
+	      return dispatch(fetchSpots());
+	    }
+	  };
+	}
+	
+	function requestMoves() {
+	  return {
+	    type: REQUEST_MOVES
+	  };
+	}
+	
+	function receiveMoves(json) {
+	  return {
+	    type: RECEIVE_MOVES,
+	    moves: json
+	  };
+	}
+	
+	function fetchMoves() {
+	  return function (dispatch) {
+	    dispatch(requestMoves());
+	    return (0, _isomorphicFetch2.default)('/json/moves/').then(function (response) {
+	      return response.json();
+	    }).then(function (json) {
+	      return dispatch(receiveMoves(_fakeData.moves));
+	    });
+	  };
+	}
+	
+	function shouldFetchMoves(state) {
+	  return !state.moves.items && !state.moves.isFetching;
+	}
+	
+	function fetchMovesIfNeeded() {
+	  return function (dispatch, getState) {
+	    if (shouldFetchMoves(getState())) {
+	      return dispatch(fetchMoves());
+	    }
+	  };
+	}
 
 /***/ },
-/* 484 */
+/* 485 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// the whatwg-fetch polyfill installs the fetch() function
+	// on the global object (window or self)
+	//
+	// Return that as the export for use in Webpack, Browserify etc.
+	__webpack_require__(486);
+	module.exports = self.fetch.bind(self);
+
+
+/***/ },
+/* 486 */
+/***/ function(module, exports) {
+
+	(function(self) {
+	  'use strict';
+	
+	  if (self.fetch) {
+	    return
+	  }
+	
+	  function normalizeName(name) {
+	    if (typeof name !== 'string') {
+	      name = String(name)
+	    }
+	    if (/[^a-z0-9\-#$%&'*+.\^_`|~]/i.test(name)) {
+	      throw new TypeError('Invalid character in header field name')
+	    }
+	    return name.toLowerCase()
+	  }
+	
+	  function normalizeValue(value) {
+	    if (typeof value !== 'string') {
+	      value = String(value)
+	    }
+	    return value
+	  }
+	
+	  function Headers(headers) {
+	    this.map = {}
+	
+	    if (headers instanceof Headers) {
+	      headers.forEach(function(value, name) {
+	        this.append(name, value)
+	      }, this)
+	
+	    } else if (headers) {
+	      Object.getOwnPropertyNames(headers).forEach(function(name) {
+	        this.append(name, headers[name])
+	      }, this)
+	    }
+	  }
+	
+	  Headers.prototype.append = function(name, value) {
+	    name = normalizeName(name)
+	    value = normalizeValue(value)
+	    var list = this.map[name]
+	    if (!list) {
+	      list = []
+	      this.map[name] = list
+	    }
+	    list.push(value)
+	  }
+	
+	  Headers.prototype['delete'] = function(name) {
+	    delete this.map[normalizeName(name)]
+	  }
+	
+	  Headers.prototype.get = function(name) {
+	    var values = this.map[normalizeName(name)]
+	    return values ? values[0] : null
+	  }
+	
+	  Headers.prototype.getAll = function(name) {
+	    return this.map[normalizeName(name)] || []
+	  }
+	
+	  Headers.prototype.has = function(name) {
+	    return this.map.hasOwnProperty(normalizeName(name))
+	  }
+	
+	  Headers.prototype.set = function(name, value) {
+	    this.map[normalizeName(name)] = [normalizeValue(value)]
+	  }
+	
+	  Headers.prototype.forEach = function(callback, thisArg) {
+	    Object.getOwnPropertyNames(this.map).forEach(function(name) {
+	      this.map[name].forEach(function(value) {
+	        callback.call(thisArg, value, name, this)
+	      }, this)
+	    }, this)
+	  }
+	
+	  function consumed(body) {
+	    if (body.bodyUsed) {
+	      return Promise.reject(new TypeError('Already read'))
+	    }
+	    body.bodyUsed = true
+	  }
+	
+	  function fileReaderReady(reader) {
+	    return new Promise(function(resolve, reject) {
+	      reader.onload = function() {
+	        resolve(reader.result)
+	      }
+	      reader.onerror = function() {
+	        reject(reader.error)
+	      }
+	    })
+	  }
+	
+	  function readBlobAsArrayBuffer(blob) {
+	    var reader = new FileReader()
+	    reader.readAsArrayBuffer(blob)
+	    return fileReaderReady(reader)
+	  }
+	
+	  function readBlobAsText(blob) {
+	    var reader = new FileReader()
+	    reader.readAsText(blob)
+	    return fileReaderReady(reader)
+	  }
+	
+	  var support = {
+	    blob: 'FileReader' in self && 'Blob' in self && (function() {
+	      try {
+	        new Blob();
+	        return true
+	      } catch(e) {
+	        return false
+	      }
+	    })(),
+	    formData: 'FormData' in self,
+	    arrayBuffer: 'ArrayBuffer' in self
+	  }
+	
+	  function Body() {
+	    this.bodyUsed = false
+	
+	
+	    this._initBody = function(body) {
+	      this._bodyInit = body
+	      if (typeof body === 'string') {
+	        this._bodyText = body
+	      } else if (support.blob && Blob.prototype.isPrototypeOf(body)) {
+	        this._bodyBlob = body
+	      } else if (support.formData && FormData.prototype.isPrototypeOf(body)) {
+	        this._bodyFormData = body
+	      } else if (!body) {
+	        this._bodyText = ''
+	      } else if (support.arrayBuffer && ArrayBuffer.prototype.isPrototypeOf(body)) {
+	        // Only support ArrayBuffers for POST method.
+	        // Receiving ArrayBuffers happens via Blobs, instead.
+	      } else {
+	        throw new Error('unsupported BodyInit type')
+	      }
+	
+	      if (!this.headers.get('content-type')) {
+	        if (typeof body === 'string') {
+	          this.headers.set('content-type', 'text/plain;charset=UTF-8')
+	        } else if (this._bodyBlob && this._bodyBlob.type) {
+	          this.headers.set('content-type', this._bodyBlob.type)
+	        }
+	      }
+	    }
+	
+	    if (support.blob) {
+	      this.blob = function() {
+	        var rejected = consumed(this)
+	        if (rejected) {
+	          return rejected
+	        }
+	
+	        if (this._bodyBlob) {
+	          return Promise.resolve(this._bodyBlob)
+	        } else if (this._bodyFormData) {
+	          throw new Error('could not read FormData body as blob')
+	        } else {
+	          return Promise.resolve(new Blob([this._bodyText]))
+	        }
+	      }
+	
+	      this.arrayBuffer = function() {
+	        return this.blob().then(readBlobAsArrayBuffer)
+	      }
+	
+	      this.text = function() {
+	        var rejected = consumed(this)
+	        if (rejected) {
+	          return rejected
+	        }
+	
+	        if (this._bodyBlob) {
+	          return readBlobAsText(this._bodyBlob)
+	        } else if (this._bodyFormData) {
+	          throw new Error('could not read FormData body as text')
+	        } else {
+	          return Promise.resolve(this._bodyText)
+	        }
+	      }
+	    } else {
+	      this.text = function() {
+	        var rejected = consumed(this)
+	        return rejected ? rejected : Promise.resolve(this._bodyText)
+	      }
+	    }
+	
+	    if (support.formData) {
+	      this.formData = function() {
+	        return this.text().then(decode)
+	      }
+	    }
+	
+	    this.json = function() {
+	      return this.text().then(JSON.parse)
+	    }
+	
+	    return this
+	  }
+	
+	  // HTTP methods whose capitalization should be normalized
+	  var methods = ['DELETE', 'GET', 'HEAD', 'OPTIONS', 'POST', 'PUT']
+	
+	  function normalizeMethod(method) {
+	    var upcased = method.toUpperCase()
+	    return (methods.indexOf(upcased) > -1) ? upcased : method
+	  }
+	
+	  function Request(input, options) {
+	    options = options || {}
+	    var body = options.body
+	    if (Request.prototype.isPrototypeOf(input)) {
+	      if (input.bodyUsed) {
+	        throw new TypeError('Already read')
+	      }
+	      this.url = input.url
+	      this.credentials = input.credentials
+	      if (!options.headers) {
+	        this.headers = new Headers(input.headers)
+	      }
+	      this.method = input.method
+	      this.mode = input.mode
+	      if (!body) {
+	        body = input._bodyInit
+	        input.bodyUsed = true
+	      }
+	    } else {
+	      this.url = input
+	    }
+	
+	    this.credentials = options.credentials || this.credentials || 'omit'
+	    if (options.headers || !this.headers) {
+	      this.headers = new Headers(options.headers)
+	    }
+	    this.method = normalizeMethod(options.method || this.method || 'GET')
+	    this.mode = options.mode || this.mode || null
+	    this.referrer = null
+	
+	    if ((this.method === 'GET' || this.method === 'HEAD') && body) {
+	      throw new TypeError('Body not allowed for GET or HEAD requests')
+	    }
+	    this._initBody(body)
+	  }
+	
+	  Request.prototype.clone = function() {
+	    return new Request(this)
+	  }
+	
+	  function decode(body) {
+	    var form = new FormData()
+	    body.trim().split('&').forEach(function(bytes) {
+	      if (bytes) {
+	        var split = bytes.split('=')
+	        var name = split.shift().replace(/\+/g, ' ')
+	        var value = split.join('=').replace(/\+/g, ' ')
+	        form.append(decodeURIComponent(name), decodeURIComponent(value))
+	      }
+	    })
+	    return form
+	  }
+	
+	  function headers(xhr) {
+	    var head = new Headers()
+	    var pairs = xhr.getAllResponseHeaders().trim().split('\n')
+	    pairs.forEach(function(header) {
+	      var split = header.trim().split(':')
+	      var key = split.shift().trim()
+	      var value = split.join(':').trim()
+	      head.append(key, value)
+	    })
+	    return head
+	  }
+	
+	  Body.call(Request.prototype)
+	
+	  function Response(bodyInit, options) {
+	    if (!options) {
+	      options = {}
+	    }
+	
+	    this.type = 'default'
+	    this.status = options.status
+	    this.ok = this.status >= 200 && this.status < 300
+	    this.statusText = options.statusText
+	    this.headers = options.headers instanceof Headers ? options.headers : new Headers(options.headers)
+	    this.url = options.url || ''
+	    this._initBody(bodyInit)
+	  }
+	
+	  Body.call(Response.prototype)
+	
+	  Response.prototype.clone = function() {
+	    return new Response(this._bodyInit, {
+	      status: this.status,
+	      statusText: this.statusText,
+	      headers: new Headers(this.headers),
+	      url: this.url
+	    })
+	  }
+	
+	  Response.error = function() {
+	    var response = new Response(null, {status: 0, statusText: ''})
+	    response.type = 'error'
+	    return response
+	  }
+	
+	  var redirectStatuses = [301, 302, 303, 307, 308]
+	
+	  Response.redirect = function(url, status) {
+	    if (redirectStatuses.indexOf(status) === -1) {
+	      throw new RangeError('Invalid status code')
+	    }
+	
+	    return new Response(null, {status: status, headers: {location: url}})
+	  }
+	
+	  self.Headers = Headers;
+	  self.Request = Request;
+	  self.Response = Response;
+	
+	  self.fetch = function(input, init) {
+	    return new Promise(function(resolve, reject) {
+	      var request
+	      if (Request.prototype.isPrototypeOf(input) && !init) {
+	        request = input
+	      } else {
+	        request = new Request(input, init)
+	      }
+	
+	      var xhr = new XMLHttpRequest()
+	
+	      function responseURL() {
+	        if ('responseURL' in xhr) {
+	          return xhr.responseURL
+	        }
+	
+	        // Avoid security warnings on getResponseHeader when not allowed by CORS
+	        if (/^X-Request-URL:/m.test(xhr.getAllResponseHeaders())) {
+	          return xhr.getResponseHeader('X-Request-URL')
+	        }
+	
+	        return;
+	      }
+	
+	      xhr.onload = function() {
+	        var status = (xhr.status === 1223) ? 204 : xhr.status
+	        if (status < 100 || status > 599) {
+	          reject(new TypeError('Network request failed'))
+	          return
+	        }
+	        var options = {
+	          status: status,
+	          statusText: xhr.statusText,
+	          headers: headers(xhr),
+	          url: responseURL()
+	        }
+	        var body = 'response' in xhr ? xhr.response : xhr.responseText;
+	        resolve(new Response(body, options))
+	      }
+	
+	      xhr.onerror = function() {
+	        reject(new TypeError('Network request failed'))
+	      }
+	
+	      xhr.open(request.method, request.url, true)
+	
+	      if (request.credentials === 'include') {
+	        xhr.withCredentials = true
+	      }
+	
+	      if ('responseType' in xhr && support.blob) {
+	        xhr.responseType = 'blob'
+	      }
+	
+	      request.headers.forEach(function(value, name) {
+	        xhr.setRequestHeader(name, value)
+	      })
+	
+	      xhr.send(typeof request._bodyInit === 'undefined' ? null : request._bodyInit)
+	    })
+	  }
+	  self.fetch.polyfill = true
+	})(typeof self !== 'undefined' ? self : this);
+
+
+/***/ },
+/* 487 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -33364,7 +33909,7 @@
 	}];
 
 /***/ },
-/* 485 */
+/* 488 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(module, global) {/**
@@ -49395,7 +49940,72 @@
 	  }
 	}.call(this));
 	
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(481)(module), (function() { return this; }())))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(482)(module), (function() { return this; }())))
+
+/***/ },
+/* 489 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _redux = __webpack_require__(462);
+	
+	var _actions = __webpack_require__(484);
+	
+	function moves() {
+	  var state = arguments.length <= 0 || arguments[0] === undefined ? {
+	    isFetching: false,
+	    items: null
+	  } : arguments[0];
+	  var action = arguments[1];
+	
+	  switch (action.type) {
+	    case _actions.REQUEST_MOVES:
+	      return Object.assign({}, state, {
+	        isFetching: true
+	      });
+	    case _actions.RECEIVE_MOVES:
+	      return Object.assign({}, state, {
+	        isFetching: false,
+	        items: action.moves
+	      });
+	    default:
+	      return state;
+	  }
+	}
+	
+	function spots() {
+	  var state = arguments.length <= 0 || arguments[0] === undefined ? {
+	    isFetching: false,
+	    items: null
+	  } : arguments[0];
+	  var action = arguments[1];
+	
+	  switch (action.type) {
+	    case _actions.REQUEST_SPOTS:
+	      return Object.assign({}, state, {
+	        isFetching: true
+	      });
+	    case _actions.RECEIVE_SPOTS:
+	      return Object.assign({}, state, {
+	        isFetching: false,
+	        items: action.spots
+	      });
+	    default:
+	      return state;
+	  }
+	}
+	
+	var rootReducer = (0, _redux.combineReducers)({
+	  moves: moves,
+	  spots: spots
+	});
+	
+	exports.default = rootReducer;
 
 /***/ }
 /******/ ]);

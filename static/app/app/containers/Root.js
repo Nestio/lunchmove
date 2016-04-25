@@ -5,10 +5,13 @@ import ListContainer from './List'
 import {spots, moves} from '../fake-data'
 
 let initialState = {
-  spots: spots,
+  spots: {
+    isFetching: false,
+    items: null
+  },
   moves: {
     isFetching: false,
-    items: moves
+    items: null
   }
 }
 

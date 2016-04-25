@@ -1,9 +1,6 @@
 import { createStore, applyMiddleware } from 'redux'
 import thunkMiddleware from 'redux-thunk'
-
-var reducer = function(state){
-    return state
-};
+import reducer from './reducers';
 
 export default function configureStore(initialState) {
   return createStore(
