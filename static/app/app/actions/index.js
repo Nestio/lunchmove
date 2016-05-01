@@ -61,7 +61,7 @@ function fetchMoves() {
     dispatch(requestMoves())
     return fetch('/json/moves/')
       .then(response => response.json())
-      .then(json => dispatch(receiveMoves(fakeMoves)))
+      .then(json => dispatch(receiveMoves(json.results)))
   }
 }
 

@@ -30,7 +30,7 @@ class Move(models.Model):
 
     def save(self, broadcast=True, *args, **kwargs):
         super(Move, self).save(*args, **kwargs)
-        if broadcast:
+        if broadcast and settings.BROADCAST_TO_SLACK:
             self.post_to_slack()
 
     def post_to_hipchat(self):

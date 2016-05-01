@@ -4,6 +4,10 @@ import {
   REQUEST_SPOTS, RECEIVE_SPOTS
 } from '../actions'
 
+function recentMove(state = {}, action){
+  return state
+}
+
 function moves(state = {
   isFetching: false,
   items: null
@@ -44,7 +48,8 @@ function spots(state = {
 
 const rootReducer = combineReducers({
   moves,
-  spots
+  spots,
+  recentMove
 })
 
 export default rootReducer

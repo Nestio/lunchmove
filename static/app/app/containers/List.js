@@ -2,9 +2,19 @@ import { connect } from 'react-redux'
 import LunchMoves from '../components/LunchMoves'
 import { values, find } from 'lodash';
 
+function mapMoves (state) {
+  return state.moves.items.map((move) => {
+    return Object.assign({}, move, {
+      isOwnMove: move.id === state.recentMove.id
+    });
+  });
+} 
+
 function groupMovesBySpots (state) {
-  var spotsById = state.moves.items.reduce((acc, move) => {
-    let spotId = move.spot_id;
+  let moves = mapMoves(state);
+  debugger
+  let spotsById = moves.reduce((acc, move) => {
+    let spotId = move.spot;
     
     if (!acc[spotId]) {
       let spot = find(state.spots.items, {id: spotId});

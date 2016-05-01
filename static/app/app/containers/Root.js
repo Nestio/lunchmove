@@ -12,7 +12,8 @@ let initialState = {
   moves: {
     isFetching: false,
     items: null
-  }
+  },
+  recentMove: lunchmove.recent_move
 }
 
 const store = configureStore(initialState)
