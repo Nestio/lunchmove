@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux'
+import { routerReducer as routing } from 'react-router-redux'
 import {
   REQUEST_MOVES, RECEIVE_MOVES,
   REQUEST_SPOTS, RECEIVE_SPOTS
@@ -49,7 +50,8 @@ function spots(state = {
 const rootReducer = combineReducers({
   moves,
   spots,
-  recentMove
+  recentMove,
+  routing
 })
 
 export default rootReducer

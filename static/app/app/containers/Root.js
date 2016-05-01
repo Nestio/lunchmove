@@ -1,29 +1,20 @@
-import React, { Component } from 'react'
+import React, { Component, PropTypes } from 'react'
 import { Provider } from 'react-redux'
-import configureStore from '../configureStore'
-import ListContainer from './List'
-import {spots, moves} from '../fake-data'
-
-let initialState = {
-  spots: {
-    isFetching: false,
-    items: null
-  },
-  moves: {
-    isFetching: false,
-    items: null
-  },
-  recentMove: lunchmove.recent_move
-}
-
-const store = configureStore(initialState)
+import routes from '../routes'
+import { Router } from 'react-router'
 
 export default class Root extends Component {
   render() {
+    const { store, history } = this.props
     return (
       <Provider store={store}>
-        <ListContainer />
+          <Router history={history} routes={routes} />
       </Provider>
     )
   }
+}
+
+Root.propTypes = {
+  store: PropTypes.object.isRequired,
+  history: PropTypes.object.isRequired
 }

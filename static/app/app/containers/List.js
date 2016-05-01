@@ -12,7 +12,6 @@ function mapMoves (state) {
 
 function groupMovesBySpots (state) {
   let moves = mapMoves(state);
-  debugger
   let spotsById = moves.reduce((acc, move) => {
     let spotId = move.spot;
     
