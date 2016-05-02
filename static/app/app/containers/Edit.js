@@ -3,6 +3,8 @@ import { connect } from 'react-redux'
 
 import { updateMove } from '../actions'
 import NameForm from '../components/NameForm';
+import MoveForm from '../components/MoveForm';
+
 
 function mapStateToProps (state) {
     return state.recentMove;
@@ -18,9 +20,8 @@ const mapDispatchToProps = (dispatch) => {
 
 class Edit extends Component { 
     render() {
-        console.log(NameForm);
         if (this.props.user) {
-            return <div>{this.props.user}</div>
+            return <MoveForm />
         } else {
             return <NameForm updateMove={this.props.updateMove} />
         }

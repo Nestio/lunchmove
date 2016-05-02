@@ -55742,6 +55742,10 @@
 	
 	var _NameForm2 = _interopRequireDefault(_NameForm);
 	
+	var _MoveForm = __webpack_require__(557);
+	
+	var _MoveForm2 = _interopRequireDefault(_MoveForm);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -55774,13 +55778,8 @@
 	    _createClass(Edit, [{
 	        key: 'render',
 	        value: function render() {
-	            console.log(_NameForm2.default);
 	            if (this.props.user) {
-	                return _react2.default.createElement(
-	                    'div',
-	                    null,
-	                    this.props.user
-	                );
+	                return _react2.default.createElement(_MoveForm2.default, null);
 	            } else {
 	                return _react2.default.createElement(_NameForm2.default, { updateMove: this.props.updateMove });
 	            }
@@ -56028,6 +56027,114 @@
 	});
 	
 	exports.default = rootReducer;
+
+/***/ },
+/* 557 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(299);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var MoveForm = function (_Component) {
+	    _inherits(MoveForm, _Component);
+	
+	    function MoveForm(props) {
+	        _classCallCheck(this, MoveForm);
+	
+	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(MoveForm).call(this, props));
+	
+	        _this.state = {
+	            value: ''
+	        };
+	        _this.onChange = _this.onChange.bind(_this);
+	        _this.onSubmit = _this.onSubmit.bind(_this);
+	        return _this;
+	    }
+	
+	    _createClass(MoveForm, [{
+	        key: 'onChange',
+	        value: function onChange(e) {}
+	    }, {
+	        key: 'onSubmit',
+	        value: function onSubmit() {}
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            return _react2.default.createElement(
+	                'form',
+	                { className: 'form-inline lunch-move-form' },
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'lunch-move-form-row' },
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'form-group' },
+	                        _react2.default.createElement(
+	                            'p',
+	                            { className: 'form-control-static' },
+	                            'You are eating'
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'form-group' },
+	                        _react2.default.createElement('input', { className: 'form-control spot-field', type: 'text', name: 'spotName', placeholder: 'place' }),
+	                        _react2.default.createElement('input', { type: 'hidden', name: 'spot' })
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'form-group' },
+	                        _react2.default.createElement(
+	                            'p',
+	                            { className: 'form-control-static' },
+	                            'at'
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'form-group' },
+	                        _react2.default.createElement('input', { className: 'form-control time-field', type: 'text', name: 'time', placeholder: 'time' })
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'lunch-move-form-row' },
+	                    _react2.default.createElement(
+	                        'button',
+	                        { type: 'submit', className: 'btn btn-default', 'data-saving-text': 'Saving...' },
+	                        'Save'
+	                    ),
+	                    _react2.default.createElement(
+	                        'button',
+	                        { 'data-ui': 'cancel', className: 'btn btn-default' },
+	                        'Cancel'
+	                    )
+	                )
+	            );
+	        }
+	    }]);
+	
+	    return MoveForm;
+	}(_react.Component);
+	
+	exports.default = MoveForm;
 
 /***/ }
 /******/ ]);
