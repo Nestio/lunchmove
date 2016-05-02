@@ -2,11 +2,17 @@ import { combineReducers } from 'redux'
 import { routerReducer as routing } from 'react-router-redux'
 import {
   REQUEST_MOVES, RECEIVE_MOVES,
-  REQUEST_SPOTS, RECEIVE_SPOTS
+  REQUEST_SPOTS, RECEIVE_SPOTS,
+  UPDATE_MOVE
 } from '../actions'
 
 function recentMove(state = {}, action){
-  return state
+  switch (action.type) {
+    case UPDATE_MOVE:
+      return Object.assign({}, state, action.move);
+    default:
+      return state;
+  }
 }
 
 function moves(state = {

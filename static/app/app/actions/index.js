@@ -5,6 +5,7 @@ export const REQUEST_MOVES = 'REQUEST_MOVES'
 export const RECEIVE_MOVES = 'RECEIVE_MOVES'
 export const REQUEST_SPOTS = 'REQUEST_SPOTS'
 export const RECEIVE_SPOTS = 'RECEIVE_SPOTS'
+export const UPDATE_MOVE = 'UPDATE_MOVE'
 
 function requestSpots(){
   return {
@@ -74,5 +75,12 @@ export function fetchMovesIfNeeded() {
     if (shouldFetchMoves(getState())) {
       return dispatch(fetchMoves())
     }
+  }
+}
+
+export function updateMove(move){
+  return {
+    type: UPDATE_MOVE,
+    move: move
   }
 }
