@@ -84,3 +84,22 @@ export function updateMove(move){
     move: move
   }
 }
+
+export function saveMove(){
+  return (dispatch, getState) => {
+    let move = getState().recentMove;
+    let url = move.id ? `/json/moves/${move.id}` : '/json/moves/';
+    let method = move.id ? 'PUT' : 'POST';
+    return fetch(url, {
+        method,
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        credentials: 'same-origin',
+        body: JSON.stringify(move)
+    })
+      .then(response => response.json())
+      .then(json => dispatch(updateMove(json)));
+  }
+} 

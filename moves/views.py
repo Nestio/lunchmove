@@ -16,11 +16,9 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 
 @ensure_csrf_cookie
 def index(request):
-
     user_uuid = request.session.get('user_uuid') or str(uuid.uuid4())
     request.session['user_uuid'] = user_uuid
     request.session.set_expiry(None)
-
     move = Move.objects.filter(uuid=user_uuid).order_by('-time').first()
     if move and move.time >= timezone.now() - datetime.timedelta(hours=6):
         move = MoveSerializer(move).data

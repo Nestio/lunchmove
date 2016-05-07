@@ -71,7 +71,7 @@
 	
 	var _Root2 = _interopRequireDefault(_Root);
 	
-	var _configureStore = __webpack_require__(599);
+	var _configureStore = __webpack_require__(596);
 	
 	var _configureStore2 = _interopRequireDefault(_configureStore);
 	
@@ -34743,7 +34743,7 @@
 	
 	var _List2 = _interopRequireDefault(_List);
 	
-	var _Edit = __webpack_require__(552);
+	var _Edit = __webpack_require__(549);
 	
 	var _Edit2 = _interopRequireDefault(_Edit);
 	
@@ -34772,7 +34772,7 @@
 	
 	var _LunchMoves2 = _interopRequireDefault(_LunchMoves);
 	
-	var _lodash = __webpack_require__(551);
+	var _lodash = __webpack_require__(548);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -39127,12 +39127,13 @@
 	exports.fetchSpotsIfNeeded = fetchSpotsIfNeeded;
 	exports.fetchMovesIfNeeded = fetchMovesIfNeeded;
 	exports.updateMove = updateMove;
+	exports.saveMove = saveMove;
 	
-	var _isomorphicFetch = __webpack_require__(548);
+	var _isomorphicFetch = __webpack_require__(599);
 	
 	var _isomorphicFetch2 = _interopRequireDefault(_isomorphicFetch);
 	
-	var _fakeData = __webpack_require__(550);
+	var _fakeData = __webpack_require__(601);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -39220,472 +39221,30 @@
 	    move: move
 	  };
 	}
+	
+	function saveMove() {
+	  return function (dispatch, getState) {
+	    var move = getState().recentMove;
+	    var url = move.id ? '/json/moves/' + move.id : '/json/moves/';
+	    var method = move.id ? 'PUT' : 'POST';
+	    return (0, _isomorphicFetch2.default)(url, {
+	      method: method,
+	      headers: {
+	        'Accept': 'application/json',
+	        'Content-Type': 'application/json'
+	      },
+	      credentials: 'same-origin',
+	      body: JSON.stringify(move)
+	    }).then(function (response) {
+	      return response.json();
+	    }).then(function (json) {
+	      return dispatch(updateMove(json));
+	    });
+	  };
+	}
 
 /***/ },
 /* 548 */
-/***/ function(module, exports, __webpack_require__) {
-
-	// the whatwg-fetch polyfill installs the fetch() function
-	// on the global object (window or self)
-	//
-	// Return that as the export for use in Webpack, Browserify etc.
-	__webpack_require__(549);
-	module.exports = self.fetch.bind(self);
-
-
-/***/ },
-/* 549 */
-/***/ function(module, exports) {
-
-	(function(self) {
-	  'use strict';
-	
-	  if (self.fetch) {
-	    return
-	  }
-	
-	  function normalizeName(name) {
-	    if (typeof name !== 'string') {
-	      name = String(name)
-	    }
-	    if (/[^a-z0-9\-#$%&'*+.\^_`|~]/i.test(name)) {
-	      throw new TypeError('Invalid character in header field name')
-	    }
-	    return name.toLowerCase()
-	  }
-	
-	  function normalizeValue(value) {
-	    if (typeof value !== 'string') {
-	      value = String(value)
-	    }
-	    return value
-	  }
-	
-	  function Headers(headers) {
-	    this.map = {}
-	
-	    if (headers instanceof Headers) {
-	      headers.forEach(function(value, name) {
-	        this.append(name, value)
-	      }, this)
-	
-	    } else if (headers) {
-	      Object.getOwnPropertyNames(headers).forEach(function(name) {
-	        this.append(name, headers[name])
-	      }, this)
-	    }
-	  }
-	
-	  Headers.prototype.append = function(name, value) {
-	    name = normalizeName(name)
-	    value = normalizeValue(value)
-	    var list = this.map[name]
-	    if (!list) {
-	      list = []
-	      this.map[name] = list
-	    }
-	    list.push(value)
-	  }
-	
-	  Headers.prototype['delete'] = function(name) {
-	    delete this.map[normalizeName(name)]
-	  }
-	
-	  Headers.prototype.get = function(name) {
-	    var values = this.map[normalizeName(name)]
-	    return values ? values[0] : null
-	  }
-	
-	  Headers.prototype.getAll = function(name) {
-	    return this.map[normalizeName(name)] || []
-	  }
-	
-	  Headers.prototype.has = function(name) {
-	    return this.map.hasOwnProperty(normalizeName(name))
-	  }
-	
-	  Headers.prototype.set = function(name, value) {
-	    this.map[normalizeName(name)] = [normalizeValue(value)]
-	  }
-	
-	  Headers.prototype.forEach = function(callback, thisArg) {
-	    Object.getOwnPropertyNames(this.map).forEach(function(name) {
-	      this.map[name].forEach(function(value) {
-	        callback.call(thisArg, value, name, this)
-	      }, this)
-	    }, this)
-	  }
-	
-	  function consumed(body) {
-	    if (body.bodyUsed) {
-	      return Promise.reject(new TypeError('Already read'))
-	    }
-	    body.bodyUsed = true
-	  }
-	
-	  function fileReaderReady(reader) {
-	    return new Promise(function(resolve, reject) {
-	      reader.onload = function() {
-	        resolve(reader.result)
-	      }
-	      reader.onerror = function() {
-	        reject(reader.error)
-	      }
-	    })
-	  }
-	
-	  function readBlobAsArrayBuffer(blob) {
-	    var reader = new FileReader()
-	    reader.readAsArrayBuffer(blob)
-	    return fileReaderReady(reader)
-	  }
-	
-	  function readBlobAsText(blob) {
-	    var reader = new FileReader()
-	    reader.readAsText(blob)
-	    return fileReaderReady(reader)
-	  }
-	
-	  var support = {
-	    blob: 'FileReader' in self && 'Blob' in self && (function() {
-	      try {
-	        new Blob();
-	        return true
-	      } catch(e) {
-	        return false
-	      }
-	    })(),
-	    formData: 'FormData' in self,
-	    arrayBuffer: 'ArrayBuffer' in self
-	  }
-	
-	  function Body() {
-	    this.bodyUsed = false
-	
-	
-	    this._initBody = function(body) {
-	      this._bodyInit = body
-	      if (typeof body === 'string') {
-	        this._bodyText = body
-	      } else if (support.blob && Blob.prototype.isPrototypeOf(body)) {
-	        this._bodyBlob = body
-	      } else if (support.formData && FormData.prototype.isPrototypeOf(body)) {
-	        this._bodyFormData = body
-	      } else if (!body) {
-	        this._bodyText = ''
-	      } else if (support.arrayBuffer && ArrayBuffer.prototype.isPrototypeOf(body)) {
-	        // Only support ArrayBuffers for POST method.
-	        // Receiving ArrayBuffers happens via Blobs, instead.
-	      } else {
-	        throw new Error('unsupported BodyInit type')
-	      }
-	
-	      if (!this.headers.get('content-type')) {
-	        if (typeof body === 'string') {
-	          this.headers.set('content-type', 'text/plain;charset=UTF-8')
-	        } else if (this._bodyBlob && this._bodyBlob.type) {
-	          this.headers.set('content-type', this._bodyBlob.type)
-	        }
-	      }
-	    }
-	
-	    if (support.blob) {
-	      this.blob = function() {
-	        var rejected = consumed(this)
-	        if (rejected) {
-	          return rejected
-	        }
-	
-	        if (this._bodyBlob) {
-	          return Promise.resolve(this._bodyBlob)
-	        } else if (this._bodyFormData) {
-	          throw new Error('could not read FormData body as blob')
-	        } else {
-	          return Promise.resolve(new Blob([this._bodyText]))
-	        }
-	      }
-	
-	      this.arrayBuffer = function() {
-	        return this.blob().then(readBlobAsArrayBuffer)
-	      }
-	
-	      this.text = function() {
-	        var rejected = consumed(this)
-	        if (rejected) {
-	          return rejected
-	        }
-	
-	        if (this._bodyBlob) {
-	          return readBlobAsText(this._bodyBlob)
-	        } else if (this._bodyFormData) {
-	          throw new Error('could not read FormData body as text')
-	        } else {
-	          return Promise.resolve(this._bodyText)
-	        }
-	      }
-	    } else {
-	      this.text = function() {
-	        var rejected = consumed(this)
-	        return rejected ? rejected : Promise.resolve(this._bodyText)
-	      }
-	    }
-	
-	    if (support.formData) {
-	      this.formData = function() {
-	        return this.text().then(decode)
-	      }
-	    }
-	
-	    this.json = function() {
-	      return this.text().then(JSON.parse)
-	    }
-	
-	    return this
-	  }
-	
-	  // HTTP methods whose capitalization should be normalized
-	  var methods = ['DELETE', 'GET', 'HEAD', 'OPTIONS', 'POST', 'PUT']
-	
-	  function normalizeMethod(method) {
-	    var upcased = method.toUpperCase()
-	    return (methods.indexOf(upcased) > -1) ? upcased : method
-	  }
-	
-	  function Request(input, options) {
-	    options = options || {}
-	    var body = options.body
-	    if (Request.prototype.isPrototypeOf(input)) {
-	      if (input.bodyUsed) {
-	        throw new TypeError('Already read')
-	      }
-	      this.url = input.url
-	      this.credentials = input.credentials
-	      if (!options.headers) {
-	        this.headers = new Headers(input.headers)
-	      }
-	      this.method = input.method
-	      this.mode = input.mode
-	      if (!body) {
-	        body = input._bodyInit
-	        input.bodyUsed = true
-	      }
-	    } else {
-	      this.url = input
-	    }
-	
-	    this.credentials = options.credentials || this.credentials || 'omit'
-	    if (options.headers || !this.headers) {
-	      this.headers = new Headers(options.headers)
-	    }
-	    this.method = normalizeMethod(options.method || this.method || 'GET')
-	    this.mode = options.mode || this.mode || null
-	    this.referrer = null
-	
-	    if ((this.method === 'GET' || this.method === 'HEAD') && body) {
-	      throw new TypeError('Body not allowed for GET or HEAD requests')
-	    }
-	    this._initBody(body)
-	  }
-	
-	  Request.prototype.clone = function() {
-	    return new Request(this)
-	  }
-	
-	  function decode(body) {
-	    var form = new FormData()
-	    body.trim().split('&').forEach(function(bytes) {
-	      if (bytes) {
-	        var split = bytes.split('=')
-	        var name = split.shift().replace(/\+/g, ' ')
-	        var value = split.join('=').replace(/\+/g, ' ')
-	        form.append(decodeURIComponent(name), decodeURIComponent(value))
-	      }
-	    })
-	    return form
-	  }
-	
-	  function headers(xhr) {
-	    var head = new Headers()
-	    var pairs = xhr.getAllResponseHeaders().trim().split('\n')
-	    pairs.forEach(function(header) {
-	      var split = header.trim().split(':')
-	      var key = split.shift().trim()
-	      var value = split.join(':').trim()
-	      head.append(key, value)
-	    })
-	    return head
-	  }
-	
-	  Body.call(Request.prototype)
-	
-	  function Response(bodyInit, options) {
-	    if (!options) {
-	      options = {}
-	    }
-	
-	    this.type = 'default'
-	    this.status = options.status
-	    this.ok = this.status >= 200 && this.status < 300
-	    this.statusText = options.statusText
-	    this.headers = options.headers instanceof Headers ? options.headers : new Headers(options.headers)
-	    this.url = options.url || ''
-	    this._initBody(bodyInit)
-	  }
-	
-	  Body.call(Response.prototype)
-	
-	  Response.prototype.clone = function() {
-	    return new Response(this._bodyInit, {
-	      status: this.status,
-	      statusText: this.statusText,
-	      headers: new Headers(this.headers),
-	      url: this.url
-	    })
-	  }
-	
-	  Response.error = function() {
-	    var response = new Response(null, {status: 0, statusText: ''})
-	    response.type = 'error'
-	    return response
-	  }
-	
-	  var redirectStatuses = [301, 302, 303, 307, 308]
-	
-	  Response.redirect = function(url, status) {
-	    if (redirectStatuses.indexOf(status) === -1) {
-	      throw new RangeError('Invalid status code')
-	    }
-	
-	    return new Response(null, {status: status, headers: {location: url}})
-	  }
-	
-	  self.Headers = Headers;
-	  self.Request = Request;
-	  self.Response = Response;
-	
-	  self.fetch = function(input, init) {
-	    return new Promise(function(resolve, reject) {
-	      var request
-	      if (Request.prototype.isPrototypeOf(input) && !init) {
-	        request = input
-	      } else {
-	        request = new Request(input, init)
-	      }
-	
-	      var xhr = new XMLHttpRequest()
-	
-	      function responseURL() {
-	        if ('responseURL' in xhr) {
-	          return xhr.responseURL
-	        }
-	
-	        // Avoid security warnings on getResponseHeader when not allowed by CORS
-	        if (/^X-Request-URL:/m.test(xhr.getAllResponseHeaders())) {
-	          return xhr.getResponseHeader('X-Request-URL')
-	        }
-	
-	        return;
-	      }
-	
-	      xhr.onload = function() {
-	        var status = (xhr.status === 1223) ? 204 : xhr.status
-	        if (status < 100 || status > 599) {
-	          reject(new TypeError('Network request failed'))
-	          return
-	        }
-	        var options = {
-	          status: status,
-	          statusText: xhr.statusText,
-	          headers: headers(xhr),
-	          url: responseURL()
-	        }
-	        var body = 'response' in xhr ? xhr.response : xhr.responseText;
-	        resolve(new Response(body, options))
-	      }
-	
-	      xhr.onerror = function() {
-	        reject(new TypeError('Network request failed'))
-	      }
-	
-	      xhr.open(request.method, request.url, true)
-	
-	      if (request.credentials === 'include') {
-	        xhr.withCredentials = true
-	      }
-	
-	      if ('responseType' in xhr && support.blob) {
-	        xhr.responseType = 'blob'
-	      }
-	
-	      request.headers.forEach(function(value, name) {
-	        xhr.setRequestHeader(name, value)
-	      })
-	
-	      xhr.send(typeof request._bodyInit === 'undefined' ? null : request._bodyInit)
-	    })
-	  }
-	  self.fetch.polyfill = true
-	})(typeof self !== 'undefined' ? self : this);
-
-
-/***/ },
-/* 550 */
-/***/ function(module, exports) {
-
-	"use strict";
-	
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	var spots = exports.spots = {
-	    1: {
-	        "name": "Momofuku",
-	        "id": 1
-	    },
-	    2: {
-	        "name": "Calexico",
-	        "id": 2
-	    },
-	    3: {
-	        "name": "Inn 'n Out",
-	        "id": 3
-	    }
-	};
-	
-	var moves = exports.moves = [{
-	    user: 'John',
-	    time: "2016-03-17T01:34:27+00:00",
-	    isOwnMove: false,
-	    spot_id: 1
-	}, {
-	    user: 'Peter',
-	    time: "2016-03-17T01:44:27+00:00",
-	    isOwnMove: false,
-	    spot_id: 1
-	}, {
-	    user: 'John',
-	    time: "2016-03-17T01:34:27+00:00",
-	    isOwnMove: false,
-	    spot_id: 2
-	}, {
-	    user: 'Peter',
-	    time: "2016-03-17T01:44:27+00:00",
-	    isOwnMove: false,
-	    spot_id: 2
-	}, {
-	    user: 'John',
-	    time: "2016-03-17T01:34:27+00:00",
-	    isOwnMove: false,
-	    spot_id: 3
-	}, {
-	    user: 'Peter',
-	    time: "2016-03-17T01:44:27+00:00",
-	    isOwnMove: true,
-	    spot_id: 3
-	}];
-
-/***/ },
-/* 551 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(module, global) {/**
@@ -55719,7 +55278,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(545)(module), (function() { return this; }())))
 
 /***/ },
-/* 552 */
+/* 549 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -55738,17 +55297,15 @@
 	
 	var _actions = __webpack_require__(547);
 	
-	var _NameForm = __webpack_require__(553);
+	var _NameForm = __webpack_require__(550);
 	
 	var _NameForm2 = _interopRequireDefault(_NameForm);
 	
-	var _MoveForm = __webpack_require__(598);
+	var _MoveForm = __webpack_require__(595);
 	
 	var _MoveForm2 = _interopRequireDefault(_MoveForm);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
@@ -55767,6 +55324,9 @@
 	    return {
 	        updateMove: function updateMove(move) {
 	            dispatch((0, _actions.updateMove)(move));
+	        },
+	        saveMove: function saveMove() {
+	            dispatch((0, _actions.saveMove)());
 	        },
 	        fetchSpotsIfNeeded: function fetchSpotsIfNeeded() {
 	            dispatch((0, _actions.fetchSpotsIfNeeded)());
@@ -55792,9 +55352,14 @@
 	        key: 'render',
 	        value: function render() {
 	            if (this.props.recentMove.user) {
-	                return _react2.default.createElement(_MoveForm2.default, { recentMove: this.props.recentMove, spots: this.props.spots });
+	                return _react2.default.createElement(_MoveForm2.default, {
+	                    recentMove: this.props.recentMove,
+	                    spots: this.props.spots,
+	                    updateMove: this.props.updateMove,
+	                    saveMove: this.props.saveMove
+	                });
 	            } else {
-	                return _react2.default.createElement(_NameForm2.default, _defineProperty({ updateMove: this.props.updateMove }, 'updateMove', this.props.updateMove));
+	                return _react2.default.createElement(_NameForm2.default, { updateMove: this.props.updateMove });
 	            }
 	        }
 	    }]);
@@ -55807,7 +55372,7 @@
 	exports.default = EditContainer;
 
 /***/ },
-/* 553 */
+/* 550 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -55824,7 +55389,7 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _reduxForm = __webpack_require__(554);
+	var _reduxForm = __webpack_require__(551);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -55900,7 +55465,7 @@
 	exports.default = NameForm;
 
 /***/ },
-/* 554 */
+/* 551 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -55914,7 +55479,7 @@
 	
 	var _reactRedux = __webpack_require__(521);
 	
-	var _createAll2 = __webpack_require__(555);
+	var _createAll2 = __webpack_require__(552);
 	
 	var _createAll3 = _interopRequireDefault(_createAll2);
 	
@@ -55978,7 +55543,7 @@
 	exports.untouchWithKey = untouchWithKey;
 
 /***/ },
-/* 555 */
+/* 552 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -55989,35 +55554,35 @@
 	
 	exports.default = createAll;
 	
-	var _reducer = __webpack_require__(556);
+	var _reducer = __webpack_require__(553);
 	
 	var _reducer2 = _interopRequireDefault(_reducer);
 	
-	var _createReduxForm = __webpack_require__(567);
+	var _createReduxForm = __webpack_require__(564);
 	
 	var _createReduxForm2 = _interopRequireDefault(_createReduxForm);
 	
-	var _mapValues = __webpack_require__(558);
+	var _mapValues = __webpack_require__(555);
 	
 	var _mapValues2 = _interopRequireDefault(_mapValues);
 	
-	var _bindActionData = __webpack_require__(574);
+	var _bindActionData = __webpack_require__(571);
 	
 	var _bindActionData2 = _interopRequireDefault(_bindActionData);
 	
-	var _actions = __webpack_require__(573);
+	var _actions = __webpack_require__(570);
 	
 	var actions = _interopRequireWildcard(_actions);
 	
-	var _actionTypes = __webpack_require__(557);
+	var _actionTypes = __webpack_require__(554);
 	
 	var actionTypes = _interopRequireWildcard(_actionTypes);
 	
-	var _createPropTypes = __webpack_require__(597);
+	var _createPropTypes = __webpack_require__(594);
 	
 	var _createPropTypes2 = _interopRequireDefault(_createPropTypes);
 	
-	var _getValuesFromState = __webpack_require__(561);
+	var _getValuesFromState = __webpack_require__(558);
 	
 	var _getValuesFromState2 = _interopRequireDefault(_getValuesFromState);
 	
@@ -56134,7 +55699,7 @@
 	}
 
 /***/ },
-/* 556 */
+/* 553 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -56146,39 +55711,39 @@
 	
 	var _initialState, _behaviors;
 	
-	var _actionTypes = __webpack_require__(557);
+	var _actionTypes = __webpack_require__(554);
 	
-	var _mapValues = __webpack_require__(558);
+	var _mapValues = __webpack_require__(555);
 	
 	var _mapValues2 = _interopRequireDefault(_mapValues);
 	
-	var _read = __webpack_require__(559);
+	var _read = __webpack_require__(556);
 	
 	var _read2 = _interopRequireDefault(_read);
 	
-	var _write = __webpack_require__(560);
+	var _write = __webpack_require__(557);
 	
 	var _write2 = _interopRequireDefault(_write);
 	
-	var _getValuesFromState = __webpack_require__(561);
+	var _getValuesFromState = __webpack_require__(558);
 	
 	var _getValuesFromState2 = _interopRequireDefault(_getValuesFromState);
 	
-	var _initializeState = __webpack_require__(563);
+	var _initializeState = __webpack_require__(560);
 	
 	var _initializeState2 = _interopRequireDefault(_initializeState);
 	
-	var _resetState = __webpack_require__(564);
+	var _resetState = __webpack_require__(561);
 	
 	var _resetState2 = _interopRequireDefault(_resetState);
 	
-	var _setErrors = __webpack_require__(565);
+	var _setErrors = __webpack_require__(562);
 	
 	var _setErrors2 = _interopRequireDefault(_setErrors);
 	
-	var _fieldValue = __webpack_require__(562);
+	var _fieldValue = __webpack_require__(559);
 	
-	var _normalizeFields = __webpack_require__(566);
+	var _normalizeFields = __webpack_require__(563);
 	
 	var _normalizeFields2 = _interopRequireDefault(_normalizeFields);
 	
@@ -56471,7 +56036,7 @@
 	exports.default = decorate(formReducer);
 
 /***/ },
-/* 557 */
+/* 554 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -56496,7 +56061,7 @@
 	var UNTOUCH = exports.UNTOUCH = 'redux-form/UNTOUCH';
 
 /***/ },
-/* 558 */
+/* 555 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -56518,7 +56083,7 @@
 	}
 
 /***/ },
-/* 559 */
+/* 556 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -56564,7 +56129,7 @@
 	exports.default = read;
 
 /***/ },
-/* 560 */
+/* 557 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -56670,14 +56235,14 @@
 	exports.default = write;
 
 /***/ },
-/* 561 */
+/* 558 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	exports.__esModule = true;
 	
-	var _fieldValue = __webpack_require__(562);
+	var _fieldValue = __webpack_require__(559);
 	
 	/**
 	 * A different version of getValues() that does not need the fields array
@@ -56716,7 +56281,7 @@
 	exports.default = getValuesFromState;
 
 /***/ },
-/* 562 */
+/* 559 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -56741,7 +56306,7 @@
 	}
 
 /***/ },
-/* 563 */
+/* 560 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -56750,7 +56315,7 @@
 	
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 	
-	var _fieldValue = __webpack_require__(562);
+	var _fieldValue = __webpack_require__(559);
 	
 	var makeEntry = function makeEntry(value, previousValue, overwriteValues) {
 	  return (0, _fieldValue.makeFieldValue)(value === undefined ? {} : {
@@ -56822,14 +56387,14 @@
 	exports.default = initializeState;
 
 /***/ },
-/* 564 */
+/* 561 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	exports.__esModule = true;
 	
-	var _fieldValue = __webpack_require__(562);
+	var _fieldValue = __webpack_require__(559);
 	
 	var reset = function reset(value) {
 	  return (0, _fieldValue.makeFieldValue)(value === undefined || value && value.initial === undefined ? {} : { initial: value.initial, value: value.initial });
@@ -56861,7 +56426,7 @@
 	exports.default = resetState;
 
 /***/ },
-/* 565 */
+/* 562 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -56870,7 +56435,7 @@
 	
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 	
-	var _fieldValue = __webpack_require__(562);
+	var _fieldValue = __webpack_require__(559);
 	
 	var isMetaKey = function isMetaKey(key) {
 	  return key[0] === '_';
@@ -56955,7 +56520,7 @@
 	exports.default = setErrors;
 
 /***/ },
-/* 566 */
+/* 563 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -56966,7 +56531,7 @@
 	
 	exports.default = normalizeFields;
 	
-	var _fieldValue = __webpack_require__(562);
+	var _fieldValue = __webpack_require__(559);
 	
 	function extractKey(field) {
 	  var dotIndex = field.indexOf('.');
@@ -57052,7 +56617,7 @@
 	}
 
 /***/ },
-/* 567 */
+/* 564 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -57061,7 +56626,7 @@
 	
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 	
-	var _createReduxFormConnector = __webpack_require__(568);
+	var _createReduxFormConnector = __webpack_require__(565);
 	
 	var _createReduxFormConnector2 = _interopRequireDefault(_createReduxFormConnector);
 	
@@ -57126,22 +56691,22 @@
 	exports.default = createReduxForm;
 
 /***/ },
-/* 568 */
+/* 565 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	exports.__esModule = true;
 	
-	var _noGetters = __webpack_require__(569);
+	var _noGetters = __webpack_require__(566);
 	
 	var _noGetters2 = _interopRequireDefault(_noGetters);
 	
-	var _getDisplayName = __webpack_require__(571);
+	var _getDisplayName = __webpack_require__(568);
 	
 	var _getDisplayName2 = _interopRequireDefault(_getDisplayName);
 	
-	var _createHigherOrderComponent = __webpack_require__(572);
+	var _createHigherOrderComponent = __webpack_require__(569);
 	
 	var _createHigherOrderComponent2 = _interopRequireDefault(_createHigherOrderComponent);
 	
@@ -57231,14 +56796,14 @@
 	exports.default = createReduxFormConnector;
 
 /***/ },
-/* 569 */
+/* 566 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(570);
+	module.exports = __webpack_require__(567);
 
 
 /***/ },
-/* 570 */
+/* 567 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -57333,7 +56898,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 571 */
+/* 568 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -57345,7 +56910,7 @@
 	}
 
 /***/ },
-/* 572 */
+/* 569 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -57354,57 +56919,57 @@
 	
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 	
-	var _actions = __webpack_require__(573);
+	var _actions = __webpack_require__(570);
 	
 	var importedActions = _interopRequireWildcard(_actions);
 	
-	var _getDisplayName = __webpack_require__(571);
+	var _getDisplayName = __webpack_require__(568);
 	
 	var _getDisplayName2 = _interopRequireDefault(_getDisplayName);
 	
-	var _reducer = __webpack_require__(556);
+	var _reducer = __webpack_require__(553);
 	
 	var _deepEqual = __webpack_require__(471);
 	
 	var _deepEqual2 = _interopRequireDefault(_deepEqual);
 	
-	var _bindActionData = __webpack_require__(574);
+	var _bindActionData = __webpack_require__(571);
 	
 	var _bindActionData2 = _interopRequireDefault(_bindActionData);
 	
-	var _getValues = __webpack_require__(575);
+	var _getValues = __webpack_require__(572);
 	
 	var _getValues2 = _interopRequireDefault(_getValues);
 	
-	var _isValid = __webpack_require__(576);
+	var _isValid = __webpack_require__(573);
 	
 	var _isValid2 = _interopRequireDefault(_isValid);
 	
-	var _readFields = __webpack_require__(577);
+	var _readFields = __webpack_require__(574);
 	
 	var _readFields2 = _interopRequireDefault(_readFields);
 	
-	var _handleSubmit2 = __webpack_require__(591);
+	var _handleSubmit2 = __webpack_require__(588);
 	
 	var _handleSubmit3 = _interopRequireDefault(_handleSubmit2);
 	
-	var _asyncValidation = __webpack_require__(592);
+	var _asyncValidation = __webpack_require__(589);
 	
 	var _asyncValidation2 = _interopRequireDefault(_asyncValidation);
 	
-	var _silenceEvents = __webpack_require__(593);
+	var _silenceEvents = __webpack_require__(590);
 	
 	var _silenceEvents2 = _interopRequireDefault(_silenceEvents);
 	
-	var _silenceEvent = __webpack_require__(594);
+	var _silenceEvent = __webpack_require__(591);
 	
 	var _silenceEvent2 = _interopRequireDefault(_silenceEvent);
 	
-	var _wrapMapDispatchToProps = __webpack_require__(595);
+	var _wrapMapDispatchToProps = __webpack_require__(592);
 	
 	var _wrapMapDispatchToProps2 = _interopRequireDefault(_wrapMapDispatchToProps);
 	
-	var _wrapMapStateToProps = __webpack_require__(596);
+	var _wrapMapStateToProps = __webpack_require__(593);
 	
 	var _wrapMapStateToProps2 = _interopRequireDefault(_wrapMapStateToProps);
 	
@@ -57716,7 +57281,7 @@
 	exports.default = createHigherOrderComponent;
 
 /***/ },
-/* 573 */
+/* 570 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -57724,7 +57289,7 @@
 	exports.__esModule = true;
 	exports.untouch = exports.touch = exports.swapArrayValues = exports.submitFailed = exports.stopSubmit = exports.stopAsyncValidation = exports.startSubmit = exports.startAsyncValidation = exports.reset = exports.removeArrayValue = exports.initialize = exports.focus = exports.destroy = exports.change = exports.blur = exports.autofill = exports.addArrayValue = undefined;
 	
-	var _actionTypes = __webpack_require__(557);
+	var _actionTypes = __webpack_require__(554);
 	
 	var addArrayValue = exports.addArrayValue = function addArrayValue(path, value, index, fields) {
 	  return { type: _actionTypes.ADD_ARRAY_VALUE, path: path, value: value, index: index, fields: fields };
@@ -57808,7 +57373,7 @@
 	};
 
 /***/ },
-/* 574 */
+/* 571 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -57819,7 +57384,7 @@
 	
 	exports.default = bindActionData;
 	
-	var _mapValues = __webpack_require__(558);
+	var _mapValues = __webpack_require__(555);
 	
 	var _mapValues2 = _interopRequireDefault(_mapValues);
 	
@@ -57843,7 +57408,7 @@
 	}
 
 /***/ },
-/* 575 */
+/* 572 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -57913,7 +57478,7 @@
 	exports.default = getValues;
 
 /***/ },
-/* 576 */
+/* 573 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -57935,7 +57500,7 @@
 	}
 
 /***/ },
-/* 577 */
+/* 574 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -57944,19 +57509,19 @@
 	
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 	
-	var _readField = __webpack_require__(578);
+	var _readField = __webpack_require__(575);
 	
 	var _readField2 = _interopRequireDefault(_readField);
 	
-	var _write = __webpack_require__(560);
+	var _write = __webpack_require__(557);
 	
 	var _write2 = _interopRequireDefault(_write);
 	
-	var _getValues = __webpack_require__(575);
+	var _getValues = __webpack_require__(572);
 	
 	var _getValues2 = _interopRequireDefault(_getValues);
 	
-	var _removeField = __webpack_require__(590);
+	var _removeField = __webpack_require__(587);
 	
 	var _removeField2 = _interopRequireDefault(_removeField);
 	
@@ -58006,7 +57571,7 @@
 	exports.default = readFields;
 
 /***/ },
-/* 578 */
+/* 575 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -58015,35 +57580,35 @@
 	
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 	
-	var _createOnBlur = __webpack_require__(579);
+	var _createOnBlur = __webpack_require__(576);
 	
 	var _createOnBlur2 = _interopRequireDefault(_createOnBlur);
 	
-	var _createOnChange = __webpack_require__(582);
+	var _createOnChange = __webpack_require__(579);
 	
 	var _createOnChange2 = _interopRequireDefault(_createOnChange);
 	
-	var _createOnDragStart = __webpack_require__(583);
+	var _createOnDragStart = __webpack_require__(580);
 	
 	var _createOnDragStart2 = _interopRequireDefault(_createOnDragStart);
 	
-	var _createOnDrop = __webpack_require__(584);
+	var _createOnDrop = __webpack_require__(581);
 	
 	var _createOnDrop2 = _interopRequireDefault(_createOnDrop);
 	
-	var _createOnFocus = __webpack_require__(585);
+	var _createOnFocus = __webpack_require__(582);
 	
 	var _createOnFocus2 = _interopRequireDefault(_createOnFocus);
 	
-	var _silencePromise = __webpack_require__(586);
+	var _silencePromise = __webpack_require__(583);
 	
 	var _silencePromise2 = _interopRequireDefault(_silencePromise);
 	
-	var _read = __webpack_require__(559);
+	var _read = __webpack_require__(556);
 	
 	var _read2 = _interopRequireDefault(_read);
 	
-	var _updateField = __webpack_require__(588);
+	var _updateField = __webpack_require__(585);
 	
 	var _updateField2 = _interopRequireDefault(_updateField);
 	
@@ -58229,14 +57794,14 @@
 	exports.default = readField;
 
 /***/ },
-/* 579 */
+/* 576 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	exports.__esModule = true;
 	
-	var _getValue = __webpack_require__(580);
+	var _getValue = __webpack_require__(577);
 	
 	var _getValue2 = _interopRequireDefault(_getValue);
 	
@@ -58254,14 +57819,14 @@
 	exports.default = createOnBlur;
 
 /***/ },
-/* 580 */
+/* 577 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	exports.__esModule = true;
 	
-	var _isEvent = __webpack_require__(581);
+	var _isEvent = __webpack_require__(578);
 	
 	var _isEvent2 = _interopRequireDefault(_isEvent);
 	
@@ -58314,7 +57879,7 @@
 	exports.default = getValue;
 
 /***/ },
-/* 581 */
+/* 578 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -58327,14 +57892,14 @@
 	exports.default = isEvent;
 
 /***/ },
-/* 582 */
+/* 579 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	exports.__esModule = true;
 	
-	var _getValue = __webpack_require__(580);
+	var _getValue = __webpack_require__(577);
 	
 	var _getValue2 = _interopRequireDefault(_getValue);
 	
@@ -58348,7 +57913,7 @@
 	exports.default = createOnChange;
 
 /***/ },
-/* 583 */
+/* 580 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -58364,14 +57929,14 @@
 	exports.default = createOnDragStart;
 
 /***/ },
-/* 584 */
+/* 581 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	exports.__esModule = true;
 	
-	var _createOnDragStart = __webpack_require__(583);
+	var _createOnDragStart = __webpack_require__(580);
 	
 	var createOnDrop = function createOnDrop(name, change) {
 	  return function (event) {
@@ -58381,7 +57946,7 @@
 	exports.default = createOnDrop;
 
 /***/ },
-/* 585 */
+/* 582 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -58395,14 +57960,14 @@
 	exports.default = createOnFocus;
 
 /***/ },
-/* 586 */
+/* 583 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	exports.__esModule = true;
 	
-	var _isPromise = __webpack_require__(587);
+	var _isPromise = __webpack_require__(584);
 	
 	var _isPromise2 = _interopRequireDefault(_isPromise);
 	
@@ -58419,7 +57984,7 @@
 	exports.default = silencePromise;
 
 /***/ },
-/* 587 */
+/* 584 */
 /***/ function(module, exports) {
 
 	module.exports = isPromise;
@@ -58430,7 +57995,7 @@
 
 
 /***/ },
-/* 588 */
+/* 585 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -58439,11 +58004,11 @@
 	
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 	
-	var _isPristine = __webpack_require__(589);
+	var _isPristine = __webpack_require__(586);
 	
 	var _isPristine2 = _interopRequireDefault(_isPristine);
 	
-	var _isValid = __webpack_require__(576);
+	var _isValid = __webpack_require__(573);
 	
 	var _isValid2 = _interopRequireDefault(_isValid);
 	
@@ -58505,7 +58070,7 @@
 	exports.default = updateField;
 
 /***/ },
-/* 589 */
+/* 586 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -58543,7 +58108,7 @@
 	}
 
 /***/ },
-/* 590 */
+/* 587 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -58623,18 +58188,18 @@
 	exports.default = removeField;
 
 /***/ },
-/* 591 */
+/* 588 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	exports.__esModule = true;
 	
-	var _isPromise = __webpack_require__(587);
+	var _isPromise = __webpack_require__(584);
 	
 	var _isPromise2 = _interopRequireDefault(_isPromise);
 	
-	var _isValid = __webpack_require__(576);
+	var _isValid = __webpack_require__(573);
 	
 	var _isValid2 = _interopRequireDefault(_isValid);
 	
@@ -58705,18 +58270,18 @@
 	exports.default = handleSubmit;
 
 /***/ },
-/* 592 */
+/* 589 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	exports.__esModule = true;
 	
-	var _isPromise = __webpack_require__(587);
+	var _isPromise = __webpack_require__(584);
 	
 	var _isPromise2 = _interopRequireDefault(_isPromise);
 	
-	var _isValid = __webpack_require__(576);
+	var _isValid = __webpack_require__(573);
 	
 	var _isValid2 = _interopRequireDefault(_isValid);
 	
@@ -58747,14 +58312,14 @@
 	exports.default = asyncValidation;
 
 /***/ },
-/* 593 */
+/* 590 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	exports.__esModule = true;
 	
-	var _silenceEvent = __webpack_require__(594);
+	var _silenceEvent = __webpack_require__(591);
 	
 	var _silenceEvent2 = _interopRequireDefault(_silenceEvent);
 	
@@ -58773,14 +58338,14 @@
 	exports.default = silenceEvents;
 
 /***/ },
-/* 594 */
+/* 591 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	exports.__esModule = true;
 	
-	var _isEvent = __webpack_require__(581);
+	var _isEvent = __webpack_require__(578);
 	
 	var _isEvent2 = _interopRequireDefault(_isEvent);
 	
@@ -58797,7 +58362,7 @@
 	exports.default = silenceEvent;
 
 /***/ },
-/* 595 */
+/* 592 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -58840,7 +58405,7 @@
 	exports.default = wrapMapDispatchToProps;
 
 /***/ },
-/* 596 */
+/* 593 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -58877,7 +58442,7 @@
 	exports.default = wrapMapStateToProps;
 
 /***/ },
-/* 597 */
+/* 594 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -58923,7 +58488,7 @@
 	exports.default = createPropTypes;
 
 /***/ },
-/* 598 */
+/* 595 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -58932,11 +58497,19 @@
 	    value: true
 	});
 	
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
 	var _react = __webpack_require__(299);
 	
 	var _react2 = _interopRequireDefault(_react);
+	
+	var _reduxForm = __webpack_require__(551);
+	
+	var _moment = __webpack_require__(544);
+	
+	var _moment2 = _interopRequireDefault(_moment);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -58960,7 +58533,7 @@
 	        var stringVal = wordMap[val.replace(/\W+/g, '').toLowerCase()];
 	
 	        if (stringVal) {
-	            return moment().add(stringVal, 'm').format();
+	            return (0, _moment2.default)().add(stringVal, 'm').format();
 	        }
 	
 	        var numVal = val.replace(/([^:0-9])/g, '');
@@ -58976,12 +58549,14 @@
 	            split[0] += 12;
 	        }
 	
-	        return moment(split.join(':'), 'hh:mm').format();
+	        return (0, _moment2.default)(split.join(':'), 'hh:mm').format();
 	    },
 	    decode: function decode(val) {
-	        return val ? moment(val).format('h:mm') : '';
+	        return val ? (0, _moment2.default)(val).format('h:mm') : '';
 	    }
 	};
+	
+	var fields = ['spot', 'time'];
 	
 	var MoveForm = function (_Component) {
 	    _inherits(MoveForm, _Component);
@@ -58991,17 +58566,17 @@
 	
 	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(MoveForm).call(this, props));
 	
-	        _this.onChange = _this.onChange.bind(_this);
 	        _this.onSubmit = _this.onSubmit.bind(_this);
 	        return _this;
 	    }
 	
 	    _createClass(MoveForm, [{
-	        key: 'onChange',
-	        value: function onChange(e) {}
-	    }, {
 	        key: 'onSubmit',
-	        value: function onSubmit() {}
+	        value: function onSubmit(data) {
+	            data.time = MoveTime.encode(data.time);
+	            this.props.updateMove(data);
+	            this.props.saveMove();
+	        }
 	    }, {
 	        key: 'render',
 	        value: function render() {
@@ -59016,14 +58591,21 @@
 	            var options = this.props.spots.items.map(function (choice) {
 	                return _react2.default.createElement(
 	                    'option',
-	                    { value: choice.id },
+	                    { key: choice.id, value: choice.id },
 	                    choice.name
 	                );
 	            });
 	
+	            var _props = this.props;
+	            var _props$fields = _props.fields;
+	            var spot = _props$fields.spot;
+	            var time = _props$fields.time;
+	            var handleSubmit = _props.handleSubmit;
+	
+	
 	            return _react2.default.createElement(
 	                'form',
-	                { className: 'form-inline lunch-move-form' },
+	                { className: 'form-inline lunch-move-form', onSubmit: handleSubmit(this.onSubmit) },
 	                _react2.default.createElement(
 	                    'div',
 	                    { className: 'lunch-move-form-row' },
@@ -59041,7 +58623,7 @@
 	                        { className: 'form-group' },
 	                        _react2.default.createElement(
 	                            'select',
-	                            { className: 'form-control spot-field', name: 'spot' },
+	                            _extends({ className: 'form-control spot-field', name: 'spot' }, spot),
 	                            _react2.default.createElement('option', { value: null }),
 	                            options
 	                        )
@@ -59058,7 +58640,7 @@
 	                    _react2.default.createElement(
 	                        'div',
 	                        { className: 'form-group' },
-	                        _react2.default.createElement('input', { className: 'form-control time-field', type: 'text', name: 'time' })
+	                        _react2.default.createElement('input', _extends({ className: 'form-control time-field', type: 'text', name: 'time' }, time))
 	                    )
 	                ),
 	                _react2.default.createElement(
@@ -59082,10 +58664,15 @@
 	    return MoveForm;
 	}(_react.Component);
 	
+	MoveForm = (0, _reduxForm.reduxForm)({
+	    form: 'move-form',
+	    fields: fields
+	})(MoveForm);
+	
 	exports.default = MoveForm;
 
 /***/ },
-/* 599 */
+/* 596 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -59097,11 +58684,11 @@
 	
 	var _redux = __webpack_require__(528);
 	
-	var _reduxThunk = __webpack_require__(600);
+	var _reduxThunk = __webpack_require__(597);
 	
 	var _reduxThunk2 = _interopRequireDefault(_reduxThunk);
 	
-	var _reducers = __webpack_require__(601);
+	var _reducers = __webpack_require__(598);
 	
 	var _reducers2 = _interopRequireDefault(_reducers);
 	
@@ -59112,7 +58699,7 @@
 	}
 
 /***/ },
-/* 600 */
+/* 597 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -59135,7 +58722,7 @@
 	}
 
 /***/ },
-/* 601 */
+/* 598 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -59148,7 +58735,7 @@
 	
 	var _reactRouterRedux = __webpack_require__(514);
 	
-	var _reduxForm = __webpack_require__(554);
+	var _reduxForm = __webpack_require__(551);
 	
 	var _actions = __webpack_require__(547);
 	
@@ -59217,6 +58804,469 @@
 	});
 	
 	exports.default = rootReducer;
+
+/***/ },
+/* 599 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// the whatwg-fetch polyfill installs the fetch() function
+	// on the global object (window or self)
+	//
+	// Return that as the export for use in Webpack, Browserify etc.
+	__webpack_require__(600);
+	module.exports = self.fetch.bind(self);
+
+
+/***/ },
+/* 600 */
+/***/ function(module, exports) {
+
+	(function(self) {
+	  'use strict';
+	
+	  if (self.fetch) {
+	    return
+	  }
+	
+	  function normalizeName(name) {
+	    if (typeof name !== 'string') {
+	      name = String(name)
+	    }
+	    if (/[^a-z0-9\-#$%&'*+.\^_`|~]/i.test(name)) {
+	      throw new TypeError('Invalid character in header field name')
+	    }
+	    return name.toLowerCase()
+	  }
+	
+	  function normalizeValue(value) {
+	    if (typeof value !== 'string') {
+	      value = String(value)
+	    }
+	    return value
+	  }
+	
+	  function Headers(headers) {
+	    this.map = {}
+	
+	    if (headers instanceof Headers) {
+	      headers.forEach(function(value, name) {
+	        this.append(name, value)
+	      }, this)
+	
+	    } else if (headers) {
+	      Object.getOwnPropertyNames(headers).forEach(function(name) {
+	        this.append(name, headers[name])
+	      }, this)
+	    }
+	  }
+	
+	  Headers.prototype.append = function(name, value) {
+	    name = normalizeName(name)
+	    value = normalizeValue(value)
+	    var list = this.map[name]
+	    if (!list) {
+	      list = []
+	      this.map[name] = list
+	    }
+	    list.push(value)
+	  }
+	
+	  Headers.prototype['delete'] = function(name) {
+	    delete this.map[normalizeName(name)]
+	  }
+	
+	  Headers.prototype.get = function(name) {
+	    var values = this.map[normalizeName(name)]
+	    return values ? values[0] : null
+	  }
+	
+	  Headers.prototype.getAll = function(name) {
+	    return this.map[normalizeName(name)] || []
+	  }
+	
+	  Headers.prototype.has = function(name) {
+	    return this.map.hasOwnProperty(normalizeName(name))
+	  }
+	
+	  Headers.prototype.set = function(name, value) {
+	    this.map[normalizeName(name)] = [normalizeValue(value)]
+	  }
+	
+	  Headers.prototype.forEach = function(callback, thisArg) {
+	    Object.getOwnPropertyNames(this.map).forEach(function(name) {
+	      this.map[name].forEach(function(value) {
+	        callback.call(thisArg, value, name, this)
+	      }, this)
+	    }, this)
+	  }
+	
+	  function consumed(body) {
+	    if (body.bodyUsed) {
+	      return Promise.reject(new TypeError('Already read'))
+	    }
+	    body.bodyUsed = true
+	  }
+	
+	  function fileReaderReady(reader) {
+	    return new Promise(function(resolve, reject) {
+	      reader.onload = function() {
+	        resolve(reader.result)
+	      }
+	      reader.onerror = function() {
+	        reject(reader.error)
+	      }
+	    })
+	  }
+	
+	  function readBlobAsArrayBuffer(blob) {
+	    var reader = new FileReader()
+	    reader.readAsArrayBuffer(blob)
+	    return fileReaderReady(reader)
+	  }
+	
+	  function readBlobAsText(blob) {
+	    var reader = new FileReader()
+	    reader.readAsText(blob)
+	    return fileReaderReady(reader)
+	  }
+	
+	  var support = {
+	    blob: 'FileReader' in self && 'Blob' in self && (function() {
+	      try {
+	        new Blob();
+	        return true
+	      } catch(e) {
+	        return false
+	      }
+	    })(),
+	    formData: 'FormData' in self,
+	    arrayBuffer: 'ArrayBuffer' in self
+	  }
+	
+	  function Body() {
+	    this.bodyUsed = false
+	
+	
+	    this._initBody = function(body) {
+	      this._bodyInit = body
+	      if (typeof body === 'string') {
+	        this._bodyText = body
+	      } else if (support.blob && Blob.prototype.isPrototypeOf(body)) {
+	        this._bodyBlob = body
+	      } else if (support.formData && FormData.prototype.isPrototypeOf(body)) {
+	        this._bodyFormData = body
+	      } else if (!body) {
+	        this._bodyText = ''
+	      } else if (support.arrayBuffer && ArrayBuffer.prototype.isPrototypeOf(body)) {
+	        // Only support ArrayBuffers for POST method.
+	        // Receiving ArrayBuffers happens via Blobs, instead.
+	      } else {
+	        throw new Error('unsupported BodyInit type')
+	      }
+	
+	      if (!this.headers.get('content-type')) {
+	        if (typeof body === 'string') {
+	          this.headers.set('content-type', 'text/plain;charset=UTF-8')
+	        } else if (this._bodyBlob && this._bodyBlob.type) {
+	          this.headers.set('content-type', this._bodyBlob.type)
+	        }
+	      }
+	    }
+	
+	    if (support.blob) {
+	      this.blob = function() {
+	        var rejected = consumed(this)
+	        if (rejected) {
+	          return rejected
+	        }
+	
+	        if (this._bodyBlob) {
+	          return Promise.resolve(this._bodyBlob)
+	        } else if (this._bodyFormData) {
+	          throw new Error('could not read FormData body as blob')
+	        } else {
+	          return Promise.resolve(new Blob([this._bodyText]))
+	        }
+	      }
+	
+	      this.arrayBuffer = function() {
+	        return this.blob().then(readBlobAsArrayBuffer)
+	      }
+	
+	      this.text = function() {
+	        var rejected = consumed(this)
+	        if (rejected) {
+	          return rejected
+	        }
+	
+	        if (this._bodyBlob) {
+	          return readBlobAsText(this._bodyBlob)
+	        } else if (this._bodyFormData) {
+	          throw new Error('could not read FormData body as text')
+	        } else {
+	          return Promise.resolve(this._bodyText)
+	        }
+	      }
+	    } else {
+	      this.text = function() {
+	        var rejected = consumed(this)
+	        return rejected ? rejected : Promise.resolve(this._bodyText)
+	      }
+	    }
+	
+	    if (support.formData) {
+	      this.formData = function() {
+	        return this.text().then(decode)
+	      }
+	    }
+	
+	    this.json = function() {
+	      return this.text().then(JSON.parse)
+	    }
+	
+	    return this
+	  }
+	
+	  // HTTP methods whose capitalization should be normalized
+	  var methods = ['DELETE', 'GET', 'HEAD', 'OPTIONS', 'POST', 'PUT']
+	
+	  function normalizeMethod(method) {
+	    var upcased = method.toUpperCase()
+	    return (methods.indexOf(upcased) > -1) ? upcased : method
+	  }
+	
+	  function Request(input, options) {
+	    options = options || {}
+	    var body = options.body
+	    if (Request.prototype.isPrototypeOf(input)) {
+	      if (input.bodyUsed) {
+	        throw new TypeError('Already read')
+	      }
+	      this.url = input.url
+	      this.credentials = input.credentials
+	      if (!options.headers) {
+	        this.headers = new Headers(input.headers)
+	      }
+	      this.method = input.method
+	      this.mode = input.mode
+	      if (!body) {
+	        body = input._bodyInit
+	        input.bodyUsed = true
+	      }
+	    } else {
+	      this.url = input
+	    }
+	
+	    this.credentials = options.credentials || this.credentials || 'omit'
+	    if (options.headers || !this.headers) {
+	      this.headers = new Headers(options.headers)
+	    }
+	    this.method = normalizeMethod(options.method || this.method || 'GET')
+	    this.mode = options.mode || this.mode || null
+	    this.referrer = null
+	
+	    if ((this.method === 'GET' || this.method === 'HEAD') && body) {
+	      throw new TypeError('Body not allowed for GET or HEAD requests')
+	    }
+	    this._initBody(body)
+	  }
+	
+	  Request.prototype.clone = function() {
+	    return new Request(this)
+	  }
+	
+	  function decode(body) {
+	    var form = new FormData()
+	    body.trim().split('&').forEach(function(bytes) {
+	      if (bytes) {
+	        var split = bytes.split('=')
+	        var name = split.shift().replace(/\+/g, ' ')
+	        var value = split.join('=').replace(/\+/g, ' ')
+	        form.append(decodeURIComponent(name), decodeURIComponent(value))
+	      }
+	    })
+	    return form
+	  }
+	
+	  function headers(xhr) {
+	    var head = new Headers()
+	    var pairs = xhr.getAllResponseHeaders().trim().split('\n')
+	    pairs.forEach(function(header) {
+	      var split = header.trim().split(':')
+	      var key = split.shift().trim()
+	      var value = split.join(':').trim()
+	      head.append(key, value)
+	    })
+	    return head
+	  }
+	
+	  Body.call(Request.prototype)
+	
+	  function Response(bodyInit, options) {
+	    if (!options) {
+	      options = {}
+	    }
+	
+	    this.type = 'default'
+	    this.status = options.status
+	    this.ok = this.status >= 200 && this.status < 300
+	    this.statusText = options.statusText
+	    this.headers = options.headers instanceof Headers ? options.headers : new Headers(options.headers)
+	    this.url = options.url || ''
+	    this._initBody(bodyInit)
+	  }
+	
+	  Body.call(Response.prototype)
+	
+	  Response.prototype.clone = function() {
+	    return new Response(this._bodyInit, {
+	      status: this.status,
+	      statusText: this.statusText,
+	      headers: new Headers(this.headers),
+	      url: this.url
+	    })
+	  }
+	
+	  Response.error = function() {
+	    var response = new Response(null, {status: 0, statusText: ''})
+	    response.type = 'error'
+	    return response
+	  }
+	
+	  var redirectStatuses = [301, 302, 303, 307, 308]
+	
+	  Response.redirect = function(url, status) {
+	    if (redirectStatuses.indexOf(status) === -1) {
+	      throw new RangeError('Invalid status code')
+	    }
+	
+	    return new Response(null, {status: status, headers: {location: url}})
+	  }
+	
+	  self.Headers = Headers;
+	  self.Request = Request;
+	  self.Response = Response;
+	
+	  self.fetch = function(input, init) {
+	    return new Promise(function(resolve, reject) {
+	      var request
+	      if (Request.prototype.isPrototypeOf(input) && !init) {
+	        request = input
+	      } else {
+	        request = new Request(input, init)
+	      }
+	
+	      var xhr = new XMLHttpRequest()
+	
+	      function responseURL() {
+	        if ('responseURL' in xhr) {
+	          return xhr.responseURL
+	        }
+	
+	        // Avoid security warnings on getResponseHeader when not allowed by CORS
+	        if (/^X-Request-URL:/m.test(xhr.getAllResponseHeaders())) {
+	          return xhr.getResponseHeader('X-Request-URL')
+	        }
+	
+	        return;
+	      }
+	
+	      xhr.onload = function() {
+	        var status = (xhr.status === 1223) ? 204 : xhr.status
+	        if (status < 100 || status > 599) {
+	          reject(new TypeError('Network request failed'))
+	          return
+	        }
+	        var options = {
+	          status: status,
+	          statusText: xhr.statusText,
+	          headers: headers(xhr),
+	          url: responseURL()
+	        }
+	        var body = 'response' in xhr ? xhr.response : xhr.responseText;
+	        resolve(new Response(body, options))
+	      }
+	
+	      xhr.onerror = function() {
+	        reject(new TypeError('Network request failed'))
+	      }
+	
+	      xhr.open(request.method, request.url, true)
+	
+	      if (request.credentials === 'include') {
+	        xhr.withCredentials = true
+	      }
+	
+	      if ('responseType' in xhr && support.blob) {
+	        xhr.responseType = 'blob'
+	      }
+	
+	      request.headers.forEach(function(value, name) {
+	        xhr.setRequestHeader(name, value)
+	      })
+	
+	      xhr.send(typeof request._bodyInit === 'undefined' ? null : request._bodyInit)
+	    })
+	  }
+	  self.fetch.polyfill = true
+	})(typeof self !== 'undefined' ? self : this);
+
+
+/***/ },
+/* 601 */
+/***/ function(module, exports) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	var spots = exports.spots = {
+	    1: {
+	        "name": "Momofuku",
+	        "id": 1
+	    },
+	    2: {
+	        "name": "Calexico",
+	        "id": 2
+	    },
+	    3: {
+	        "name": "Inn 'n Out",
+	        "id": 3
+	    }
+	};
+	
+	var moves = exports.moves = [{
+	    user: 'John',
+	    time: "2016-03-17T01:34:27+00:00",
+	    isOwnMove: false,
+	    spot_id: 1
+	}, {
+	    user: 'Peter',
+	    time: "2016-03-17T01:44:27+00:00",
+	    isOwnMove: false,
+	    spot_id: 1
+	}, {
+	    user: 'John',
+	    time: "2016-03-17T01:34:27+00:00",
+	    isOwnMove: false,
+	    spot_id: 2
+	}, {
+	    user: 'Peter',
+	    time: "2016-03-17T01:44:27+00:00",
+	    isOwnMove: false,
+	    spot_id: 2
+	}, {
+	    user: 'John',
+	    time: "2016-03-17T01:34:27+00:00",
+	    isOwnMove: false,
+	    spot_id: 3
+	}, {
+	    user: 'Peter',
+	    time: "2016-03-17T01:44:27+00:00",
+	    isOwnMove: true,
+	    spot_id: 3
+	}];
 
 /***/ }
 /******/ ]);

@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import {reduxForm} from 'redux-form';
+import moment from 'moment';
 
 let MoveTime = {
     encode: function(val) {
@@ -33,19 +35,21 @@ let MoveTime = {
     }
 };
 
+const fields = [
+    'spot',
+    'time'
+];
+
 class MoveForm extends Component {
     constructor(props){
-        super(props)
-        this.onChange = this.onChange.bind(this);
-        this.onSubmit = this.onSubmit.bind(this);
+      super(props)
+      this.onSubmit = this.onSubmit.bind(this);
     }
     
-    onChange(e){
-
-    }
-    
-    onSubmit(){
-        
+    onSubmit(data){
+      data.time = MoveTime.encode(data.time);
+      this.props.updateMove(data);
+      this.props.saveMove();
     }
     
     render(){
@@ -54,17 +58,19 @@ class MoveForm extends Component {
         }
         
         let options = this.props.spots.items.map((choice) => {
-            return <option value={choice.id}>{choice.name}</option>
+            return <option key={choice.id} value={choice.id}>{choice.name}</option>
         });
         
+        let {fields: {spot, time}, handleSubmit} = this.props;
+        
         return (
-            <form className="form-inline lunch-move-form">
+            <form className="form-inline lunch-move-form" onSubmit={handleSubmit(this.onSubmit)}>
                 <div className="lunch-move-form-row">
                     <div className="form-group">
                         <p className="form-control-static">You are eating</p>
                     </div>
                     <div className="form-group">
-                        <select className="form-control spot-field" name="spot">
+                        <select className="form-control spot-field" name="spot" {...spot}>
                             <option value={null}></option>
                             {options}
                         </select>
@@ -73,7 +79,7 @@ class MoveForm extends Component {
                         <p className="form-control-static">at</p>
                     </div>
                     <div className="form-group">
-                        <input className="form-control time-field" type="text" name="time"/>
+                        <input className="form-control time-field" type="text" name="time" {...time}/>
                     </div>
                 </div>
                 <div className="lunch-move-form-row">
@@ -85,4 +91,9 @@ class MoveForm extends Component {
     }
 }
 
-export default MoveForm
+MoveForm = reduxForm({
+  form: 'move-form',
+  fields: fields
+})(MoveForm);
+
+export default MoveForm;
