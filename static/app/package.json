@@ -40,6 +40,7 @@
     "react-router": "^2.4.0",
     "react-router-redux": "^4.0.4",
     "redux": "^3.2.1",
+    "redux-form": "^5.2.3",
     "redux-logger": "^2.6.1",
     "redux-thunk": "^2.0.1",
     "spinkit": "^1.2.5"
