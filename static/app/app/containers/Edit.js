@@ -30,7 +30,7 @@ class Edit extends Component {
         if (this.props.recentMove.user) {
             return <MoveForm recentMove={this.props.recentMove} spots={this.props.spots}/>
         } else {
-            return <NameForm updateMove={this.props.updateMove} />
+            return <NameForm updateMove={this.props.updateMove} updateMove={this.props.updateMove} />
         }
     }
 }

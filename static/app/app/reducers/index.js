@@ -1,5 +1,7 @@
 import { combineReducers } from 'redux'
 import { routerReducer as routing } from 'react-router-redux'
+import {reducer as formReducer} from 'redux-form';
+
 import {
   REQUEST_MOVES, RECEIVE_MOVES,
   REQUEST_SPOTS, RECEIVE_SPOTS,
@@ -57,7 +59,8 @@ const rootReducer = combineReducers({
   moves,
   spots,
   recentMove,
-  routing
+  routing,
+  form: formReducer
 })
 
 export default rootReducer
