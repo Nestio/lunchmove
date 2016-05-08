@@ -34756,11 +34756,13 @@
 	
 	var _reactRedux = __webpack_require__(521);
 	
-	var _LunchMoves = __webpack_require__(543);
+	var _MoveList = __webpack_require__(606);
 	
-	var _LunchMoves2 = _interopRequireDefault(_LunchMoves);
+	var _MoveList2 = _interopRequireDefault(_MoveList);
 	
 	var _lodash = __webpack_require__(550);
+	
+	var _actions = __webpack_require__(547);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -34805,188 +34807,28 @@
 	    spots = groupMovesBySpots(state);
 	  }
 	  return {
-	    spots: spots
+	    spots: spots,
+	    recentMove: state.recentMove
 	  };
 	};
 	
-	var ListContainer = (0, _reactRedux.connect)(mapStateToProps)(_LunchMoves2.default);
+	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+	  return {
+	    fetchMovesIfNeeded: function fetchMovesIfNeeded() {
+	      return dispatch((0, _actions.fetchSpotsIfNeeded)());
+	    },
+	    fetchSpotsIfNeeded: function fetchSpotsIfNeeded() {
+	      return dispatch((0, _actions.fetchMovesIfNeeded)());
+	    }
+	  };
+	};
+	
+	var ListContainer = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_MoveList2.default);
 	
 	exports.default = ListContainer;
 
 /***/ },
-/* 543 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-	
-	var _react = __webpack_require__(299);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	var _moment = __webpack_require__(544);
-	
-	var _moment2 = _interopRequireDefault(_moment);
-	
-	var _classnames = __webpack_require__(546);
-	
-	var _classnames2 = _interopRequireDefault(_classnames);
-	
-	var _actions = __webpack_require__(547);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-	
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-	
-	var Move = function Move(_ref) {
-	    var isOwnMove = _ref.isOwnMove;
-	    var time = _ref.time;
-	    var user = _ref.user;
-	
-	    var moveName = void 0;
-	    var deleteButton = void 0;
-	
-	    if (isOwnMove) {
-	        moveName = _react2.default.createElement(
-	            'span',
-	            null,
-	            'You ',
-	            _react2.default.createElement('span', { className: 'glyphicon glyphicon-pencil' })
-	        );
-	    } else {
-	        moveName = user;
-	    }
-	
-	    return _react2.default.createElement(
-	        'div',
-	        { className: (0, _classnames2.default)("move", { "own-move": isOwnMove }) },
-	        _react2.default.createElement(
-	            'div',
-	            { className: 'move-time' },
-	            _react2.default.createElement(
-	                'span',
-	                null,
-	                (0, _moment2.default)(time).format('h:mm')
-	            )
-	        ),
-	        _react2.default.createElement(
-	            'div',
-	            { className: 'move-name' },
-	            _react2.default.createElement(
-	                'span',
-	                null,
-	                moveName
-	            )
-	        )
-	    );
-	};
-	
-	var ListItem = function ListItem(_ref2) {
-	    var name = _ref2.name;
-	    var moves = _ref2.moves;
-	    var hasOwnMove = _ref2.hasOwnMove;
-	
-	    var moveItems = moves.map(function (move) {
-	        return _react2.default.createElement(Move, move);
-	    });
-	    var newMove = void 0;
-	
-	    if (!hasOwnMove) {
-	        newMove = _react2.default.createElement(
-	            'div',
-	            { className: 'move move-new' },
-	            _react2.default.createElement(
-	                'div',
-	                { className: 'move-icon' },
-	                _react2.default.createElement('span', { className: 'glyphicon glyphicon-plus' })
-	            ),
-	            _react2.default.createElement(
-	                'div',
-	                { className: 'move-name' },
-	                _react2.default.createElement(
-	                    'span',
-	                    null,
-	                    'Go Here'
-	                )
-	            )
-	        );
-	    }
-	
-	    return _react2.default.createElement(
-	        'div',
-	        { className: 'row move-row' },
-	        _react2.default.createElement(
-	            'div',
-	            { className: 'spot-name col-md-12' },
-	            _react2.default.createElement(
-	                'span',
-	                null,
-	                name
-	            )
-	        ),
-	        _react2.default.createElement(
-	            'div',
-	            { className: 'spot-moves col-md-12' },
-	            moveItems,
-	            newMove
-	        )
-	    );
-	};
-	
-	var List = function (_Component) {
-	    _inherits(List, _Component);
-	
-	    function List() {
-	        _classCallCheck(this, List);
-	
-	        return _possibleConstructorReturn(this, Object.getPrototypeOf(List).apply(this, arguments));
-	    }
-	
-	    _createClass(List, [{
-	        key: 'componentDidMount',
-	        value: function componentDidMount() {
-	            this.props.dispatch((0, _actions.fetchSpotsIfNeeded)());
-	            this.props.dispatch((0, _actions.fetchMovesIfNeeded)());
-	        }
-	    }, {
-	        key: 'render',
-	        value: function render() {
-	            if (!this.props.spots) {
-	                return _react2.default.createElement(
-	                    'div',
-	                    null,
-	                    'LOADING'
-	                );
-	            }
-	
-	            var spotItems = this.props.spots.map(function (spot) {
-	                return _react2.default.createElement(ListItem, spot);
-	            });
-	
-	            return _react2.default.createElement(
-	                'div',
-	                { className: 'container moves-container' },
-	                spotItems
-	            );
-	        }
-	    }]);
-	
-	    return List;
-	}(_react.Component);
-	
-	exports.default = List;
-	exports.default = List;
-
-/***/ },
+/* 543 */,
 /* 544 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -55902,6 +55744,10 @@
 	
 	var _classnames2 = _interopRequireDefault(_classnames);
 	
+	var _Loading = __webpack_require__(605);
+	
+	var _Loading2 = _interopRequireDefault(_Loading);
+	
 	var _utils = __webpack_require__(598);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -55952,11 +55798,7 @@
 	        key: 'render',
 	        value: function render() {
 	            if (!this.props.spots.items) {
-	                return _react2.default.createElement(
-	                    'div',
-	                    null,
-	                    'LOADING'
-	                );
+	                return _react2.default.createElement(_Loading2.default, null);
 	            }
 	
 	            var options = this.props.spots.items.map(function (choice) {
@@ -59315,6 +59157,288 @@
 	      return state;
 	  }
 	}
+
+/***/ },
+/* 605 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.default = LoadingView;
+	
+	var _react = __webpack_require__(299);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function LoadingView() {
+	    return _react2.default.createElement(
+	        "div",
+	        { className: "container" },
+	        _react2.default.createElement(
+	            "div",
+	            { className: "row loading-container" },
+	            _react2.default.createElement("div", { className: "sk-rotating-plane" })
+	        )
+	    );
+	}
+
+/***/ },
+/* 606 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(299);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _MoveListRow = __webpack_require__(607);
+	
+	var _MoveListRow2 = _interopRequireDefault(_MoveListRow);
+	
+	var _Loading = __webpack_require__(605);
+	
+	var _Loading2 = _interopRequireDefault(_Loading);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var List = function (_Component) {
+	    _inherits(List, _Component);
+	
+	    function List() {
+	        _classCallCheck(this, List);
+	
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(List).apply(this, arguments));
+	    }
+	
+	    _createClass(List, [{
+	        key: 'componentDidMount',
+	        value: function componentDidMount() {
+	            this.props.fetchSpotsIfNeeded();
+	            this.props.fetchMovesIfNeeded();
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            if (!this.props.spots) {
+	                return _react2.default.createElement(_Loading2.default, null);
+	            }
+	
+	            var list = void 0;
+	            if (!this.props.spots.length) {
+	                list = _react2.default.createElement(
+	                    'div',
+	                    { className: 'col-md-12 text-center' },
+	                    "No one's going anywhere, just quite yet."
+	                );
+	            } else {
+	                list = this.props.spots.map(function (spot, i) {
+	                    return _react2.default.createElement(_MoveListRow2.default, _extends({}, spot, { key: i }));
+	                });
+	            }
+	
+	            var yourMove = void 0;
+	            if (!this.props.recentMove.id) {
+	                yourMove = _react2.default.createElement(
+	                    'div',
+	                    { className: 'container your-move' },
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'row' },
+	                        _react2.default.createElement(
+	                            'div',
+	                            { className: 'col-sm-12 text-center' },
+	                            _react2.default.createElement(
+	                                'button',
+	                                { type: 'button', className: 'btn btn-default btn-lg' },
+	                                'Where are you going?'
+	                            )
+	                        )
+	                    )
+	                );
+	            }
+	
+	            return _react2.default.createElement(
+	                'div',
+	                null,
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'lunch-moves-list' },
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'container moves-container' },
+	                        list
+	                    )
+	                ),
+	                yourMove
+	            );
+	        }
+	    }]);
+	
+	    return List;
+	}(_react.Component);
+	
+	exports.default = List;
+
+/***/ },
+/* 607 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.default = MoveListRow;
+	
+	var _react = __webpack_require__(299);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _Move = __webpack_require__(608);
+	
+	var _Move2 = _interopRequireDefault(_Move);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function MoveListRow(_ref) {
+	    var name = _ref.name;
+	    var moves = _ref.moves;
+	    var hasOwnMove = _ref.hasOwnMove;
+	
+	    var moveItems = moves.map(function (move) {
+	        return _react2.default.createElement(_Move2.default, move);
+	    });
+	    var newMove = void 0;
+	
+	    if (!hasOwnMove) {
+	        newMove = _react2.default.createElement(
+	            'div',
+	            { className: 'move move-new' },
+	            _react2.default.createElement(
+	                'div',
+	                { className: 'move-icon' },
+	                _react2.default.createElement('span', { className: 'glyphicon glyphicon-plus' })
+	            ),
+	            _react2.default.createElement(
+	                'div',
+	                { className: 'move-name' },
+	                _react2.default.createElement(
+	                    'span',
+	                    null,
+	                    'Go Here'
+	                )
+	            )
+	        );
+	    }
+	
+	    return _react2.default.createElement(
+	        'div',
+	        { className: 'row move-row' },
+	        _react2.default.createElement(
+	            'div',
+	            { className: 'spot-name col-md-12' },
+	            _react2.default.createElement(
+	                'span',
+	                null,
+	                name
+	            )
+	        ),
+	        _react2.default.createElement(
+	            'div',
+	            { className: 'spot-moves col-md-12' },
+	            moveItems,
+	            newMove
+	        )
+	    );
+	};
+
+/***/ },
+/* 608 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.default = Move;
+	
+	var _react = __webpack_require__(299);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _moment = __webpack_require__(544);
+	
+	var _moment2 = _interopRequireDefault(_moment);
+	
+	var _classnames = __webpack_require__(546);
+	
+	var _classnames2 = _interopRequireDefault(_classnames);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function Move(_ref) {
+	    var isOwnMove = _ref.isOwnMove;
+	    var time = _ref.time;
+	    var user = _ref.user;
+	
+	    var moveName = void 0;
+	    var deleteButton = void 0;
+	
+	    if (isOwnMove) {
+	        moveName = _react2.default.createElement(
+	            'span',
+	            null,
+	            'You ',
+	            _react2.default.createElement('span', { className: 'glyphicon glyphicon-pencil' })
+	        );
+	    } else {
+	        moveName = user;
+	    }
+	
+	    return _react2.default.createElement(
+	        'div',
+	        { className: (0, _classnames2.default)("move", { "own-move": isOwnMove }) },
+	        _react2.default.createElement(
+	            'div',
+	            { className: 'move-time' },
+	            _react2.default.createElement(
+	                'span',
+	                null,
+	                (0, _moment2.default)(time).format('h:mm')
+	            )
+	        ),
+	        _react2.default.createElement(
+	            'div',
+	            { className: 'move-name' },
+	            _react2.default.createElement(
+	                'span',
+	                null,
+	                moveName
+	            )
+	        )
+	    );
+	};
 
 /***/ }
 /******/ ]);

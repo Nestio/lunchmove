@@ -3,6 +3,7 @@ import {reduxForm} from 'redux-form';
 import moment from 'moment';
 import classNames from 'classnames';
 
+import Loading from './Loading';
 import { parseTimeInput } from '../utils';
 
 const fields = [
@@ -39,7 +40,7 @@ class MoveForm extends Component {
     
     render(){
         if (!this.props.spots.items) {
-            return <div>LOADING</div>;
+            return <Loading />;
         }
         
         let options = this.props.spots.items.map((choice) => {

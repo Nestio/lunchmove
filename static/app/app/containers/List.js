@@ -1,6 +1,7 @@
 import { connect } from 'react-redux'
-import LunchMoves from '../components/LunchMoves'
+import MoveList from '../components/MoveList'
 import { values, find } from 'lodash';
+import { fetchSpotsIfNeeded, fetchMovesIfNeeded } from '../actions'
 
 function mapMoves (state) {
   return state.moves.items.map((move) => {
@@ -43,12 +44,19 @@ const mapStateToProps = (state) => {
     spots = groupMovesBySpots(state);
   }
   return {
-    spots
+    spots,
+    recentMove: state.recentMove
   };
 }
 
+const mapDispatchToProps = (dispatch) => ({
+    fetchMovesIfNeeded: () => dispatch(fetchSpotsIfNeeded()),
+    fetchSpotsIfNeeded: () => dispatch(fetchMovesIfNeeded())
+});
+
 const ListContainer = connect(
-  mapStateToProps
-)(LunchMoves)
+  mapStateToProps,
+  mapDispatchToProps
+)(MoveList);
 
 export default ListContainer
