@@ -34758,6 +34758,10 @@
 	
 	var _reactRedux = __webpack_require__(521);
 	
+	var _moment = __webpack_require__(546);
+	
+	var _moment2 = _interopRequireDefault(_moment);
+	
 	var _react = __webpack_require__(299);
 	
 	var _react2 = _interopRequireDefault(_react);
@@ -34800,6 +34804,7 @@
 	
 	            acc[spotId] = {
 	                name: spot.name,
+	                id: spot.id,
 	                hasOwnMove: false,
 	                moves: []
 	            };
@@ -34839,6 +34844,9 @@
 	        },
 	        fetchSpots: function fetchSpots() {
 	            return dispatch((0, _actions.fetchMoves)());
+	        },
+	        updateMove: function updateMove(move) {
+	            return dispatch((0, _actions.updateMove)(move));
 	        }
 	    };
 	};
@@ -34869,12 +34877,13 @@
 	            var _props = this.props;
 	            var spots = _props.spots;
 	            var recentMove = _props.recentMove;
+	            var updateMove = _props.updateMove;
 	
 	
 	            if (!spots) {
 	                return _react2.default.createElement(_Loading2.default, null);
 	            } else {
-	                return _react2.default.createElement(_MoveList2.default, { spots: spots, recentMove: recentMove });
+	                return _react2.default.createElement(_MoveList2.default, { spots: spots, recentMove: recentMove, updateMove: updateMove });
 	            }
 	        }
 	    }]);
@@ -34920,7 +34929,7 @@
 	        );
 	    } else {
 	        list = props.spots.map(function (spot, i) {
-	            return _react2.default.createElement(_MoveListRow2.default, _extends({}, spot, { key: i }));
+	            return _react2.default.createElement(_MoveListRow2.default, _extends({}, spot, { key: i, updateMove: props.updateMove }));
 	        });
 	    }
 	
@@ -34970,11 +34979,16 @@
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
+	
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+	
 	exports.default = MoveListRow;
 	
 	var _react = __webpack_require__(299);
 	
 	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactRouter = __webpack_require__(297);
 	
 	var _Move = __webpack_require__(545);
 	
@@ -34986,16 +35000,26 @@
 	    var name = _ref.name;
 	    var moves = _ref.moves;
 	    var hasOwnMove = _ref.hasOwnMove;
+	    var updateMove = _ref.updateMove;
+	    var id = _ref.id;
 	
-	    var moveItems = moves.map(function (move) {
-	        return _react2.default.createElement(_Move2.default, move);
+	    var moveItems = moves.map(function (move, i) {
+	        return _react2.default.createElement(_Move2.default, _extends({}, move, { key: i }));
 	    });
 	    var newMove = void 0;
+	    var onClick = function onClick() {
+	        var move = {
+	            spot: id,
+	            time: moves[moves.length - 1].time
+	        };
+	        updateMove(move);
+	        _reactRouter.browserHistory.push('/edit');
+	    };
 	
 	    if (!hasOwnMove) {
 	        newMove = _react2.default.createElement(
 	            'div',
-	            { className: 'move move-new' },
+	            { className: 'move move-new', onClick: onClick },
 	            _react2.default.createElement(
 	                'div',
 	                { className: 'move-icon' },

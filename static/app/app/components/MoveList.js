@@ -13,7 +13,7 @@ export default function List (props) {
         );
 
     } else {
-        list = props.spots.map((spot, i) => <MoveListRow {...spot} key={i}/>);
+        list = props.spots.map((spot, i) => <MoveListRow {...spot} key={i} updateMove={props.updateMove} />);
     }
     
     let yourMove;

@@ -1,8 +1,9 @@
 import { connect } from 'react-redux'
+import moment from 'moment';
 import React, { Component } from 'react';
 import MoveList from '../components/MoveList'
 import { values, find } from 'lodash';
-import { fetchSpots, fetchMoves } from '../actions'
+import { fetchSpots, fetchMoves, updateMove } from '../actions'
 import Loading from '../components/Loading';
 
 function mapMoves (state) {
@@ -23,6 +24,7 @@ function groupMovesBySpots (state) {
 
             acc[spotId] = {
                 name: spot.name,
+                id: spot.id,
                 hasOwnMove: false,
                 moves: []
               }
@@ -57,7 +59,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => ({
     fetchMoves: () => dispatch(fetchSpots()),
-    fetchSpots: () => dispatch(fetchMoves())
+    fetchSpots: () => dispatch(fetchMoves()),
+    updateMove: (move) => dispatch(updateMove(move))
 });
 
 class List extends Component {
@@ -72,12 +75,12 @@ class List extends Component {
     }
     
     render () {
-        const {spots, recentMove} = this.props;
+        const {spots, recentMove, updateMove} = this.props;
         
         if (!spots) {
             return <Loading />
         } else {
-            return <MoveList spots={spots} recentMove={recentMove} />
+            return <MoveList spots={spots} recentMove={recentMove} updateMove={updateMove} />
         }
     }
 }
