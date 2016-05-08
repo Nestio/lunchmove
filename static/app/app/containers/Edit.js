@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
 
-import { updateMove, fetchSpotsIfNeeded, saveMove } from '../actions'
+import { updateMove, fetchSpots, saveMove } from '../actions'
 import NameForm from '../components/NameForm';
 import MoveForm from '../components/MoveForm';
 
@@ -19,15 +19,17 @@ const mapDispatchToProps = (dispatch) => {
     saveMove: () => {
       return dispatch(saveMove());
     },
-    fetchSpotsIfNeeded: () => {
-      return dispatch(fetchSpotsIfNeeded());
+    fetchSpots: () => {
+      return dispatch(fetchSpots());
     }
   }
 }
 
 class Edit extends Component {
     componentDidMount(){
-      this.props.fetchSpotsIfNeeded();
+        if (!this.props.spots.isFetching) {
+            this.props.fetchSpots();
+        }
     }
   
     render() {

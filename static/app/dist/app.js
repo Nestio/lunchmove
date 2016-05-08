@@ -34751,10 +34751,16 @@
 	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
-	  value: true
+	    value: true
 	});
 	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
 	var _reactRedux = __webpack_require__(521);
+	
+	var _react = __webpack_require__(299);
+	
+	var _react2 = _interopRequireDefault(_react);
 	
 	var _MoveList = __webpack_require__(543);
 	
@@ -34763,93 +34769,6 @@
 	var _lodash = __webpack_require__(550);
 	
 	var _actions = __webpack_require__(551);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function mapMoves(state) {
-	  return state.moves.items.map(function (move) {
-	    return Object.assign({}, move, {
-	      isOwnMove: move.id === state.recentMove.id
-	    });
-	  });
-	}
-	
-	function groupMovesBySpots(state) {
-	  var moves = mapMoves(state);
-	  var spotsById = moves.reduce(function (acc, move) {
-	    var spotId = move.spot;
-	
-	    if (!acc[spotId]) {
-	      var spot = (0, _lodash.find)(state.spots.items, { id: spotId });
-	
-	      acc[spotId] = {
-	        name: spot.name,
-	        hasOwnMove: false,
-	        moves: []
-	      };
-	    }
-	
-	    acc[spotId].moves.push(move);
-	
-	    if (move.isOwnMove) {
-	      acc[spotId].hasOwnMove = true;
-	    }
-	
-	    return acc;
-	  }, {});
-	
-	  return (0, _lodash.values)(spotsById);
-	}
-	
-	var mapStateToProps = function mapStateToProps(state) {
-	  var spots = null;
-	  if (state.moves.items && state.spots.items) {
-	    spots = groupMovesBySpots(state);
-	  }
-	  return {
-	    spots: spots,
-	    recentMove: state.recentMove
-	  };
-	};
-	
-	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
-	  return {
-	    fetchMovesIfNeeded: function fetchMovesIfNeeded() {
-	      return dispatch((0, _actions.fetchSpotsIfNeeded)());
-	    },
-	    fetchSpotsIfNeeded: function fetchSpotsIfNeeded() {
-	      return dispatch((0, _actions.fetchMovesIfNeeded)());
-	    }
-	  };
-	};
-	
-	var ListContainer = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_MoveList2.default);
-	
-	exports.default = ListContainer;
-
-/***/ },
-/* 543 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-	
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-	
-	var _react = __webpack_require__(299);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	var _reactRouter = __webpack_require__(297);
-	
-	var _MoveListRow = __webpack_require__(544);
-	
-	var _MoveListRow2 = _interopRequireDefault(_MoveListRow);
 	
 	var _Loading = __webpack_require__(549);
 	
@@ -34863,6 +34782,67 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
+	function mapMoves(state) {
+	    return state.moves.items.map(function (move) {
+	        return Object.assign({}, move, {
+	            isOwnMove: move.id === state.recentMove.id
+	        });
+	    });
+	}
+	
+	function groupMovesBySpots(state) {
+	    var moves = mapMoves(state);
+	    var spotsById = moves.reduce(function (acc, move) {
+	        var spotId = move.spot;
+	
+	        if (!acc[spotId]) {
+	            var spot = (0, _lodash.find)(state.spots.items, { id: spotId });
+	
+	            acc[spotId] = {
+	                name: spot.name,
+	                hasOwnMove: false,
+	                moves: []
+	            };
+	        }
+	
+	        acc[spotId].moves.push(move);
+	
+	        if (move.isOwnMove) {
+	            acc[spotId].hasOwnMove = true;
+	        }
+	
+	        return acc;
+	    }, {});
+	
+	    return (0, _lodash.values)(spotsById);
+	}
+	
+	var mapStateToProps = function mapStateToProps(state) {
+	    var spots = null;
+	
+	    if (!state.moves.isFetching && !state.spots.isFetching) {
+	        spots = groupMovesBySpots(state);
+	    }
+	
+	    return {
+	        spots: spots,
+	        movesAreFetching: state.moves.isFetching,
+	        spotsAreFetching: state.spots.isFetching,
+	        recentMove: state.recentMove
+	    };
+	};
+	
+	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+	    return {
+	        fetchMoves: function fetchMoves() {
+	            return dispatch((0, _actions.fetchSpots)());
+	        },
+	        fetchSpots: function fetchSpots() {
+	            return dispatch((0, _actions.fetchMoves)());
+	        }
+	    };
+	};
+	
 	var List = function (_Component) {
 	    _inherits(List, _Component);
 	
@@ -34873,73 +34853,113 @@
 	    }
 	
 	    _createClass(List, [{
-	        key: 'componentDidMount',
-	        value: function componentDidMount() {
-	            this.props.fetchSpotsIfNeeded();
-	            this.props.fetchMovesIfNeeded();
+	        key: 'componentWillMount',
+	        value: function componentWillMount() {
+	            if (!this.props.movesAreFetching) {
+	                this.props.fetchMoves();
+	            }
+	
+	            if (!this.props.spotsAreFetching) {
+	                this.props.fetchSpots();
+	            }
 	        }
 	    }, {
 	        key: 'render',
 	        value: function render() {
-	            if (!this.props.spots) {
+	            var _props = this.props;
+	            var spots = _props.spots;
+	            var recentMove = _props.recentMove;
+	
+	
+	            if (!spots) {
 	                return _react2.default.createElement(_Loading2.default, null);
-	            }
-	
-	            var list = void 0;
-	            if (!this.props.spots.length) {
-	                list = _react2.default.createElement(
-	                    'div',
-	                    { className: 'col-md-12 text-center' },
-	                    "No one's going anywhere, just quite yet."
-	                );
 	            } else {
-	                list = this.props.spots.map(function (spot, i) {
-	                    return _react2.default.createElement(_MoveListRow2.default, _extends({}, spot, { key: i }));
-	                });
+	                return _react2.default.createElement(_MoveList2.default, { spots: spots, recentMove: recentMove });
 	            }
-	
-	            var yourMove = void 0;
-	            if (!this.props.recentMove.id) {
-	                yourMove = _react2.default.createElement(
-	                    'div',
-	                    { className: 'container your-move' },
-	                    _react2.default.createElement(
-	                        'div',
-	                        { className: 'row' },
-	                        _react2.default.createElement(
-	                            'div',
-	                            { className: 'col-sm-12 text-center' },
-	                            _react2.default.createElement(
-	                                _reactRouter.Link,
-	                                { to: '/edit', className: 'btn btn-default btn-lg' },
-	                                'Where are you going?'
-	                            )
-	                        )
-	                    )
-	                );
-	            }
-	
-	            return _react2.default.createElement(
-	                'div',
-	                null,
-	                _react2.default.createElement(
-	                    'div',
-	                    { className: 'lunch-moves-list' },
-	                    _react2.default.createElement(
-	                        'div',
-	                        { className: 'container moves-container' },
-	                        list
-	                    )
-	                ),
-	                yourMove
-	            );
 	        }
 	    }]);
 	
 	    return List;
 	}(_react.Component);
 	
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(List);
+
+/***/ },
+/* 543 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+	
 	exports.default = List;
+	
+	var _react = __webpack_require__(299);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactRouter = __webpack_require__(297);
+	
+	var _MoveListRow = __webpack_require__(544);
+	
+	var _MoveListRow2 = _interopRequireDefault(_MoveListRow);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function List(props) {
+	    var list = void 0;
+	    if (!props.spots.length) {
+	        list = _react2.default.createElement(
+	            'div',
+	            { className: 'col-md-12 text-center' },
+	            "No one's going anywhere, just quite yet."
+	        );
+	    } else {
+	        list = props.spots.map(function (spot, i) {
+	            return _react2.default.createElement(_MoveListRow2.default, _extends({}, spot, { key: i }));
+	        });
+	    }
+	
+	    var yourMove = void 0;
+	    if (!props.recentMove.id) {
+	        yourMove = _react2.default.createElement(
+	            'div',
+	            { className: 'container your-move' },
+	            _react2.default.createElement(
+	                'div',
+	                { className: 'row' },
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'col-sm-12 text-center' },
+	                    _react2.default.createElement(
+	                        _reactRouter.Link,
+	                        { to: '/edit', className: 'btn btn-default btn-lg' },
+	                        'Where are you going?'
+	                    )
+	                )
+	            )
+	        );
+	    }
+	
+	    return _react2.default.createElement(
+	        'div',
+	        null,
+	        _react2.default.createElement(
+	            'div',
+	            { className: 'lunch-moves-list' },
+	            _react2.default.createElement(
+	                'div',
+	                { className: 'container moves-container' },
+	                list
+	            )
+	        ),
+	        yourMove
+	    );
+	}
 
 /***/ },
 /* 544 */
@@ -55274,11 +55294,11 @@
 	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
-	  value: true
+	    value: true
 	});
-	exports.UPDATE_MOVE = exports.RECEIVE_SPOTS = exports.REQUEST_SPOTS = exports.RECEIVE_MOVES = exports.REQUEST_MOVES = undefined;
-	exports.fetchSpotsIfNeeded = fetchSpotsIfNeeded;
-	exports.fetchMovesIfNeeded = fetchMovesIfNeeded;
+	exports.RECEIVE_SPOTS = exports.REQUEST_SPOTS = exports.UPDATE_MOVE = exports.RECEIVE_MOVES = exports.REQUEST_MOVES = undefined;
+	exports.fetchSpots = fetchSpots;
+	exports.fetchMoves = fetchMoves;
 	exports.updateMove = updateMove;
 	exports.saveMove = saveMove;
 	
@@ -55290,106 +55310,84 @@
 	
 	var REQUEST_MOVES = exports.REQUEST_MOVES = 'REQUEST_MOVES';
 	var RECEIVE_MOVES = exports.RECEIVE_MOVES = 'RECEIVE_MOVES';
-	var REQUEST_SPOTS = exports.REQUEST_SPOTS = 'REQUEST_SPOTS';
-	var RECEIVE_SPOTS = exports.RECEIVE_SPOTS = 'RECEIVE_SPOTS';
+	
 	var UPDATE_MOVE = exports.UPDATE_MOVE = 'UPDATE_MOVE';
 	
+	var REQUEST_SPOTS = exports.REQUEST_SPOTS = 'REQUEST_SPOTS';
+	var RECEIVE_SPOTS = exports.RECEIVE_SPOTS = 'RECEIVE_SPOTS';
+	
 	function requestSpots() {
-	  return {
-	    type: REQUEST_SPOTS
-	  };
+	    return {
+	        type: REQUEST_SPOTS
+	    };
 	}
 	
 	function receiveSpots(json) {
-	  return {
-	    type: RECEIVE_SPOTS,
-	    spots: json
-	  };
+	    return {
+	        type: RECEIVE_SPOTS,
+	        spots: json
+	    };
 	}
 	
 	function fetchSpots() {
-	  return function (dispatch) {
-	    dispatch(requestSpots());
-	    return (0, _isomorphicFetch2.default)('/json/spots/').then(function (response) {
-	      return response.json();
-	    }).then(function (json) {
-	      dispatch(receiveSpots(json.results));
-	    });
-	  };
-	}
-	
-	function shouldFetchSpots(state) {
-	  return !state.spots.items && !state.spots.isFetching;
-	}
-	
-	function fetchSpotsIfNeeded() {
-	  return function (dispatch, getState) {
-	    if (shouldFetchSpots(getState())) {
-	      return dispatch(fetchSpots());
-	    }
-	  };
+	    return function (dispatch) {
+	        dispatch(requestSpots());
+	        return (0, _isomorphicFetch2.default)('/json/spots/').then(function (response) {
+	            return response.json();
+	        }).then(function (json) {
+	            return dispatch(receiveSpots(json.results));
+	        });
+	    };
 	}
 	
 	function requestMoves() {
-	  return {
-	    type: REQUEST_MOVES
-	  };
+	    return {
+	        type: REQUEST_MOVES
+	    };
 	}
 	
 	function receiveMoves(json) {
-	  return {
-	    type: RECEIVE_MOVES,
-	    moves: json
-	  };
+	    return {
+	        type: RECEIVE_MOVES,
+	        moves: json
+	    };
 	}
 	
 	function fetchMoves() {
-	  return function (dispatch) {
-	    dispatch(requestMoves());
-	    return (0, _isomorphicFetch2.default)('/json/moves/').then(function (response) {
-	      return response.json();
-	    }).then(function (json) {
-	      return dispatch(receiveMoves(json.results));
-	    });
-	  };
-	}
-	
-	function shouldFetchMoves(state) {
-	  return !state.moves.items && !state.moves.isFetching;
-	}
-	
-	function fetchMovesIfNeeded() {
-	  return function (dispatch, getState) {
-	    if (shouldFetchMoves(getState())) {
-	      return dispatch(fetchMoves());
-	    }
-	  };
+	    return function (dispatch) {
+	        dispatch(requestMoves());
+	        return (0, _isomorphicFetch2.default)('/json/moves/').then(function (response) {
+	            return response.json();
+	        }).then(function (json) {
+	            return dispatch(receiveMoves(json.results));
+	        });
+	    };
 	}
 	
 	function updateMove(move) {
-	  return { type: UPDATE_MOVE, move: move };
+	    return { type: UPDATE_MOVE, move: move };
 	}
 	
 	function saveMove() {
-	  return function (dispatch, getState) {
-	    var move = getState().recentMove;
-	    var url = move.id ? '/json/moves/' + move.id : '/json/moves/';
-	    var method = move.id ? 'PUT' : 'POST';
+	    return function (dispatch, getState) {
+	        var move = getState().recentMove;
+	        var url = move.id ? '/json/moves/' + move.id : '/json/moves/';
+	        var method = move.id ? 'PUT' : 'POST';
 	
-	    return (0, _isomorphicFetch2.default)(url, {
-	      method: method,
-	      headers: {
-	        'Accept': 'application/json',
-	        'Content-Type': 'application/json'
-	      },
-	      credentials: 'same-origin',
-	      body: JSON.stringify(move)
-	    }).then(function (response) {
-	      return response.json();
-	    }).then(function (json) {
-	      dispatch(updateMove(json));
-	    });
-	  };
+	        return (0, _isomorphicFetch2.default)(url, {
+	            method: method,
+	            headers: {
+	                'Accept': 'application/json',
+	                'Content-Type': 'application/json'
+	            },
+	            credentials: 'same-origin',
+	            body: JSON.stringify(move)
+	        }).then(function (response) {
+	            return response.json();
+	        }).then(function (json) {
+	            dispatch(updateMove(json));
+	        });
+	    };
 	}
 
 /***/ },
@@ -55806,7 +55804,7 @@
 	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
-	  value: true
+	    value: true
 	});
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -55836,57 +55834,59 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
 	function mapStateToProps(state) {
-	  var recentMove = state.recentMove;
-	  var spots = state.spots;
+	    var recentMove = state.recentMove;
+	    var spots = state.spots;
 	
-	  return { recentMove: recentMove, spots: spots };
+	    return { recentMove: recentMove, spots: spots };
 	}
 	
 	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
-	  return {
-	    updateMove: function updateMove(move) {
-	      return dispatch((0, _actions.updateMove)(move));
-	    },
-	    saveMove: function saveMove() {
-	      return dispatch((0, _actions.saveMove)());
-	    },
-	    fetchSpotsIfNeeded: function fetchSpotsIfNeeded() {
-	      return dispatch((0, _actions.fetchSpotsIfNeeded)());
-	    }
-	  };
+	    return {
+	        updateMove: function updateMove(move) {
+	            return dispatch((0, _actions.updateMove)(move));
+	        },
+	        saveMove: function saveMove() {
+	            return dispatch((0, _actions.saveMove)());
+	        },
+	        fetchSpots: function fetchSpots() {
+	            return dispatch((0, _actions.fetchSpots)());
+	        }
+	    };
 	};
 	
 	var Edit = function (_Component) {
-	  _inherits(Edit, _Component);
+	    _inherits(Edit, _Component);
 	
-	  function Edit() {
-	    _classCallCheck(this, Edit);
+	    function Edit() {
+	        _classCallCheck(this, Edit);
 	
-	    return _possibleConstructorReturn(this, Object.getPrototypeOf(Edit).apply(this, arguments));
-	  }
-	
-	  _createClass(Edit, [{
-	    key: 'componentDidMount',
-	    value: function componentDidMount() {
-	      this.props.fetchSpotsIfNeeded();
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(Edit).apply(this, arguments));
 	    }
-	  }, {
-	    key: 'render',
-	    value: function render() {
-	      if (this.props.recentMove.user) {
-	        return _react2.default.createElement(_MoveForm2.default, {
-	          recentMove: this.props.recentMove,
-	          spots: this.props.spots,
-	          updateMove: this.props.updateMove,
-	          saveMove: this.props.saveMove
-	        });
-	      } else {
-	        return _react2.default.createElement(_NameForm2.default, { updateMove: this.props.updateMove });
-	      }
-	    }
-	  }]);
 	
-	  return Edit;
+	    _createClass(Edit, [{
+	        key: 'componentDidMount',
+	        value: function componentDidMount() {
+	            if (!this.props.spots.isFetching) {
+	                this.props.fetchSpots();
+	            }
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            if (this.props.recentMove.user) {
+	                return _react2.default.createElement(_MoveForm2.default, {
+	                    recentMove: this.props.recentMove,
+	                    spots: this.props.spots,
+	                    updateMove: this.props.updateMove,
+	                    saveMove: this.props.saveMove
+	                });
+	            } else {
+	                return _react2.default.createElement(_NameForm2.default, { updateMove: this.props.updateMove });
+	            }
+	        }
+	    }]);
+	
+	    return Edit;
 	}(_react.Component);
 	
 	var EditContainer = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(Edit);
@@ -59370,7 +59370,7 @@
 	
 	var initialState = {
 	  isFetching: false,
-	  items: null
+	  items: []
 	};
 	
 	function moves() {
@@ -59387,8 +59387,6 @@
 	        isFetching: false,
 	        items: action.moves
 	      });
-	    case _actions.UPDATE_MOVE:
-	      return updateMove(state, action);
 	    default:
 	      return state;
 	  }
@@ -59436,7 +59434,7 @@
 	
 	var initialState = {
 	  isFetching: false,
-	  items: null
+	  items: []
 	};
 	
 	function spots() {

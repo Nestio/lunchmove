@@ -2,7 +2,7 @@ import { REQUEST_SPOTS, RECEIVE_SPOTS } from '../actions'
 
 let initialState = {
   isFetching: false,
-  items: null
+  items: []
 };
 
 export default function spots(state = initialState, action) {

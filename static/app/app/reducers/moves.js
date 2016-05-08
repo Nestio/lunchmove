@@ -1,10 +1,10 @@
 import {
-  REQUEST_MOVES, RECEIVE_MOVES, UPDATE_MOVE
+  REQUEST_MOVES, RECEIVE_MOVES
 } from '../actions'
 
 let initialState = {
   isFetching: false,
-  items: null
+  items: []
 };
 
 export default function moves(state = initialState, action) {
@@ -18,8 +18,6 @@ export default function moves(state = initialState, action) {
         isFetching: false,
         items: action.moves
       })
-    case UPDATE_MOVE:
-      return updateMove(state, action);
     default:
       return state
   }
