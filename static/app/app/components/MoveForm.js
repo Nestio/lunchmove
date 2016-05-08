@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {reduxForm} from 'redux-form';
 import moment from 'moment';
 import classNames from 'classnames';
+import { Link } from 'react-router';
 
 import Loading from './Loading';
 import { parseTimeInput } from '../utils';
@@ -70,7 +71,7 @@ class MoveForm extends Component {
                 </div>
                 <div className="lunch-move-form-row">
                     <button type="submit" className="btn btn-default" disabled={hasErrors}>Save</button>
-                    <button className="btn btn-default">Cancel</button>
+                    <Link to="/" className="btn btn-default">Cancel</Link>
                 </div>
             </form>
         )

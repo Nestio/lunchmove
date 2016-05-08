@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import {reduxForm} from 'redux-form';
+import { reduxForm } from 'redux-form';
+import { Link } from 'react-router';
 
 const fields = [
     'user'
@@ -29,7 +30,7 @@ class NameForm extends Component {
                 </div>
                 <div className="lunch-move-form-row">
                     <button type="submit" className="btn btn-default" disabled={hasErrors}>Save</button>
-                    <button className="btn btn-default">Cancel</button>
+                    <Link to="/" className="btn btn-default">Cancel</Link>
                 </div>
             </form>
         );

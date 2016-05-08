@@ -55624,6 +55624,8 @@
 	
 	var _reduxForm = __webpack_require__(554);
 	
+	var _reactRouter = __webpack_require__(297);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -55690,8 +55692,8 @@
 	                        'Save'
 	                    ),
 	                    _react2.default.createElement(
-	                        'button',
-	                        { className: 'btn btn-default' },
+	                        _reactRouter.Link,
+	                        { to: '/', className: 'btn btn-default' },
 	                        'Cancel'
 	                    )
 	                )
@@ -55743,6 +55745,8 @@
 	var _classnames = __webpack_require__(546);
 	
 	var _classnames2 = _interopRequireDefault(_classnames);
+	
+	var _reactRouter = __webpack_require__(297);
 	
 	var _Loading = __webpack_require__(605);
 	
@@ -55865,8 +55869,8 @@
 	                        'Save'
 	                    ),
 	                    _react2.default.createElement(
-	                        'button',
-	                        { className: 'btn btn-default' },
+	                        _reactRouter.Link,
+	                        { to: '/', className: 'btn btn-default' },
 	                        'Cancel'
 	                    )
 	                )
@@ -59205,6 +59209,8 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
+	var _reactRouter = __webpack_require__(297);
+	
 	var _MoveListRow = __webpack_require__(607);
 	
 	var _MoveListRow2 = _interopRequireDefault(_MoveListRow);
@@ -59268,8 +59274,8 @@
 	                            'div',
 	                            { className: 'col-sm-12 text-center' },
 	                            _react2.default.createElement(
-	                                'button',
-	                                { type: 'button', className: 'btn btn-default btn-lg' },
+	                                _reactRouter.Link,
+	                                { to: '/edit', className: 'btn btn-default btn-lg' },
 	                                'Where are you going?'
 	                            )
 	                        )

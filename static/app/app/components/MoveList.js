@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router';
 
 import MoveListRow from './MoveListRow';
 import Loading from './Loading';
@@ -32,7 +33,7 @@ export default class List extends Component {
                 <div className="container your-move">
                     <div className="row">
                         <div className="col-sm-12 text-center">
-                            <button type="button" className="btn btn-default btn-lg">Where are you going?</button>
+                            <Link to='/edit' className="btn btn-default btn-lg">Where are you going?</Link>
                         </div>
                     </div>
                 </div>
