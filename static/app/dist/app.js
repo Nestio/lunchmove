@@ -71,7 +71,7 @@
 	
 	var _Root2 = _interopRequireDefault(_Root);
 	
-	var _configureStore = __webpack_require__(599);
+	var _configureStore = __webpack_require__(602);
 	
 	var _configureStore2 = _interopRequireDefault(_configureStore);
 	
@@ -34731,7 +34731,7 @@
 	
 	var _List2 = _interopRequireDefault(_List);
 	
-	var _Edit = __webpack_require__(551);
+	var _Edit = __webpack_require__(554);
 	
 	var _Edit2 = _interopRequireDefault(_Edit);
 	
@@ -34756,13 +34756,13 @@
 	
 	var _reactRedux = __webpack_require__(521);
 	
-	var _MoveList = __webpack_require__(606);
+	var _MoveList = __webpack_require__(543);
 	
 	var _MoveList2 = _interopRequireDefault(_MoveList);
 	
 	var _lodash = __webpack_require__(550);
 	
-	var _actions = __webpack_require__(547);
+	var _actions = __webpack_require__(551);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -34828,8 +34828,268 @@
 	exports.default = ListContainer;
 
 /***/ },
-/* 543 */,
+/* 543 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(299);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactRouter = __webpack_require__(297);
+	
+	var _MoveListRow = __webpack_require__(544);
+	
+	var _MoveListRow2 = _interopRequireDefault(_MoveListRow);
+	
+	var _Loading = __webpack_require__(549);
+	
+	var _Loading2 = _interopRequireDefault(_Loading);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var List = function (_Component) {
+	    _inherits(List, _Component);
+	
+	    function List() {
+	        _classCallCheck(this, List);
+	
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(List).apply(this, arguments));
+	    }
+	
+	    _createClass(List, [{
+	        key: 'componentDidMount',
+	        value: function componentDidMount() {
+	            this.props.fetchSpotsIfNeeded();
+	            this.props.fetchMovesIfNeeded();
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            if (!this.props.spots) {
+	                return _react2.default.createElement(_Loading2.default, null);
+	            }
+	
+	            var list = void 0;
+	            if (!this.props.spots.length) {
+	                list = _react2.default.createElement(
+	                    'div',
+	                    { className: 'col-md-12 text-center' },
+	                    "No one's going anywhere, just quite yet."
+	                );
+	            } else {
+	                list = this.props.spots.map(function (spot, i) {
+	                    return _react2.default.createElement(_MoveListRow2.default, _extends({}, spot, { key: i }));
+	                });
+	            }
+	
+	            var yourMove = void 0;
+	            if (!this.props.recentMove.id) {
+	                yourMove = _react2.default.createElement(
+	                    'div',
+	                    { className: 'container your-move' },
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'row' },
+	                        _react2.default.createElement(
+	                            'div',
+	                            { className: 'col-sm-12 text-center' },
+	                            _react2.default.createElement(
+	                                _reactRouter.Link,
+	                                { to: '/edit', className: 'btn btn-default btn-lg' },
+	                                'Where are you going?'
+	                            )
+	                        )
+	                    )
+	                );
+	            }
+	
+	            return _react2.default.createElement(
+	                'div',
+	                null,
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'lunch-moves-list' },
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'container moves-container' },
+	                        list
+	                    )
+	                ),
+	                yourMove
+	            );
+	        }
+	    }]);
+	
+	    return List;
+	}(_react.Component);
+	
+	exports.default = List;
+
+/***/ },
 /* 544 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.default = MoveListRow;
+	
+	var _react = __webpack_require__(299);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _Move = __webpack_require__(545);
+	
+	var _Move2 = _interopRequireDefault(_Move);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function MoveListRow(_ref) {
+	    var name = _ref.name;
+	    var moves = _ref.moves;
+	    var hasOwnMove = _ref.hasOwnMove;
+	
+	    var moveItems = moves.map(function (move) {
+	        return _react2.default.createElement(_Move2.default, move);
+	    });
+	    var newMove = void 0;
+	
+	    if (!hasOwnMove) {
+	        newMove = _react2.default.createElement(
+	            'div',
+	            { className: 'move move-new' },
+	            _react2.default.createElement(
+	                'div',
+	                { className: 'move-icon' },
+	                _react2.default.createElement('span', { className: 'glyphicon glyphicon-plus' })
+	            ),
+	            _react2.default.createElement(
+	                'div',
+	                { className: 'move-name' },
+	                _react2.default.createElement(
+	                    'span',
+	                    null,
+	                    'Go Here'
+	                )
+	            )
+	        );
+	    }
+	
+	    return _react2.default.createElement(
+	        'div',
+	        { className: 'row move-row' },
+	        _react2.default.createElement(
+	            'div',
+	            { className: 'spot-name col-md-12' },
+	            _react2.default.createElement(
+	                'span',
+	                null,
+	                name
+	            )
+	        ),
+	        _react2.default.createElement(
+	            'div',
+	            { className: 'spot-moves col-md-12' },
+	            moveItems,
+	            newMove
+	        )
+	    );
+	};
+
+/***/ },
+/* 545 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.default = Move;
+	
+	var _react = __webpack_require__(299);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _moment = __webpack_require__(546);
+	
+	var _moment2 = _interopRequireDefault(_moment);
+	
+	var _classnames = __webpack_require__(548);
+	
+	var _classnames2 = _interopRequireDefault(_classnames);
+	
+	var _reactRouter = __webpack_require__(297);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function Move(_ref) {
+	    var isOwnMove = _ref.isOwnMove;
+	    var time = _ref.time;
+	    var user = _ref.user;
+	
+	    var moveName = void 0;
+	    var deleteButton = void 0;
+	    var onClick = void 0;
+	
+	    if (isOwnMove) {
+	        moveName = _react2.default.createElement(
+	            'span',
+	            null,
+	            'You ',
+	            _react2.default.createElement('span', { className: 'glyphicon glyphicon-pencil' })
+	        );
+	        onClick = function onClick() {
+	            return _reactRouter.browserHistory.push('/edit');
+	        };
+	    } else {
+	        moveName = user;
+	    }
+	
+	    return _react2.default.createElement(
+	        'div',
+	        { className: (0, _classnames2.default)("move", { "own-move": isOwnMove }), onClick: onClick },
+	        _react2.default.createElement(
+	            'div',
+	            { className: 'move-time' },
+	            _react2.default.createElement(
+	                'span',
+	                null,
+	                (0, _moment2.default)(time).format('h:mm')
+	            )
+	        ),
+	        _react2.default.createElement(
+	            'div',
+	            { className: 'move-name' },
+	            _react2.default.createElement(
+	                'span',
+	                null,
+	                moveName
+	            )
+	        )
+	    );
+	};
+
+/***/ },
+/* 546 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(module) {//! moment.js
@@ -38872,10 +39132,10 @@
 	    return _moment;
 	
 	}));
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(545)(module)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(547)(module)))
 
 /***/ },
-/* 545 */
+/* 547 */
 /***/ function(module, exports) {
 
 	module.exports = function(module) {
@@ -38891,7 +39151,7 @@
 
 
 /***/ },
-/* 546 */
+/* 548 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -38945,536 +39205,33 @@
 
 
 /***/ },
-/* 547 */
+/* 549 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
+	"use strict";
 	
 	Object.defineProperty(exports, "__esModule", {
-	  value: true
+	    value: true
 	});
-	exports.UPDATE_MOVE = exports.RECEIVE_SPOTS = exports.REQUEST_SPOTS = exports.RECEIVE_MOVES = exports.REQUEST_MOVES = undefined;
-	exports.fetchSpotsIfNeeded = fetchSpotsIfNeeded;
-	exports.fetchMovesIfNeeded = fetchMovesIfNeeded;
-	exports.updateMove = updateMove;
-	exports.saveMove = saveMove;
+	exports.default = LoadingView;
 	
-	var _isomorphicFetch = __webpack_require__(548);
+	var _react = __webpack_require__(299);
 	
-	var _isomorphicFetch2 = _interopRequireDefault(_isomorphicFetch);
+	var _react2 = _interopRequireDefault(_react);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var REQUEST_MOVES = exports.REQUEST_MOVES = 'REQUEST_MOVES';
-	var RECEIVE_MOVES = exports.RECEIVE_MOVES = 'RECEIVE_MOVES';
-	var REQUEST_SPOTS = exports.REQUEST_SPOTS = 'REQUEST_SPOTS';
-	var RECEIVE_SPOTS = exports.RECEIVE_SPOTS = 'RECEIVE_SPOTS';
-	var UPDATE_MOVE = exports.UPDATE_MOVE = 'UPDATE_MOVE';
-	
-	function requestSpots() {
-	  return {
-	    type: REQUEST_SPOTS
-	  };
+	function LoadingView() {
+	    return _react2.default.createElement(
+	        "div",
+	        { className: "container" },
+	        _react2.default.createElement(
+	            "div",
+	            { className: "row loading-container" },
+	            _react2.default.createElement("div", { className: "sk-rotating-plane" })
+	        )
+	    );
 	}
-	
-	function receiveSpots(json) {
-	  return {
-	    type: RECEIVE_SPOTS,
-	    spots: json
-	  };
-	}
-	
-	function fetchSpots() {
-	  return function (dispatch) {
-	    dispatch(requestSpots());
-	    return (0, _isomorphicFetch2.default)('/json/spots/').then(function (response) {
-	      return response.json();
-	    }).then(function (json) {
-	      dispatch(receiveSpots(json.results));
-	    });
-	  };
-	}
-	
-	function shouldFetchSpots(state) {
-	  return !state.spots.items && !state.spots.isFetching;
-	}
-	
-	function fetchSpotsIfNeeded() {
-	  return function (dispatch, getState) {
-	    if (shouldFetchSpots(getState())) {
-	      return dispatch(fetchSpots());
-	    }
-	  };
-	}
-	
-	function requestMoves() {
-	  return {
-	    type: REQUEST_MOVES
-	  };
-	}
-	
-	function receiveMoves(json) {
-	  return {
-	    type: RECEIVE_MOVES,
-	    moves: json
-	  };
-	}
-	
-	function fetchMoves() {
-	  return function (dispatch) {
-	    dispatch(requestMoves());
-	    return (0, _isomorphicFetch2.default)('/json/moves/').then(function (response) {
-	      return response.json();
-	    }).then(function (json) {
-	      return dispatch(receiveMoves(json.results));
-	    });
-	  };
-	}
-	
-	function shouldFetchMoves(state) {
-	  return !state.moves.items && !state.moves.isFetching;
-	}
-	
-	function fetchMovesIfNeeded() {
-	  return function (dispatch, getState) {
-	    if (shouldFetchMoves(getState())) {
-	      return dispatch(fetchMoves());
-	    }
-	  };
-	}
-	
-	function updateMove(move) {
-	  return {
-	    type: UPDATE_MOVE,
-	    move: move
-	  };
-	}
-	
-	function saveMove() {
-	  return function (dispatch, getState) {
-	    var move = getState().recentMove;
-	    return (0, _isomorphicFetch2.default)('/json/moves/', {
-	      method: 'POST',
-	      headers: {
-	        'Accept': 'application/json',
-	        'Content-Type': 'application/json'
-	      },
-	      credentials: 'same-origin',
-	      body: JSON.stringify(move)
-	    }).then(function (response) {
-	      return response.json();
-	    }).then(function (json) {
-	      return dispatch(updateMove(json));
-	    });
-	  };
-	}
-
-/***/ },
-/* 548 */
-/***/ function(module, exports, __webpack_require__) {
-
-	// the whatwg-fetch polyfill installs the fetch() function
-	// on the global object (window or self)
-	//
-	// Return that as the export for use in Webpack, Browserify etc.
-	__webpack_require__(549);
-	module.exports = self.fetch.bind(self);
-
-
-/***/ },
-/* 549 */
-/***/ function(module, exports) {
-
-	(function(self) {
-	  'use strict';
-	
-	  if (self.fetch) {
-	    return
-	  }
-	
-	  function normalizeName(name) {
-	    if (typeof name !== 'string') {
-	      name = String(name)
-	    }
-	    if (/[^a-z0-9\-#$%&'*+.\^_`|~]/i.test(name)) {
-	      throw new TypeError('Invalid character in header field name')
-	    }
-	    return name.toLowerCase()
-	  }
-	
-	  function normalizeValue(value) {
-	    if (typeof value !== 'string') {
-	      value = String(value)
-	    }
-	    return value
-	  }
-	
-	  function Headers(headers) {
-	    this.map = {}
-	
-	    if (headers instanceof Headers) {
-	      headers.forEach(function(value, name) {
-	        this.append(name, value)
-	      }, this)
-	
-	    } else if (headers) {
-	      Object.getOwnPropertyNames(headers).forEach(function(name) {
-	        this.append(name, headers[name])
-	      }, this)
-	    }
-	  }
-	
-	  Headers.prototype.append = function(name, value) {
-	    name = normalizeName(name)
-	    value = normalizeValue(value)
-	    var list = this.map[name]
-	    if (!list) {
-	      list = []
-	      this.map[name] = list
-	    }
-	    list.push(value)
-	  }
-	
-	  Headers.prototype['delete'] = function(name) {
-	    delete this.map[normalizeName(name)]
-	  }
-	
-	  Headers.prototype.get = function(name) {
-	    var values = this.map[normalizeName(name)]
-	    return values ? values[0] : null
-	  }
-	
-	  Headers.prototype.getAll = function(name) {
-	    return this.map[normalizeName(name)] || []
-	  }
-	
-	  Headers.prototype.has = function(name) {
-	    return this.map.hasOwnProperty(normalizeName(name))
-	  }
-	
-	  Headers.prototype.set = function(name, value) {
-	    this.map[normalizeName(name)] = [normalizeValue(value)]
-	  }
-	
-	  Headers.prototype.forEach = function(callback, thisArg) {
-	    Object.getOwnPropertyNames(this.map).forEach(function(name) {
-	      this.map[name].forEach(function(value) {
-	        callback.call(thisArg, value, name, this)
-	      }, this)
-	    }, this)
-	  }
-	
-	  function consumed(body) {
-	    if (body.bodyUsed) {
-	      return Promise.reject(new TypeError('Already read'))
-	    }
-	    body.bodyUsed = true
-	  }
-	
-	  function fileReaderReady(reader) {
-	    return new Promise(function(resolve, reject) {
-	      reader.onload = function() {
-	        resolve(reader.result)
-	      }
-	      reader.onerror = function() {
-	        reject(reader.error)
-	      }
-	    })
-	  }
-	
-	  function readBlobAsArrayBuffer(blob) {
-	    var reader = new FileReader()
-	    reader.readAsArrayBuffer(blob)
-	    return fileReaderReady(reader)
-	  }
-	
-	  function readBlobAsText(blob) {
-	    var reader = new FileReader()
-	    reader.readAsText(blob)
-	    return fileReaderReady(reader)
-	  }
-	
-	  var support = {
-	    blob: 'FileReader' in self && 'Blob' in self && (function() {
-	      try {
-	        new Blob();
-	        return true
-	      } catch(e) {
-	        return false
-	      }
-	    })(),
-	    formData: 'FormData' in self,
-	    arrayBuffer: 'ArrayBuffer' in self
-	  }
-	
-	  function Body() {
-	    this.bodyUsed = false
-	
-	
-	    this._initBody = function(body) {
-	      this._bodyInit = body
-	      if (typeof body === 'string') {
-	        this._bodyText = body
-	      } else if (support.blob && Blob.prototype.isPrototypeOf(body)) {
-	        this._bodyBlob = body
-	      } else if (support.formData && FormData.prototype.isPrototypeOf(body)) {
-	        this._bodyFormData = body
-	      } else if (!body) {
-	        this._bodyText = ''
-	      } else if (support.arrayBuffer && ArrayBuffer.prototype.isPrototypeOf(body)) {
-	        // Only support ArrayBuffers for POST method.
-	        // Receiving ArrayBuffers happens via Blobs, instead.
-	      } else {
-	        throw new Error('unsupported BodyInit type')
-	      }
-	
-	      if (!this.headers.get('content-type')) {
-	        if (typeof body === 'string') {
-	          this.headers.set('content-type', 'text/plain;charset=UTF-8')
-	        } else if (this._bodyBlob && this._bodyBlob.type) {
-	          this.headers.set('content-type', this._bodyBlob.type)
-	        }
-	      }
-	    }
-	
-	    if (support.blob) {
-	      this.blob = function() {
-	        var rejected = consumed(this)
-	        if (rejected) {
-	          return rejected
-	        }
-	
-	        if (this._bodyBlob) {
-	          return Promise.resolve(this._bodyBlob)
-	        } else if (this._bodyFormData) {
-	          throw new Error('could not read FormData body as blob')
-	        } else {
-	          return Promise.resolve(new Blob([this._bodyText]))
-	        }
-	      }
-	
-	      this.arrayBuffer = function() {
-	        return this.blob().then(readBlobAsArrayBuffer)
-	      }
-	
-	      this.text = function() {
-	        var rejected = consumed(this)
-	        if (rejected) {
-	          return rejected
-	        }
-	
-	        if (this._bodyBlob) {
-	          return readBlobAsText(this._bodyBlob)
-	        } else if (this._bodyFormData) {
-	          throw new Error('could not read FormData body as text')
-	        } else {
-	          return Promise.resolve(this._bodyText)
-	        }
-	      }
-	    } else {
-	      this.text = function() {
-	        var rejected = consumed(this)
-	        return rejected ? rejected : Promise.resolve(this._bodyText)
-	      }
-	    }
-	
-	    if (support.formData) {
-	      this.formData = function() {
-	        return this.text().then(decode)
-	      }
-	    }
-	
-	    this.json = function() {
-	      return this.text().then(JSON.parse)
-	    }
-	
-	    return this
-	  }
-	
-	  // HTTP methods whose capitalization should be normalized
-	  var methods = ['DELETE', 'GET', 'HEAD', 'OPTIONS', 'POST', 'PUT']
-	
-	  function normalizeMethod(method) {
-	    var upcased = method.toUpperCase()
-	    return (methods.indexOf(upcased) > -1) ? upcased : method
-	  }
-	
-	  function Request(input, options) {
-	    options = options || {}
-	    var body = options.body
-	    if (Request.prototype.isPrototypeOf(input)) {
-	      if (input.bodyUsed) {
-	        throw new TypeError('Already read')
-	      }
-	      this.url = input.url
-	      this.credentials = input.credentials
-	      if (!options.headers) {
-	        this.headers = new Headers(input.headers)
-	      }
-	      this.method = input.method
-	      this.mode = input.mode
-	      if (!body) {
-	        body = input._bodyInit
-	        input.bodyUsed = true
-	      }
-	    } else {
-	      this.url = input
-	    }
-	
-	    this.credentials = options.credentials || this.credentials || 'omit'
-	    if (options.headers || !this.headers) {
-	      this.headers = new Headers(options.headers)
-	    }
-	    this.method = normalizeMethod(options.method || this.method || 'GET')
-	    this.mode = options.mode || this.mode || null
-	    this.referrer = null
-	
-	    if ((this.method === 'GET' || this.method === 'HEAD') && body) {
-	      throw new TypeError('Body not allowed for GET or HEAD requests')
-	    }
-	    this._initBody(body)
-	  }
-	
-	  Request.prototype.clone = function() {
-	    return new Request(this)
-	  }
-	
-	  function decode(body) {
-	    var form = new FormData()
-	    body.trim().split('&').forEach(function(bytes) {
-	      if (bytes) {
-	        var split = bytes.split('=')
-	        var name = split.shift().replace(/\+/g, ' ')
-	        var value = split.join('=').replace(/\+/g, ' ')
-	        form.append(decodeURIComponent(name), decodeURIComponent(value))
-	      }
-	    })
-	    return form
-	  }
-	
-	  function headers(xhr) {
-	    var head = new Headers()
-	    var pairs = xhr.getAllResponseHeaders().trim().split('\n')
-	    pairs.forEach(function(header) {
-	      var split = header.trim().split(':')
-	      var key = split.shift().trim()
-	      var value = split.join(':').trim()
-	      head.append(key, value)
-	    })
-	    return head
-	  }
-	
-	  Body.call(Request.prototype)
-	
-	  function Response(bodyInit, options) {
-	    if (!options) {
-	      options = {}
-	    }
-	
-	    this.type = 'default'
-	    this.status = options.status
-	    this.ok = this.status >= 200 && this.status < 300
-	    this.statusText = options.statusText
-	    this.headers = options.headers instanceof Headers ? options.headers : new Headers(options.headers)
-	    this.url = options.url || ''
-	    this._initBody(bodyInit)
-	  }
-	
-	  Body.call(Response.prototype)
-	
-	  Response.prototype.clone = function() {
-	    return new Response(this._bodyInit, {
-	      status: this.status,
-	      statusText: this.statusText,
-	      headers: new Headers(this.headers),
-	      url: this.url
-	    })
-	  }
-	
-	  Response.error = function() {
-	    var response = new Response(null, {status: 0, statusText: ''})
-	    response.type = 'error'
-	    return response
-	  }
-	
-	  var redirectStatuses = [301, 302, 303, 307, 308]
-	
-	  Response.redirect = function(url, status) {
-	    if (redirectStatuses.indexOf(status) === -1) {
-	      throw new RangeError('Invalid status code')
-	    }
-	
-	    return new Response(null, {status: status, headers: {location: url}})
-	  }
-	
-	  self.Headers = Headers;
-	  self.Request = Request;
-	  self.Response = Response;
-	
-	  self.fetch = function(input, init) {
-	    return new Promise(function(resolve, reject) {
-	      var request
-	      if (Request.prototype.isPrototypeOf(input) && !init) {
-	        request = input
-	      } else {
-	        request = new Request(input, init)
-	      }
-	
-	      var xhr = new XMLHttpRequest()
-	
-	      function responseURL() {
-	        if ('responseURL' in xhr) {
-	          return xhr.responseURL
-	        }
-	
-	        // Avoid security warnings on getResponseHeader when not allowed by CORS
-	        if (/^X-Request-URL:/m.test(xhr.getAllResponseHeaders())) {
-	          return xhr.getResponseHeader('X-Request-URL')
-	        }
-	
-	        return;
-	      }
-	
-	      xhr.onload = function() {
-	        var status = (xhr.status === 1223) ? 204 : xhr.status
-	        if (status < 100 || status > 599) {
-	          reject(new TypeError('Network request failed'))
-	          return
-	        }
-	        var options = {
-	          status: status,
-	          statusText: xhr.statusText,
-	          headers: headers(xhr),
-	          url: responseURL()
-	        }
-	        var body = 'response' in xhr ? xhr.response : xhr.responseText;
-	        resolve(new Response(body, options))
-	      }
-	
-	      xhr.onerror = function() {
-	        reject(new TypeError('Network request failed'))
-	      }
-	
-	      xhr.open(request.method, request.url, true)
-	
-	      if (request.credentials === 'include') {
-	        xhr.withCredentials = true
-	      }
-	
-	      if ('responseType' in xhr && support.blob) {
-	        xhr.responseType = 'blob'
-	      }
-	
-	      request.headers.forEach(function(value, name) {
-	        xhr.setRequestHeader(name, value)
-	      })
-	
-	      xhr.send(typeof request._bodyInit === 'undefined' ? null : request._bodyInit)
-	    })
-	  }
-	  self.fetch.polyfill = true
-	})(typeof self !== 'undefined' ? self : this);
-
 
 /***/ },
 /* 550 */
@@ -55508,7 +55265,7 @@
 	  }
 	}.call(this));
 	
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(545)(module), (function() { return this; }())))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(547)(module), (function() { return this; }())))
 
 /***/ },
 /* 551 */
@@ -55517,7 +55274,539 @@
 	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
-	    value: true
+	  value: true
+	});
+	exports.UPDATE_MOVE = exports.RECEIVE_SPOTS = exports.REQUEST_SPOTS = exports.RECEIVE_MOVES = exports.REQUEST_MOVES = undefined;
+	exports.fetchSpotsIfNeeded = fetchSpotsIfNeeded;
+	exports.fetchMovesIfNeeded = fetchMovesIfNeeded;
+	exports.updateMove = updateMove;
+	exports.saveMove = saveMove;
+	
+	var _isomorphicFetch = __webpack_require__(552);
+	
+	var _isomorphicFetch2 = _interopRequireDefault(_isomorphicFetch);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var REQUEST_MOVES = exports.REQUEST_MOVES = 'REQUEST_MOVES';
+	var RECEIVE_MOVES = exports.RECEIVE_MOVES = 'RECEIVE_MOVES';
+	var REQUEST_SPOTS = exports.REQUEST_SPOTS = 'REQUEST_SPOTS';
+	var RECEIVE_SPOTS = exports.RECEIVE_SPOTS = 'RECEIVE_SPOTS';
+	var UPDATE_MOVE = exports.UPDATE_MOVE = 'UPDATE_MOVE';
+	
+	function requestSpots() {
+	  return {
+	    type: REQUEST_SPOTS
+	  };
+	}
+	
+	function receiveSpots(json) {
+	  return {
+	    type: RECEIVE_SPOTS,
+	    spots: json
+	  };
+	}
+	
+	function fetchSpots() {
+	  return function (dispatch) {
+	    dispatch(requestSpots());
+	    return (0, _isomorphicFetch2.default)('/json/spots/').then(function (response) {
+	      return response.json();
+	    }).then(function (json) {
+	      dispatch(receiveSpots(json.results));
+	    });
+	  };
+	}
+	
+	function shouldFetchSpots(state) {
+	  return !state.spots.items && !state.spots.isFetching;
+	}
+	
+	function fetchSpotsIfNeeded() {
+	  return function (dispatch, getState) {
+	    if (shouldFetchSpots(getState())) {
+	      return dispatch(fetchSpots());
+	    }
+	  };
+	}
+	
+	function requestMoves() {
+	  return {
+	    type: REQUEST_MOVES
+	  };
+	}
+	
+	function receiveMoves(json) {
+	  return {
+	    type: RECEIVE_MOVES,
+	    moves: json
+	  };
+	}
+	
+	function fetchMoves() {
+	  return function (dispatch) {
+	    dispatch(requestMoves());
+	    return (0, _isomorphicFetch2.default)('/json/moves/').then(function (response) {
+	      return response.json();
+	    }).then(function (json) {
+	      return dispatch(receiveMoves(json.results));
+	    });
+	  };
+	}
+	
+	function shouldFetchMoves(state) {
+	  return !state.moves.items && !state.moves.isFetching;
+	}
+	
+	function fetchMovesIfNeeded() {
+	  return function (dispatch, getState) {
+	    if (shouldFetchMoves(getState())) {
+	      return dispatch(fetchMoves());
+	    }
+	  };
+	}
+	
+	function updateMove(move) {
+	  return { type: UPDATE_MOVE, move: move };
+	}
+	
+	function saveMove() {
+	  return function (dispatch, getState) {
+	    var move = getState().recentMove;
+	    var url = move.id ? '/json/moves/' + move.id : '/json/moves/';
+	    var method = move.id ? 'PUT' : 'POST';
+	
+	    return (0, _isomorphicFetch2.default)(url, {
+	      method: method,
+	      headers: {
+	        'Accept': 'application/json',
+	        'Content-Type': 'application/json'
+	      },
+	      credentials: 'same-origin',
+	      body: JSON.stringify(move)
+	    }).then(function (response) {
+	      return response.json();
+	    }).then(function (json) {
+	      dispatch(updateMove(json));
+	    });
+	  };
+	}
+
+/***/ },
+/* 552 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// the whatwg-fetch polyfill installs the fetch() function
+	// on the global object (window or self)
+	//
+	// Return that as the export for use in Webpack, Browserify etc.
+	__webpack_require__(553);
+	module.exports = self.fetch.bind(self);
+
+
+/***/ },
+/* 553 */
+/***/ function(module, exports) {
+
+	(function(self) {
+	  'use strict';
+	
+	  if (self.fetch) {
+	    return
+	  }
+	
+	  function normalizeName(name) {
+	    if (typeof name !== 'string') {
+	      name = String(name)
+	    }
+	    if (/[^a-z0-9\-#$%&'*+.\^_`|~]/i.test(name)) {
+	      throw new TypeError('Invalid character in header field name')
+	    }
+	    return name.toLowerCase()
+	  }
+	
+	  function normalizeValue(value) {
+	    if (typeof value !== 'string') {
+	      value = String(value)
+	    }
+	    return value
+	  }
+	
+	  function Headers(headers) {
+	    this.map = {}
+	
+	    if (headers instanceof Headers) {
+	      headers.forEach(function(value, name) {
+	        this.append(name, value)
+	      }, this)
+	
+	    } else if (headers) {
+	      Object.getOwnPropertyNames(headers).forEach(function(name) {
+	        this.append(name, headers[name])
+	      }, this)
+	    }
+	  }
+	
+	  Headers.prototype.append = function(name, value) {
+	    name = normalizeName(name)
+	    value = normalizeValue(value)
+	    var list = this.map[name]
+	    if (!list) {
+	      list = []
+	      this.map[name] = list
+	    }
+	    list.push(value)
+	  }
+	
+	  Headers.prototype['delete'] = function(name) {
+	    delete this.map[normalizeName(name)]
+	  }
+	
+	  Headers.prototype.get = function(name) {
+	    var values = this.map[normalizeName(name)]
+	    return values ? values[0] : null
+	  }
+	
+	  Headers.prototype.getAll = function(name) {
+	    return this.map[normalizeName(name)] || []
+	  }
+	
+	  Headers.prototype.has = function(name) {
+	    return this.map.hasOwnProperty(normalizeName(name))
+	  }
+	
+	  Headers.prototype.set = function(name, value) {
+	    this.map[normalizeName(name)] = [normalizeValue(value)]
+	  }
+	
+	  Headers.prototype.forEach = function(callback, thisArg) {
+	    Object.getOwnPropertyNames(this.map).forEach(function(name) {
+	      this.map[name].forEach(function(value) {
+	        callback.call(thisArg, value, name, this)
+	      }, this)
+	    }, this)
+	  }
+	
+	  function consumed(body) {
+	    if (body.bodyUsed) {
+	      return Promise.reject(new TypeError('Already read'))
+	    }
+	    body.bodyUsed = true
+	  }
+	
+	  function fileReaderReady(reader) {
+	    return new Promise(function(resolve, reject) {
+	      reader.onload = function() {
+	        resolve(reader.result)
+	      }
+	      reader.onerror = function() {
+	        reject(reader.error)
+	      }
+	    })
+	  }
+	
+	  function readBlobAsArrayBuffer(blob) {
+	    var reader = new FileReader()
+	    reader.readAsArrayBuffer(blob)
+	    return fileReaderReady(reader)
+	  }
+	
+	  function readBlobAsText(blob) {
+	    var reader = new FileReader()
+	    reader.readAsText(blob)
+	    return fileReaderReady(reader)
+	  }
+	
+	  var support = {
+	    blob: 'FileReader' in self && 'Blob' in self && (function() {
+	      try {
+	        new Blob();
+	        return true
+	      } catch(e) {
+	        return false
+	      }
+	    })(),
+	    formData: 'FormData' in self,
+	    arrayBuffer: 'ArrayBuffer' in self
+	  }
+	
+	  function Body() {
+	    this.bodyUsed = false
+	
+	
+	    this._initBody = function(body) {
+	      this._bodyInit = body
+	      if (typeof body === 'string') {
+	        this._bodyText = body
+	      } else if (support.blob && Blob.prototype.isPrototypeOf(body)) {
+	        this._bodyBlob = body
+	      } else if (support.formData && FormData.prototype.isPrototypeOf(body)) {
+	        this._bodyFormData = body
+	      } else if (!body) {
+	        this._bodyText = ''
+	      } else if (support.arrayBuffer && ArrayBuffer.prototype.isPrototypeOf(body)) {
+	        // Only support ArrayBuffers for POST method.
+	        // Receiving ArrayBuffers happens via Blobs, instead.
+	      } else {
+	        throw new Error('unsupported BodyInit type')
+	      }
+	
+	      if (!this.headers.get('content-type')) {
+	        if (typeof body === 'string') {
+	          this.headers.set('content-type', 'text/plain;charset=UTF-8')
+	        } else if (this._bodyBlob && this._bodyBlob.type) {
+	          this.headers.set('content-type', this._bodyBlob.type)
+	        }
+	      }
+	    }
+	
+	    if (support.blob) {
+	      this.blob = function() {
+	        var rejected = consumed(this)
+	        if (rejected) {
+	          return rejected
+	        }
+	
+	        if (this._bodyBlob) {
+	          return Promise.resolve(this._bodyBlob)
+	        } else if (this._bodyFormData) {
+	          throw new Error('could not read FormData body as blob')
+	        } else {
+	          return Promise.resolve(new Blob([this._bodyText]))
+	        }
+	      }
+	
+	      this.arrayBuffer = function() {
+	        return this.blob().then(readBlobAsArrayBuffer)
+	      }
+	
+	      this.text = function() {
+	        var rejected = consumed(this)
+	        if (rejected) {
+	          return rejected
+	        }
+	
+	        if (this._bodyBlob) {
+	          return readBlobAsText(this._bodyBlob)
+	        } else if (this._bodyFormData) {
+	          throw new Error('could not read FormData body as text')
+	        } else {
+	          return Promise.resolve(this._bodyText)
+	        }
+	      }
+	    } else {
+	      this.text = function() {
+	        var rejected = consumed(this)
+	        return rejected ? rejected : Promise.resolve(this._bodyText)
+	      }
+	    }
+	
+	    if (support.formData) {
+	      this.formData = function() {
+	        return this.text().then(decode)
+	      }
+	    }
+	
+	    this.json = function() {
+	      return this.text().then(JSON.parse)
+	    }
+	
+	    return this
+	  }
+	
+	  // HTTP methods whose capitalization should be normalized
+	  var methods = ['DELETE', 'GET', 'HEAD', 'OPTIONS', 'POST', 'PUT']
+	
+	  function normalizeMethod(method) {
+	    var upcased = method.toUpperCase()
+	    return (methods.indexOf(upcased) > -1) ? upcased : method
+	  }
+	
+	  function Request(input, options) {
+	    options = options || {}
+	    var body = options.body
+	    if (Request.prototype.isPrototypeOf(input)) {
+	      if (input.bodyUsed) {
+	        throw new TypeError('Already read')
+	      }
+	      this.url = input.url
+	      this.credentials = input.credentials
+	      if (!options.headers) {
+	        this.headers = new Headers(input.headers)
+	      }
+	      this.method = input.method
+	      this.mode = input.mode
+	      if (!body) {
+	        body = input._bodyInit
+	        input.bodyUsed = true
+	      }
+	    } else {
+	      this.url = input
+	    }
+	
+	    this.credentials = options.credentials || this.credentials || 'omit'
+	    if (options.headers || !this.headers) {
+	      this.headers = new Headers(options.headers)
+	    }
+	    this.method = normalizeMethod(options.method || this.method || 'GET')
+	    this.mode = options.mode || this.mode || null
+	    this.referrer = null
+	
+	    if ((this.method === 'GET' || this.method === 'HEAD') && body) {
+	      throw new TypeError('Body not allowed for GET or HEAD requests')
+	    }
+	    this._initBody(body)
+	  }
+	
+	  Request.prototype.clone = function() {
+	    return new Request(this)
+	  }
+	
+	  function decode(body) {
+	    var form = new FormData()
+	    body.trim().split('&').forEach(function(bytes) {
+	      if (bytes) {
+	        var split = bytes.split('=')
+	        var name = split.shift().replace(/\+/g, ' ')
+	        var value = split.join('=').replace(/\+/g, ' ')
+	        form.append(decodeURIComponent(name), decodeURIComponent(value))
+	      }
+	    })
+	    return form
+	  }
+	
+	  function headers(xhr) {
+	    var head = new Headers()
+	    var pairs = xhr.getAllResponseHeaders().trim().split('\n')
+	    pairs.forEach(function(header) {
+	      var split = header.trim().split(':')
+	      var key = split.shift().trim()
+	      var value = split.join(':').trim()
+	      head.append(key, value)
+	    })
+	    return head
+	  }
+	
+	  Body.call(Request.prototype)
+	
+	  function Response(bodyInit, options) {
+	    if (!options) {
+	      options = {}
+	    }
+	
+	    this.type = 'default'
+	    this.status = options.status
+	    this.ok = this.status >= 200 && this.status < 300
+	    this.statusText = options.statusText
+	    this.headers = options.headers instanceof Headers ? options.headers : new Headers(options.headers)
+	    this.url = options.url || ''
+	    this._initBody(bodyInit)
+	  }
+	
+	  Body.call(Response.prototype)
+	
+	  Response.prototype.clone = function() {
+	    return new Response(this._bodyInit, {
+	      status: this.status,
+	      statusText: this.statusText,
+	      headers: new Headers(this.headers),
+	      url: this.url
+	    })
+	  }
+	
+	  Response.error = function() {
+	    var response = new Response(null, {status: 0, statusText: ''})
+	    response.type = 'error'
+	    return response
+	  }
+	
+	  var redirectStatuses = [301, 302, 303, 307, 308]
+	
+	  Response.redirect = function(url, status) {
+	    if (redirectStatuses.indexOf(status) === -1) {
+	      throw new RangeError('Invalid status code')
+	    }
+	
+	    return new Response(null, {status: status, headers: {location: url}})
+	  }
+	
+	  self.Headers = Headers;
+	  self.Request = Request;
+	  self.Response = Response;
+	
+	  self.fetch = function(input, init) {
+	    return new Promise(function(resolve, reject) {
+	      var request
+	      if (Request.prototype.isPrototypeOf(input) && !init) {
+	        request = input
+	      } else {
+	        request = new Request(input, init)
+	      }
+	
+	      var xhr = new XMLHttpRequest()
+	
+	      function responseURL() {
+	        if ('responseURL' in xhr) {
+	          return xhr.responseURL
+	        }
+	
+	        // Avoid security warnings on getResponseHeader when not allowed by CORS
+	        if (/^X-Request-URL:/m.test(xhr.getAllResponseHeaders())) {
+	          return xhr.getResponseHeader('X-Request-URL')
+	        }
+	
+	        return;
+	      }
+	
+	      xhr.onload = function() {
+	        var status = (xhr.status === 1223) ? 204 : xhr.status
+	        if (status < 100 || status > 599) {
+	          reject(new TypeError('Network request failed'))
+	          return
+	        }
+	        var options = {
+	          status: status,
+	          statusText: xhr.statusText,
+	          headers: headers(xhr),
+	          url: responseURL()
+	        }
+	        var body = 'response' in xhr ? xhr.response : xhr.responseText;
+	        resolve(new Response(body, options))
+	      }
+	
+	      xhr.onerror = function() {
+	        reject(new TypeError('Network request failed'))
+	      }
+	
+	      xhr.open(request.method, request.url, true)
+	
+	      if (request.credentials === 'include') {
+	        xhr.withCredentials = true
+	      }
+	
+	      if ('responseType' in xhr && support.blob) {
+	        xhr.responseType = 'blob'
+	      }
+	
+	      request.headers.forEach(function(value, name) {
+	        xhr.setRequestHeader(name, value)
+	      })
+	
+	      xhr.send(typeof request._bodyInit === 'undefined' ? null : request._bodyInit)
+	    })
+	  }
+	  self.fetch.polyfill = true
+	})(typeof self !== 'undefined' ? self : this);
+
+
+/***/ },
+/* 554 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
 	});
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -55528,13 +55817,13 @@
 	
 	var _reactRedux = __webpack_require__(521);
 	
-	var _actions = __webpack_require__(547);
+	var _actions = __webpack_require__(551);
 	
-	var _NameForm = __webpack_require__(552);
+	var _NameForm = __webpack_require__(555);
 	
 	var _NameForm2 = _interopRequireDefault(_NameForm);
 	
-	var _MoveForm = __webpack_require__(553);
+	var _MoveForm = __webpack_require__(600);
 	
 	var _MoveForm2 = _interopRequireDefault(_MoveForm);
 	
@@ -55547,57 +55836,57 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
 	function mapStateToProps(state) {
-	    var recentMove = state.recentMove;
-	    var spots = state.spots;
+	  var recentMove = state.recentMove;
+	  var spots = state.spots;
 	
-	    return { recentMove: recentMove, spots: spots };
+	  return { recentMove: recentMove, spots: spots };
 	}
 	
 	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
-	    return {
-	        updateMove: function updateMove(move) {
-	            dispatch((0, _actions.updateMove)(move));
-	        },
-	        saveMove: function saveMove() {
-	            dispatch((0, _actions.saveMove)());
-	        },
-	        fetchSpotsIfNeeded: function fetchSpotsIfNeeded() {
-	            dispatch((0, _actions.fetchSpotsIfNeeded)());
-	        }
-	    };
+	  return {
+	    updateMove: function updateMove(move) {
+	      return dispatch((0, _actions.updateMove)(move));
+	    },
+	    saveMove: function saveMove() {
+	      return dispatch((0, _actions.saveMove)());
+	    },
+	    fetchSpotsIfNeeded: function fetchSpotsIfNeeded() {
+	      return dispatch((0, _actions.fetchSpotsIfNeeded)());
+	    }
+	  };
 	};
 	
 	var Edit = function (_Component) {
-	    _inherits(Edit, _Component);
+	  _inherits(Edit, _Component);
 	
-	    function Edit() {
-	        _classCallCheck(this, Edit);
+	  function Edit() {
+	    _classCallCheck(this, Edit);
 	
-	        return _possibleConstructorReturn(this, Object.getPrototypeOf(Edit).apply(this, arguments));
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(Edit).apply(this, arguments));
+	  }
+	
+	  _createClass(Edit, [{
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      this.props.fetchSpotsIfNeeded();
 	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      if (this.props.recentMove.user) {
+	        return _react2.default.createElement(_MoveForm2.default, {
+	          recentMove: this.props.recentMove,
+	          spots: this.props.spots,
+	          updateMove: this.props.updateMove,
+	          saveMove: this.props.saveMove
+	        });
+	      } else {
+	        return _react2.default.createElement(_NameForm2.default, { updateMove: this.props.updateMove });
+	      }
+	    }
+	  }]);
 	
-	    _createClass(Edit, [{
-	        key: 'componentDidMount',
-	        value: function componentDidMount() {
-	            this.props.fetchSpotsIfNeeded();
-	        }
-	    }, {
-	        key: 'render',
-	        value: function render() {
-	            if (this.props.recentMove.user) {
-	                return _react2.default.createElement(_MoveForm2.default, {
-	                    recentMove: this.props.recentMove,
-	                    spots: this.props.spots,
-	                    updateMove: this.props.updateMove,
-	                    saveMove: this.props.saveMove
-	                });
-	            } else {
-	                return _react2.default.createElement(_NameForm2.default, { updateMove: this.props.updateMove });
-	            }
-	        }
-	    }]);
-	
-	    return Edit;
+	  return Edit;
 	}(_react.Component);
 	
 	var EditContainer = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(Edit);
@@ -55605,7 +55894,7 @@
 	exports.default = EditContainer;
 
 /***/ },
-/* 552 */
+/* 555 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -55622,7 +55911,7 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _reduxForm = __webpack_require__(554);
+	var _reduxForm = __webpack_require__(556);
 	
 	var _reactRouter = __webpack_require__(297);
 	
@@ -55719,185 +56008,7 @@
 	exports.default = NameForm;
 
 /***/ },
-/* 553 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-	
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-	
-	var _react = __webpack_require__(299);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	var _reduxForm = __webpack_require__(554);
-	
-	var _moment = __webpack_require__(544);
-	
-	var _moment2 = _interopRequireDefault(_moment);
-	
-	var _classnames = __webpack_require__(546);
-	
-	var _classnames2 = _interopRequireDefault(_classnames);
-	
-	var _reactRouter = __webpack_require__(297);
-	
-	var _Loading = __webpack_require__(605);
-	
-	var _Loading2 = _interopRequireDefault(_Loading);
-	
-	var _utils = __webpack_require__(598);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-	
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-	
-	var fields = ['spot', 'time'];
-	
-	var validate = function validate(values) {
-	    var errors = {};
-	    if (!values.spot) {
-	        errors.spot = 'Required';
-	    }
-	
-	    if (!values.time) {
-	        errors.time = 'Required';
-	    } else if (!(0, _utils.parseTimeInput)(values.time)) {
-	        errors.time = 'Enter time in HH:MM format';
-	    }
-	    return errors;
-	};
-	
-	var MoveForm = function (_Component) {
-	    _inherits(MoveForm, _Component);
-	
-	    function MoveForm(props) {
-	        _classCallCheck(this, MoveForm);
-	
-	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(MoveForm).call(this, props));
-	
-	        _this.onSubmit = _this.onSubmit.bind(_this);
-	        return _this;
-	    }
-	
-	    _createClass(MoveForm, [{
-	        key: 'onSubmit',
-	        value: function onSubmit(data) {
-	            var parsed = (0, _utils.parseTimeInput)(data.time);
-	            data.time = (0, _moment2.default)(parsed, 'hh:mm').format();
-	            this.props.updateMove(data);
-	            this.props.saveMove();
-	        }
-	    }, {
-	        key: 'render',
-	        value: function render() {
-	            if (!this.props.spots.items) {
-	                return _react2.default.createElement(_Loading2.default, null);
-	            }
-	
-	            var options = this.props.spots.items.map(function (choice) {
-	                return _react2.default.createElement(
-	                    'option',
-	                    { key: choice.id, value: choice.id },
-	                    choice.name
-	                );
-	            });
-	
-	            var _props = this.props;
-	            var _props$fields = _props.fields;
-	            var spot = _props$fields.spot;
-	            var time = _props$fields.time;
-	            var handleSubmit = _props.handleSubmit;
-	
-	            var hasErrors = !!(spot.error || time.error);
-	            return _react2.default.createElement(
-	                'form',
-	                { className: 'form-inline lunch-move-form', onSubmit: handleSubmit(this.onSubmit) },
-	                _react2.default.createElement(
-	                    'div',
-	                    { className: 'lunch-move-form-row' },
-	                    _react2.default.createElement(
-	                        'div',
-	                        { className: 'form-group' },
-	                        _react2.default.createElement(
-	                            'p',
-	                            { className: 'form-control-static' },
-	                            'You are eating'
-	                        )
-	                    ),
-	                    _react2.default.createElement(
-	                        'div',
-	                        { className: 'form-group' },
-	                        _react2.default.createElement(
-	                            'select',
-	                            _extends({ className: 'form-control spot-field', name: 'spot' }, spot),
-	                            _react2.default.createElement('option', { value: null }),
-	                            options
-	                        )
-	                    ),
-	                    _react2.default.createElement(
-	                        'div',
-	                        { className: 'form-group' },
-	                        _react2.default.createElement(
-	                            'p',
-	                            { className: 'form-control-static' },
-	                            'at'
-	                        )
-	                    ),
-	                    _react2.default.createElement(
-	                        'div',
-	                        { className: 'form-group' },
-	                        _react2.default.createElement('input', _extends({ className: 'form-control time-field', type: 'text', name: 'time' }, time))
-	                    )
-	                ),
-	                _react2.default.createElement(
-	                    'div',
-	                    { className: 'lunch-move-form-row' },
-	                    _react2.default.createElement(
-	                        'button',
-	                        { type: 'submit', className: 'btn btn-default', disabled: hasErrors },
-	                        'Save'
-	                    ),
-	                    _react2.default.createElement(
-	                        _reactRouter.Link,
-	                        { to: '/', className: 'btn btn-default' },
-	                        'Cancel'
-	                    )
-	                )
-	            );
-	        }
-	    }]);
-	
-	    return MoveForm;
-	}(_react.Component);
-	
-	MoveForm = (0, _reduxForm.reduxForm)({
-	    form: 'move-form',
-	    fields: fields,
-	    validate: validate
-	}, function (state) {
-	    var _state$recentMove = state.recentMove;
-	    var time = _state$recentMove.time;
-	    var spot = _state$recentMove.spot;
-	
-	    time = time ? (0, _moment2.default)(time).format('h:mm') : '';
-	    return { initialValues: { time: time, spot: spot } };
-	})(MoveForm);
-	
-	exports.default = MoveForm;
-
-/***/ },
-/* 554 */
+/* 556 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -55911,7 +56022,7 @@
 	
 	var _reactRedux = __webpack_require__(521);
 	
-	var _createAll2 = __webpack_require__(555);
+	var _createAll2 = __webpack_require__(557);
 	
 	var _createAll3 = _interopRequireDefault(_createAll2);
 	
@@ -55975,7 +56086,7 @@
 	exports.untouchWithKey = untouchWithKey;
 
 /***/ },
-/* 555 */
+/* 557 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -55986,35 +56097,35 @@
 	
 	exports.default = createAll;
 	
-	var _reducer = __webpack_require__(556);
+	var _reducer = __webpack_require__(558);
 	
 	var _reducer2 = _interopRequireDefault(_reducer);
 	
-	var _createReduxForm = __webpack_require__(567);
+	var _createReduxForm = __webpack_require__(569);
 	
 	var _createReduxForm2 = _interopRequireDefault(_createReduxForm);
 	
-	var _mapValues = __webpack_require__(558);
+	var _mapValues = __webpack_require__(560);
 	
 	var _mapValues2 = _interopRequireDefault(_mapValues);
 	
-	var _bindActionData = __webpack_require__(574);
+	var _bindActionData = __webpack_require__(576);
 	
 	var _bindActionData2 = _interopRequireDefault(_bindActionData);
 	
-	var _actions = __webpack_require__(573);
+	var _actions = __webpack_require__(575);
 	
 	var actions = _interopRequireWildcard(_actions);
 	
-	var _actionTypes = __webpack_require__(557);
+	var _actionTypes = __webpack_require__(559);
 	
 	var actionTypes = _interopRequireWildcard(_actionTypes);
 	
-	var _createPropTypes = __webpack_require__(597);
+	var _createPropTypes = __webpack_require__(599);
 	
 	var _createPropTypes2 = _interopRequireDefault(_createPropTypes);
 	
-	var _getValuesFromState = __webpack_require__(561);
+	var _getValuesFromState = __webpack_require__(563);
 	
 	var _getValuesFromState2 = _interopRequireDefault(_getValuesFromState);
 	
@@ -56131,7 +56242,7 @@
 	}
 
 /***/ },
-/* 556 */
+/* 558 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -56143,39 +56254,39 @@
 	
 	var _initialState, _behaviors;
 	
-	var _actionTypes = __webpack_require__(557);
+	var _actionTypes = __webpack_require__(559);
 	
-	var _mapValues = __webpack_require__(558);
+	var _mapValues = __webpack_require__(560);
 	
 	var _mapValues2 = _interopRequireDefault(_mapValues);
 	
-	var _read = __webpack_require__(559);
+	var _read = __webpack_require__(561);
 	
 	var _read2 = _interopRequireDefault(_read);
 	
-	var _write = __webpack_require__(560);
+	var _write = __webpack_require__(562);
 	
 	var _write2 = _interopRequireDefault(_write);
 	
-	var _getValuesFromState = __webpack_require__(561);
+	var _getValuesFromState = __webpack_require__(563);
 	
 	var _getValuesFromState2 = _interopRequireDefault(_getValuesFromState);
 	
-	var _initializeState = __webpack_require__(563);
+	var _initializeState = __webpack_require__(565);
 	
 	var _initializeState2 = _interopRequireDefault(_initializeState);
 	
-	var _resetState = __webpack_require__(564);
+	var _resetState = __webpack_require__(566);
 	
 	var _resetState2 = _interopRequireDefault(_resetState);
 	
-	var _setErrors = __webpack_require__(565);
+	var _setErrors = __webpack_require__(567);
 	
 	var _setErrors2 = _interopRequireDefault(_setErrors);
 	
-	var _fieldValue = __webpack_require__(562);
+	var _fieldValue = __webpack_require__(564);
 	
-	var _normalizeFields = __webpack_require__(566);
+	var _normalizeFields = __webpack_require__(568);
 	
 	var _normalizeFields2 = _interopRequireDefault(_normalizeFields);
 	
@@ -56468,7 +56579,7 @@
 	exports.default = decorate(formReducer);
 
 /***/ },
-/* 557 */
+/* 559 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -56493,7 +56604,7 @@
 	var UNTOUCH = exports.UNTOUCH = 'redux-form/UNTOUCH';
 
 /***/ },
-/* 558 */
+/* 560 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -56515,7 +56626,7 @@
 	}
 
 /***/ },
-/* 559 */
+/* 561 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -56561,7 +56672,7 @@
 	exports.default = read;
 
 /***/ },
-/* 560 */
+/* 562 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -56667,14 +56778,14 @@
 	exports.default = write;
 
 /***/ },
-/* 561 */
+/* 563 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	exports.__esModule = true;
 	
-	var _fieldValue = __webpack_require__(562);
+	var _fieldValue = __webpack_require__(564);
 	
 	/**
 	 * A different version of getValues() that does not need the fields array
@@ -56713,7 +56824,7 @@
 	exports.default = getValuesFromState;
 
 /***/ },
-/* 562 */
+/* 564 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -56738,7 +56849,7 @@
 	}
 
 /***/ },
-/* 563 */
+/* 565 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -56747,7 +56858,7 @@
 	
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 	
-	var _fieldValue = __webpack_require__(562);
+	var _fieldValue = __webpack_require__(564);
 	
 	var makeEntry = function makeEntry(value, previousValue, overwriteValues) {
 	  return (0, _fieldValue.makeFieldValue)(value === undefined ? {} : {
@@ -56819,14 +56930,14 @@
 	exports.default = initializeState;
 
 /***/ },
-/* 564 */
+/* 566 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	exports.__esModule = true;
 	
-	var _fieldValue = __webpack_require__(562);
+	var _fieldValue = __webpack_require__(564);
 	
 	var reset = function reset(value) {
 	  return (0, _fieldValue.makeFieldValue)(value === undefined || value && value.initial === undefined ? {} : { initial: value.initial, value: value.initial });
@@ -56858,7 +56969,7 @@
 	exports.default = resetState;
 
 /***/ },
-/* 565 */
+/* 567 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -56867,7 +56978,7 @@
 	
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 	
-	var _fieldValue = __webpack_require__(562);
+	var _fieldValue = __webpack_require__(564);
 	
 	var isMetaKey = function isMetaKey(key) {
 	  return key[0] === '_';
@@ -56952,7 +57063,7 @@
 	exports.default = setErrors;
 
 /***/ },
-/* 566 */
+/* 568 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -56963,7 +57074,7 @@
 	
 	exports.default = normalizeFields;
 	
-	var _fieldValue = __webpack_require__(562);
+	var _fieldValue = __webpack_require__(564);
 	
 	function extractKey(field) {
 	  var dotIndex = field.indexOf('.');
@@ -57049,7 +57160,7 @@
 	}
 
 /***/ },
-/* 567 */
+/* 569 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -57058,7 +57169,7 @@
 	
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 	
-	var _createReduxFormConnector = __webpack_require__(568);
+	var _createReduxFormConnector = __webpack_require__(570);
 	
 	var _createReduxFormConnector2 = _interopRequireDefault(_createReduxFormConnector);
 	
@@ -57123,22 +57234,22 @@
 	exports.default = createReduxForm;
 
 /***/ },
-/* 568 */
+/* 570 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	exports.__esModule = true;
 	
-	var _noGetters = __webpack_require__(569);
+	var _noGetters = __webpack_require__(571);
 	
 	var _noGetters2 = _interopRequireDefault(_noGetters);
 	
-	var _getDisplayName = __webpack_require__(571);
+	var _getDisplayName = __webpack_require__(573);
 	
 	var _getDisplayName2 = _interopRequireDefault(_getDisplayName);
 	
-	var _createHigherOrderComponent = __webpack_require__(572);
+	var _createHigherOrderComponent = __webpack_require__(574);
 	
 	var _createHigherOrderComponent2 = _interopRequireDefault(_createHigherOrderComponent);
 	
@@ -57228,14 +57339,14 @@
 	exports.default = createReduxFormConnector;
 
 /***/ },
-/* 569 */
+/* 571 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(570);
+	module.exports = __webpack_require__(572);
 
 
 /***/ },
-/* 570 */
+/* 572 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -57330,7 +57441,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 571 */
+/* 573 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -57342,7 +57453,7 @@
 	}
 
 /***/ },
-/* 572 */
+/* 574 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -57351,57 +57462,57 @@
 	
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 	
-	var _actions = __webpack_require__(573);
+	var _actions = __webpack_require__(575);
 	
 	var importedActions = _interopRequireWildcard(_actions);
 	
-	var _getDisplayName = __webpack_require__(571);
+	var _getDisplayName = __webpack_require__(573);
 	
 	var _getDisplayName2 = _interopRequireDefault(_getDisplayName);
 	
-	var _reducer = __webpack_require__(556);
+	var _reducer = __webpack_require__(558);
 	
 	var _deepEqual = __webpack_require__(471);
 	
 	var _deepEqual2 = _interopRequireDefault(_deepEqual);
 	
-	var _bindActionData = __webpack_require__(574);
+	var _bindActionData = __webpack_require__(576);
 	
 	var _bindActionData2 = _interopRequireDefault(_bindActionData);
 	
-	var _getValues = __webpack_require__(575);
+	var _getValues = __webpack_require__(577);
 	
 	var _getValues2 = _interopRequireDefault(_getValues);
 	
-	var _isValid = __webpack_require__(576);
+	var _isValid = __webpack_require__(578);
 	
 	var _isValid2 = _interopRequireDefault(_isValid);
 	
-	var _readFields = __webpack_require__(577);
+	var _readFields = __webpack_require__(579);
 	
 	var _readFields2 = _interopRequireDefault(_readFields);
 	
-	var _handleSubmit2 = __webpack_require__(591);
+	var _handleSubmit2 = __webpack_require__(593);
 	
 	var _handleSubmit3 = _interopRequireDefault(_handleSubmit2);
 	
-	var _asyncValidation = __webpack_require__(592);
+	var _asyncValidation = __webpack_require__(594);
 	
 	var _asyncValidation2 = _interopRequireDefault(_asyncValidation);
 	
-	var _silenceEvents = __webpack_require__(593);
+	var _silenceEvents = __webpack_require__(595);
 	
 	var _silenceEvents2 = _interopRequireDefault(_silenceEvents);
 	
-	var _silenceEvent = __webpack_require__(594);
+	var _silenceEvent = __webpack_require__(596);
 	
 	var _silenceEvent2 = _interopRequireDefault(_silenceEvent);
 	
-	var _wrapMapDispatchToProps = __webpack_require__(595);
+	var _wrapMapDispatchToProps = __webpack_require__(597);
 	
 	var _wrapMapDispatchToProps2 = _interopRequireDefault(_wrapMapDispatchToProps);
 	
-	var _wrapMapStateToProps = __webpack_require__(596);
+	var _wrapMapStateToProps = __webpack_require__(598);
 	
 	var _wrapMapStateToProps2 = _interopRequireDefault(_wrapMapStateToProps);
 	
@@ -57713,7 +57824,7 @@
 	exports.default = createHigherOrderComponent;
 
 /***/ },
-/* 573 */
+/* 575 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -57721,7 +57832,7 @@
 	exports.__esModule = true;
 	exports.untouch = exports.touch = exports.swapArrayValues = exports.submitFailed = exports.stopSubmit = exports.stopAsyncValidation = exports.startSubmit = exports.startAsyncValidation = exports.reset = exports.removeArrayValue = exports.initialize = exports.focus = exports.destroy = exports.change = exports.blur = exports.autofill = exports.addArrayValue = undefined;
 	
-	var _actionTypes = __webpack_require__(557);
+	var _actionTypes = __webpack_require__(559);
 	
 	var addArrayValue = exports.addArrayValue = function addArrayValue(path, value, index, fields) {
 	  return { type: _actionTypes.ADD_ARRAY_VALUE, path: path, value: value, index: index, fields: fields };
@@ -57805,7 +57916,7 @@
 	};
 
 /***/ },
-/* 574 */
+/* 576 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -57816,7 +57927,7 @@
 	
 	exports.default = bindActionData;
 	
-	var _mapValues = __webpack_require__(558);
+	var _mapValues = __webpack_require__(560);
 	
 	var _mapValues2 = _interopRequireDefault(_mapValues);
 	
@@ -57840,7 +57951,7 @@
 	}
 
 /***/ },
-/* 575 */
+/* 577 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -57910,7 +58021,7 @@
 	exports.default = getValues;
 
 /***/ },
-/* 576 */
+/* 578 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -57932,7 +58043,7 @@
 	}
 
 /***/ },
-/* 577 */
+/* 579 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -57941,19 +58052,19 @@
 	
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 	
-	var _readField = __webpack_require__(578);
+	var _readField = __webpack_require__(580);
 	
 	var _readField2 = _interopRequireDefault(_readField);
 	
-	var _write = __webpack_require__(560);
+	var _write = __webpack_require__(562);
 	
 	var _write2 = _interopRequireDefault(_write);
 	
-	var _getValues = __webpack_require__(575);
+	var _getValues = __webpack_require__(577);
 	
 	var _getValues2 = _interopRequireDefault(_getValues);
 	
-	var _removeField = __webpack_require__(590);
+	var _removeField = __webpack_require__(592);
 	
 	var _removeField2 = _interopRequireDefault(_removeField);
 	
@@ -58003,7 +58114,7 @@
 	exports.default = readFields;
 
 /***/ },
-/* 578 */
+/* 580 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -58012,35 +58123,35 @@
 	
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 	
-	var _createOnBlur = __webpack_require__(579);
+	var _createOnBlur = __webpack_require__(581);
 	
 	var _createOnBlur2 = _interopRequireDefault(_createOnBlur);
 	
-	var _createOnChange = __webpack_require__(582);
+	var _createOnChange = __webpack_require__(584);
 	
 	var _createOnChange2 = _interopRequireDefault(_createOnChange);
 	
-	var _createOnDragStart = __webpack_require__(583);
+	var _createOnDragStart = __webpack_require__(585);
 	
 	var _createOnDragStart2 = _interopRequireDefault(_createOnDragStart);
 	
-	var _createOnDrop = __webpack_require__(584);
+	var _createOnDrop = __webpack_require__(586);
 	
 	var _createOnDrop2 = _interopRequireDefault(_createOnDrop);
 	
-	var _createOnFocus = __webpack_require__(585);
+	var _createOnFocus = __webpack_require__(587);
 	
 	var _createOnFocus2 = _interopRequireDefault(_createOnFocus);
 	
-	var _silencePromise = __webpack_require__(586);
+	var _silencePromise = __webpack_require__(588);
 	
 	var _silencePromise2 = _interopRequireDefault(_silencePromise);
 	
-	var _read = __webpack_require__(559);
+	var _read = __webpack_require__(561);
 	
 	var _read2 = _interopRequireDefault(_read);
 	
-	var _updateField = __webpack_require__(588);
+	var _updateField = __webpack_require__(590);
 	
 	var _updateField2 = _interopRequireDefault(_updateField);
 	
@@ -58226,14 +58337,14 @@
 	exports.default = readField;
 
 /***/ },
-/* 579 */
+/* 581 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	exports.__esModule = true;
 	
-	var _getValue = __webpack_require__(580);
+	var _getValue = __webpack_require__(582);
 	
 	var _getValue2 = _interopRequireDefault(_getValue);
 	
@@ -58251,14 +58362,14 @@
 	exports.default = createOnBlur;
 
 /***/ },
-/* 580 */
+/* 582 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	exports.__esModule = true;
 	
-	var _isEvent = __webpack_require__(581);
+	var _isEvent = __webpack_require__(583);
 	
 	var _isEvent2 = _interopRequireDefault(_isEvent);
 	
@@ -58311,7 +58422,7 @@
 	exports.default = getValue;
 
 /***/ },
-/* 581 */
+/* 583 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -58324,14 +58435,14 @@
 	exports.default = isEvent;
 
 /***/ },
-/* 582 */
+/* 584 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	exports.__esModule = true;
 	
-	var _getValue = __webpack_require__(580);
+	var _getValue = __webpack_require__(582);
 	
 	var _getValue2 = _interopRequireDefault(_getValue);
 	
@@ -58345,7 +58456,7 @@
 	exports.default = createOnChange;
 
 /***/ },
-/* 583 */
+/* 585 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -58361,14 +58472,14 @@
 	exports.default = createOnDragStart;
 
 /***/ },
-/* 584 */
+/* 586 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	exports.__esModule = true;
 	
-	var _createOnDragStart = __webpack_require__(583);
+	var _createOnDragStart = __webpack_require__(585);
 	
 	var createOnDrop = function createOnDrop(name, change) {
 	  return function (event) {
@@ -58378,7 +58489,7 @@
 	exports.default = createOnDrop;
 
 /***/ },
-/* 585 */
+/* 587 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -58392,14 +58503,14 @@
 	exports.default = createOnFocus;
 
 /***/ },
-/* 586 */
+/* 588 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	exports.__esModule = true;
 	
-	var _isPromise = __webpack_require__(587);
+	var _isPromise = __webpack_require__(589);
 	
 	var _isPromise2 = _interopRequireDefault(_isPromise);
 	
@@ -58416,7 +58527,7 @@
 	exports.default = silencePromise;
 
 /***/ },
-/* 587 */
+/* 589 */
 /***/ function(module, exports) {
 
 	module.exports = isPromise;
@@ -58427,7 +58538,7 @@
 
 
 /***/ },
-/* 588 */
+/* 590 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -58436,11 +58547,11 @@
 	
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 	
-	var _isPristine = __webpack_require__(589);
+	var _isPristine = __webpack_require__(591);
 	
 	var _isPristine2 = _interopRequireDefault(_isPristine);
 	
-	var _isValid = __webpack_require__(576);
+	var _isValid = __webpack_require__(578);
 	
 	var _isValid2 = _interopRequireDefault(_isValid);
 	
@@ -58502,7 +58613,7 @@
 	exports.default = updateField;
 
 /***/ },
-/* 589 */
+/* 591 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -58540,7 +58651,7 @@
 	}
 
 /***/ },
-/* 590 */
+/* 592 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -58620,18 +58731,18 @@
 	exports.default = removeField;
 
 /***/ },
-/* 591 */
+/* 593 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	exports.__esModule = true;
 	
-	var _isPromise = __webpack_require__(587);
+	var _isPromise = __webpack_require__(589);
 	
 	var _isPromise2 = _interopRequireDefault(_isPromise);
 	
-	var _isValid = __webpack_require__(576);
+	var _isValid = __webpack_require__(578);
 	
 	var _isValid2 = _interopRequireDefault(_isValid);
 	
@@ -58702,18 +58813,18 @@
 	exports.default = handleSubmit;
 
 /***/ },
-/* 592 */
+/* 594 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	exports.__esModule = true;
 	
-	var _isPromise = __webpack_require__(587);
+	var _isPromise = __webpack_require__(589);
 	
 	var _isPromise2 = _interopRequireDefault(_isPromise);
 	
-	var _isValid = __webpack_require__(576);
+	var _isValid = __webpack_require__(578);
 	
 	var _isValid2 = _interopRequireDefault(_isValid);
 	
@@ -58744,14 +58855,14 @@
 	exports.default = asyncValidation;
 
 /***/ },
-/* 593 */
+/* 595 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	exports.__esModule = true;
 	
-	var _silenceEvent = __webpack_require__(594);
+	var _silenceEvent = __webpack_require__(596);
 	
 	var _silenceEvent2 = _interopRequireDefault(_silenceEvent);
 	
@@ -58770,14 +58881,14 @@
 	exports.default = silenceEvents;
 
 /***/ },
-/* 594 */
+/* 596 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	exports.__esModule = true;
 	
-	var _isEvent = __webpack_require__(581);
+	var _isEvent = __webpack_require__(583);
 	
 	var _isEvent2 = _interopRequireDefault(_isEvent);
 	
@@ -58794,7 +58905,7 @@
 	exports.default = silenceEvent;
 
 /***/ },
-/* 595 */
+/* 597 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -58837,7 +58948,7 @@
 	exports.default = wrapMapDispatchToProps;
 
 /***/ },
-/* 596 */
+/* 598 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -58874,7 +58985,7 @@
 	exports.default = wrapMapStateToProps;
 
 /***/ },
-/* 597 */
+/* 599 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -58920,7 +59031,193 @@
 	exports.default = createPropTypes;
 
 /***/ },
-/* 598 */
+/* 600 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(299);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reduxForm = __webpack_require__(556);
+	
+	var _moment = __webpack_require__(546);
+	
+	var _moment2 = _interopRequireDefault(_moment);
+	
+	var _classnames = __webpack_require__(548);
+	
+	var _classnames2 = _interopRequireDefault(_classnames);
+	
+	var _reactRouter = __webpack_require__(297);
+	
+	var _Loading = __webpack_require__(549);
+	
+	var _Loading2 = _interopRequireDefault(_Loading);
+	
+	var _utils = __webpack_require__(601);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var fields = ['spot', 'time'];
+	
+	var validate = function validate(values) {
+	    var errors = {};
+	    if (!values.spot) {
+	        errors.spot = 'Required';
+	    }
+	
+	    if (!values.time) {
+	        errors.time = 'Required';
+	    } else if (!(0, _utils.parseTimeInput)(values.time)) {
+	        errors.time = 'Enter time in HH:MM format';
+	    }
+	    return errors;
+	};
+	
+	var MoveForm = function (_Component) {
+	    _inherits(MoveForm, _Component);
+	
+	    function MoveForm(props) {
+	        _classCallCheck(this, MoveForm);
+	
+	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(MoveForm).call(this, props));
+	
+	        _this.onSubmit = _this.onSubmit.bind(_this);
+	        return _this;
+	    }
+	
+	    _createClass(MoveForm, [{
+	        key: 'onSubmit',
+	        value: function onSubmit(data) {
+	            var parsed = (0, _utils.parseTimeInput)(data.time);
+	            data.time = (0, _moment2.default)(parsed, 'hh:mm').format();
+	            this.props.updateMove(data);
+	            return this.props.saveMove();
+	        }
+	    }, {
+	        key: 'componentWillReceiveProps',
+	        value: function componentWillReceiveProps(nextProps) {
+	            if (this.props.submitting && !nextProps.submitting) {
+	                _reactRouter.browserHistory.push('/');
+	            }
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            if (!this.props.spots.items) {
+	                return _react2.default.createElement(_Loading2.default, null);
+	            }
+	
+	            var options = this.props.spots.items.map(function (choice) {
+	                return _react2.default.createElement(
+	                    'option',
+	                    { key: choice.id, value: choice.id },
+	                    choice.name
+	                );
+	            });
+	
+	            var _props = this.props;
+	            var _props$fields = _props.fields;
+	            var spot = _props$fields.spot;
+	            var time = _props$fields.time;
+	            var handleSubmit = _props.handleSubmit;
+	            var submitting = _props.submitting;
+	
+	            var hasErrors = !!(spot.error || time.error);
+	            return _react2.default.createElement(
+	                'form',
+	                { className: 'form-inline lunch-move-form', onSubmit: handleSubmit(this.onSubmit) },
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'lunch-move-form-row' },
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'form-group' },
+	                        _react2.default.createElement(
+	                            'p',
+	                            { className: 'form-control-static' },
+	                            'You are eating'
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'form-group' },
+	                        _react2.default.createElement(
+	                            'select',
+	                            _extends({ className: 'form-control spot-field', name: 'spot' }, spot),
+	                            _react2.default.createElement('option', { value: null }),
+	                            options
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'form-group' },
+	                        _react2.default.createElement(
+	                            'p',
+	                            { className: 'form-control-static' },
+	                            'at'
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'form-group' },
+	                        _react2.default.createElement('input', _extends({ className: 'form-control time-field', type: 'text', name: 'time' }, time))
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'lunch-move-form-row' },
+	                    _react2.default.createElement(
+	                        'button',
+	                        { type: 'submit', className: 'btn btn-default', disabled: hasErrors || submitting },
+	                        submitting ? 'Saving...' : 'Save'
+	                    ),
+	                    _react2.default.createElement(
+	                        _reactRouter.Link,
+	                        { to: '/', className: 'btn btn-default' },
+	                        'Cancel'
+	                    )
+	                )
+	            );
+	        }
+	    }]);
+	
+	    return MoveForm;
+	}(_react.Component);
+	
+	MoveForm = (0, _reduxForm.reduxForm)({
+	    form: 'move-form',
+	    fields: fields,
+	    validate: validate
+	}, function (state) {
+	    var _state$recentMove = state.recentMove;
+	    var time = _state$recentMove.time;
+	    var spot = _state$recentMove.spot;
+	
+	    time = time ? (0, _moment2.default)(time).format('h:mm') : '';
+	    return { initialValues: { time: time, spot: spot } };
+	})(MoveForm);
+	
+	exports.default = MoveForm;
+
+/***/ },
+/* 601 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -58930,7 +59227,7 @@
 	});
 	exports.parseTimeInput = parseTimeInput;
 	
-	var _moment = __webpack_require__(544);
+	var _moment = __webpack_require__(546);
 	
 	var _moment2 = _interopRequireDefault(_moment);
 	
@@ -58969,7 +59266,7 @@
 	}
 
 /***/ },
-/* 599 */
+/* 602 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -58981,11 +59278,11 @@
 	
 	var _redux = __webpack_require__(528);
 	
-	var _reduxThunk = __webpack_require__(600);
+	var _reduxThunk = __webpack_require__(603);
 	
 	var _reduxThunk2 = _interopRequireDefault(_reduxThunk);
 	
-	var _reducers = __webpack_require__(601);
+	var _reducers = __webpack_require__(604);
 	
 	var _reducers2 = _interopRequireDefault(_reducers);
 	
@@ -58996,7 +59293,7 @@
 	}
 
 /***/ },
-/* 600 */
+/* 603 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -59019,7 +59316,7 @@
 	}
 
 /***/ },
-/* 601 */
+/* 604 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -59032,17 +59329,17 @@
 	
 	var _reactRouterRedux = __webpack_require__(514);
 	
-	var _reduxForm = __webpack_require__(554);
+	var _reduxForm = __webpack_require__(556);
 	
-	var _moves = __webpack_require__(602);
+	var _moves = __webpack_require__(605);
 	
 	var _moves2 = _interopRequireDefault(_moves);
 	
-	var _recentMove = __webpack_require__(603);
+	var _recentMove = __webpack_require__(606);
 	
 	var _recentMove2 = _interopRequireDefault(_recentMove);
 	
-	var _spots = __webpack_require__(604);
+	var _spots = __webpack_require__(607);
 	
 	var _spots2 = _interopRequireDefault(_spots);
 	
@@ -59059,7 +59356,7 @@
 	exports.default = rootReducer;
 
 /***/ },
-/* 602 */
+/* 605 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -59069,7 +59366,7 @@
 	});
 	exports.default = moves;
 	
-	var _actions = __webpack_require__(547);
+	var _actions = __webpack_require__(551);
 	
 	var initialState = {
 	  isFetching: false,
@@ -59091,15 +59388,14 @@
 	        items: action.moves
 	      });
 	    case _actions.UPDATE_MOVE:
-	      //TODO
-	      return state;
+	      return updateMove(state, action);
 	    default:
 	      return state;
 	  }
 	}
 
 /***/ },
-/* 603 */
+/* 606 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -59109,7 +59405,7 @@
 	});
 	exports.default = recentMove;
 	
-	var _actions = __webpack_require__(547);
+	var _actions = __webpack_require__(551);
 	
 	var initialState = lunchmove.recent_move || {};
 	
@@ -59126,7 +59422,7 @@
 	}
 
 /***/ },
-/* 604 */
+/* 607 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -59136,7 +59432,7 @@
 	});
 	exports.default = spots;
 	
-	var _actions = __webpack_require__(547);
+	var _actions = __webpack_require__(551);
 	
 	var initialState = {
 	  isFetching: false,
@@ -59161,290 +59457,6 @@
 	      return state;
 	  }
 	}
-
-/***/ },
-/* 605 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.default = LoadingView;
-	
-	var _react = __webpack_require__(299);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function LoadingView() {
-	    return _react2.default.createElement(
-	        "div",
-	        { className: "container" },
-	        _react2.default.createElement(
-	            "div",
-	            { className: "row loading-container" },
-	            _react2.default.createElement("div", { className: "sk-rotating-plane" })
-	        )
-	    );
-	}
-
-/***/ },
-/* 606 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-	
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-	
-	var _react = __webpack_require__(299);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	var _reactRouter = __webpack_require__(297);
-	
-	var _MoveListRow = __webpack_require__(607);
-	
-	var _MoveListRow2 = _interopRequireDefault(_MoveListRow);
-	
-	var _Loading = __webpack_require__(605);
-	
-	var _Loading2 = _interopRequireDefault(_Loading);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-	
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-	
-	var List = function (_Component) {
-	    _inherits(List, _Component);
-	
-	    function List() {
-	        _classCallCheck(this, List);
-	
-	        return _possibleConstructorReturn(this, Object.getPrototypeOf(List).apply(this, arguments));
-	    }
-	
-	    _createClass(List, [{
-	        key: 'componentDidMount',
-	        value: function componentDidMount() {
-	            this.props.fetchSpotsIfNeeded();
-	            this.props.fetchMovesIfNeeded();
-	        }
-	    }, {
-	        key: 'render',
-	        value: function render() {
-	            if (!this.props.spots) {
-	                return _react2.default.createElement(_Loading2.default, null);
-	            }
-	
-	            var list = void 0;
-	            if (!this.props.spots.length) {
-	                list = _react2.default.createElement(
-	                    'div',
-	                    { className: 'col-md-12 text-center' },
-	                    "No one's going anywhere, just quite yet."
-	                );
-	            } else {
-	                list = this.props.spots.map(function (spot, i) {
-	                    return _react2.default.createElement(_MoveListRow2.default, _extends({}, spot, { key: i }));
-	                });
-	            }
-	
-	            var yourMove = void 0;
-	            if (!this.props.recentMove.id) {
-	                yourMove = _react2.default.createElement(
-	                    'div',
-	                    { className: 'container your-move' },
-	                    _react2.default.createElement(
-	                        'div',
-	                        { className: 'row' },
-	                        _react2.default.createElement(
-	                            'div',
-	                            { className: 'col-sm-12 text-center' },
-	                            _react2.default.createElement(
-	                                _reactRouter.Link,
-	                                { to: '/edit', className: 'btn btn-default btn-lg' },
-	                                'Where are you going?'
-	                            )
-	                        )
-	                    )
-	                );
-	            }
-	
-	            return _react2.default.createElement(
-	                'div',
-	                null,
-	                _react2.default.createElement(
-	                    'div',
-	                    { className: 'lunch-moves-list' },
-	                    _react2.default.createElement(
-	                        'div',
-	                        { className: 'container moves-container' },
-	                        list
-	                    )
-	                ),
-	                yourMove
-	            );
-	        }
-	    }]);
-	
-	    return List;
-	}(_react.Component);
-	
-	exports.default = List;
-
-/***/ },
-/* 607 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.default = MoveListRow;
-	
-	var _react = __webpack_require__(299);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	var _Move = __webpack_require__(608);
-	
-	var _Move2 = _interopRequireDefault(_Move);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function MoveListRow(_ref) {
-	    var name = _ref.name;
-	    var moves = _ref.moves;
-	    var hasOwnMove = _ref.hasOwnMove;
-	
-	    var moveItems = moves.map(function (move) {
-	        return _react2.default.createElement(_Move2.default, move);
-	    });
-	    var newMove = void 0;
-	
-	    if (!hasOwnMove) {
-	        newMove = _react2.default.createElement(
-	            'div',
-	            { className: 'move move-new' },
-	            _react2.default.createElement(
-	                'div',
-	                { className: 'move-icon' },
-	                _react2.default.createElement('span', { className: 'glyphicon glyphicon-plus' })
-	            ),
-	            _react2.default.createElement(
-	                'div',
-	                { className: 'move-name' },
-	                _react2.default.createElement(
-	                    'span',
-	                    null,
-	                    'Go Here'
-	                )
-	            )
-	        );
-	    }
-	
-	    return _react2.default.createElement(
-	        'div',
-	        { className: 'row move-row' },
-	        _react2.default.createElement(
-	            'div',
-	            { className: 'spot-name col-md-12' },
-	            _react2.default.createElement(
-	                'span',
-	                null,
-	                name
-	            )
-	        ),
-	        _react2.default.createElement(
-	            'div',
-	            { className: 'spot-moves col-md-12' },
-	            moveItems,
-	            newMove
-	        )
-	    );
-	};
-
-/***/ },
-/* 608 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.default = Move;
-	
-	var _react = __webpack_require__(299);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	var _moment = __webpack_require__(544);
-	
-	var _moment2 = _interopRequireDefault(_moment);
-	
-	var _classnames = __webpack_require__(546);
-	
-	var _classnames2 = _interopRequireDefault(_classnames);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function Move(_ref) {
-	    var isOwnMove = _ref.isOwnMove;
-	    var time = _ref.time;
-	    var user = _ref.user;
-	
-	    var moveName = void 0;
-	    var deleteButton = void 0;
-	
-	    if (isOwnMove) {
-	        moveName = _react2.default.createElement(
-	            'span',
-	            null,
-	            'You ',
-	            _react2.default.createElement('span', { className: 'glyphicon glyphicon-pencil' })
-	        );
-	    } else {
-	        moveName = user;
-	    }
-	
-	    return _react2.default.createElement(
-	        'div',
-	        { className: (0, _classnames2.default)("move", { "own-move": isOwnMove }) },
-	        _react2.default.createElement(
-	            'div',
-	            { className: 'move-time' },
-	            _react2.default.createElement(
-	                'span',
-	                null,
-	                (0, _moment2.default)(time).format('h:mm')
-	            )
-	        ),
-	        _react2.default.createElement(
-	            'div',
-	            { className: 'move-name' },
-	            _react2.default.createElement(
-	                'span',
-	                null,
-	                moveName
-	            )
-	        )
-	    );
-	};
 
 /***/ }
 /******/ ]);

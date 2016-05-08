@@ -78,17 +78,17 @@ export function fetchMovesIfNeeded() {
 }
 
 export function updateMove(move){
-  return {
-    type: UPDATE_MOVE,
-    move: move
-  }
+  return { type: UPDATE_MOVE, move };
 }
 
 export function saveMove(){
   return (dispatch, getState) => {
-    let move = getState().recentMove;
-    return fetch('/json/moves/', {
-        method: 'POST',
+    const move = getState().recentMove;
+    const url = move.id ? `/json/moves/${move.id}` : '/json/moves/';
+    const method = move.id ? 'PUT' : 'POST';
+    
+    return fetch(url, {
+        method,
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json'
@@ -97,6 +97,8 @@ export function saveMove(){
         body: JSON.stringify(move)
     })
       .then(response => response.json())
-      .then(json => dispatch(updateMove(json)));
+      .then(json => {
+        dispatch(updateMove(json));
+      });
   }
 } 

@@ -14,13 +14,13 @@ function mapStateToProps (state) {
 const mapDispatchToProps = (dispatch) => {
   return {
     updateMove: (move) => {
-      dispatch(updateMove(move))
+      return dispatch(updateMove(move));
     },
     saveMove: () => {
-      dispatch(saveMove())
+      return dispatch(saveMove());
     },
     fetchSpotsIfNeeded: () => {
-      dispatch(fetchSpotsIfNeeded());
+      return dispatch(fetchSpotsIfNeeded());
     }
   }
 }
@@ -29,6 +29,7 @@ class Edit extends Component {
     componentDidMount(){
       this.props.fetchSpotsIfNeeded();
     }
+  
     render() {
         if (this.props.recentMove.user) {
             return (

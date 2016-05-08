@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import {reduxForm} from 'redux-form';
 import moment from 'moment';
 import classNames from 'classnames';
-import { Link } from 'react-router';
+import { Link, browserHistory } from 'react-router';
+
 
 import Loading from './Loading';
 import { parseTimeInput } from '../utils';
@@ -36,7 +37,13 @@ class MoveForm extends Component {
       let parsed = parseTimeInput(data.time);
       data.time = moment(parsed, 'hh:mm').format();
       this.props.updateMove(data);
-      this.props.saveMove();
+      return this.props.saveMove();
+    }
+    
+    componentWillReceiveProps(nextProps){
+        if (this.props.submitting && !nextProps.submitting) {
+            browserHistory.push('/');
+        }
     }
     
     render(){
@@ -47,8 +54,8 @@ class MoveForm extends Component {
         let options = this.props.spots.items.map((choice) => {
             return <option key={choice.id} value={choice.id}>{choice.name}</option>
         });
-        
-        let {fields: {spot, time}, handleSubmit} = this.props;
+                
+        let {fields: {spot, time}, handleSubmit, submitting} = this.props;
         let hasErrors = !!(spot.error || time.error);
         return (
             <form className="form-inline lunch-move-form" onSubmit={handleSubmit(this.onSubmit)}>
@@ -70,7 +77,9 @@ class MoveForm extends Component {
                     </div>
                 </div>
                 <div className="lunch-move-form-row">
-                    <button type="submit" className="btn btn-default" disabled={hasErrors}>Save</button>
+                    <button type="submit" className="btn btn-default" disabled={hasErrors || submitting}>
+                      { submitting ? 'Saving...' : 'Save' }
+                    </button>
                     <Link to="/" className="btn btn-default">Cancel</Link>
                 </div>
             </form>

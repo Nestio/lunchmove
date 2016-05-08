@@ -19,8 +19,7 @@ export default function moves(state = initialState, action) {
         items: action.moves
       })
     case UPDATE_MOVE:
-      //TODO
-      return state;
+      return updateMove(state, action);
     default:
       return state
   }
