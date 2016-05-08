@@ -11748,7 +11748,7 @@ button.close {
     margin: 0; }
   .lunch-move-form .form-group .tt-empty {
     text-align: center; }
-  .lunch-move-form [type="submit"], .lunch-move-form [data-ui="cancel"] {
+  .lunch-move-form button {
     font-size: 24px;
     padding: 6px 24px; }
 

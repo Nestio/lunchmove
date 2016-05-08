@@ -1,44 +1,28 @@
 import React, { Component } from 'react';
 import {reduxForm} from 'redux-form';
 import moment from 'moment';
+import classNames from 'classnames';
 
-let MoveTime = {
-    encode: function(val) {
-        let wordMap = {
-            'rightnow': 1,
-            'immediately': 1,
-            'now': 1,
-            'soonish': 15,
-            'soon': 15,
-            'later': 60
-        };
-
-        let stringVal = wordMap[val.replace(/\W+/g, '').toLowerCase()];
-
-        if (stringVal) {
-            return moment().add(stringVal, 'm').format();
-        }
-
-        let numVal = val.replace(/([^:0-9])/g, '');
-
-        if (!numVal || !numVal.match(/\d{1,2}:\d{2}/)){ return ''; }
-
-        let split = numVal.split(':').map(function(num){return +num; });
-        if (split[0] < 6) {
-            split[0] += 12;
-        }
-
-        return moment(split.join(':'), 'hh:mm').format();
-    },
-    decode: function(val) {
-        return val ? moment(val).format('h:mm') : '';
-    }
-};
+import { parseTimeInput } from '../utils';
 
 const fields = [
     'spot',
     'time'
 ];
+
+const validate = values => {
+  const errors = {}
+  if (!values.spot) {
+    errors.spot = 'Required';
+  }
+  
+  if (!values.time){
+    errors.time = 'Required';
+  } else if (!parseTimeInput(values.time)) {
+    errors.time = 'Enter time in HH:MM format';
+  }
+  return errors;
+}
 
 class MoveForm extends Component {
     constructor(props){
@@ -47,7 +31,8 @@ class MoveForm extends Component {
     }
     
     onSubmit(data){
-      data.time = MoveTime.encode(data.time);
+      let parsed = parseTimeInput(data.time);
+      data.time = moment(parsed, 'hh:mm').format();
       this.props.updateMove(data);
       this.props.saveMove();
     }
@@ -62,7 +47,7 @@ class MoveForm extends Component {
         });
         
         let {fields: {spot, time}, handleSubmit} = this.props;
-        
+        let hasErrors = !!(spot.error || time.error);
         return (
             <form className="form-inline lunch-move-form" onSubmit={handleSubmit(this.onSubmit)}>
                 <div className="lunch-move-form-row">
@@ -83,7 +68,7 @@ class MoveForm extends Component {
                     </div>
                 </div>
                 <div className="lunch-move-form-row">
-                    <button type="submit" className="btn btn-default">Save</button>
+                    <button type="submit" className="btn btn-default" disabled={hasErrors}>Save</button>
                     <button className="btn btn-default">Cancel</button>
                 </div>
             </form>
@@ -93,7 +78,12 @@ class MoveForm extends Component {
 
 MoveForm = reduxForm({
   form: 'move-form',
-  fields: fields
+  fields: fields,
+  validate
+}, state => {
+  let { time, spot } = state.recentMove;
+  time = (time ? moment(time).format('h:mm') : '');
+  return { initialValues: { time, spot } };
 })(MoveForm);
 
 export default MoveForm;

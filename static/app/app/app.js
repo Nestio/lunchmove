@@ -8,18 +8,6 @@ import { render } from 'react-dom'
 import Root from './containers/Root'
 import configureStore from './configureStore'
 
-let initialState = {
-  spots: {
-    isFetching: false,
-    items: null
-  },
-  moves: {
-    isFetching: false,
-    items: null
-  },
-  recentMove: lunchmove.recent_move
-}
-
 const store = configureStore()
 const history = syncHistoryWithStore(browserHistory, store)
 

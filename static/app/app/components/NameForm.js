@@ -5,21 +5,31 @@ const fields = [
     'user'
 ];
 
-class NameForm extends Component {    
+const validate = (values) => {
+  const errors = {};
+    if (!values.user) {
+        errors.user = 'Required';
+    }
+    return errors;
+}
+
+class NameForm extends Component {
     render () {
+        const { fields: { user }, handleSubmit, updateMove } = this.props;
+        const hasErrors = !!user.error;
         return (
-            <form className="form-inline lunch-move-form" onSubmit={this.props.handleSubmit(this.props.updateMove)}>
+            <form className="form-inline lunch-move-form" onSubmit={handleSubmit(updateMove)}>
                 <div className="lunch-move-form-row">
                     <div className="form-group">
                         <p className="form-control-static">Your name is</p>
                     </div>
                     <div className="form-group">
-                        <input className="form-control" type="text" name="user" {...this.props.fields.user} />
+                        <input className="form-control" type="text" name="user" {...user} />
                     </div>
                 </div>
                 <div className="lunch-move-form-row">
-                    <button type="submit" className="btn btn-default" >Save</button>
-                    <button data-ui="cancel" className="btn btn-default">Cancel</button>
+                    <button type="submit" className="btn btn-default" disabled={hasErrors}>Save</button>
+                    <button className="btn btn-default">Cancel</button>
                 </div>
             </form>
         );
@@ -28,7 +38,10 @@ class NameForm extends Component {
 
 NameForm = reduxForm({
   form: 'name-form',
-  fields: fields
-})(NameForm);
+  fields: fields,
+  validate
+}, state => ({
+    initialValues: state.recentMove
+}))(NameForm);
 
 export default NameForm

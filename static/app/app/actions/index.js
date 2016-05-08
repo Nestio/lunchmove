@@ -1,5 +1,4 @@
 import fetch from 'isomorphic-fetch'
-import {moves as fakeMoves} from '../fake-data';
 
 export const REQUEST_MOVES = 'REQUEST_MOVES'
 export const RECEIVE_MOVES = 'RECEIVE_MOVES'
@@ -88,10 +87,8 @@ export function updateMove(move){
 export function saveMove(){
   return (dispatch, getState) => {
     let move = getState().recentMove;
-    let url = move.id ? `/json/moves/${move.id}` : '/json/moves/';
-    let method = move.id ? 'PUT' : 'POST';
-    return fetch(url, {
-        method,
+    return fetch('/json/moves/', {
+        method: 'POST',
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json'
