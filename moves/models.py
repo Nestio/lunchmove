@@ -15,7 +15,7 @@ class Spot(models.Model):
 
 class MoveManager(models.Manager):
     def recent(self):
-        start = timezone.now() - datetime.timedelta(hours=6)
+        start = timezone.now() - datetime.timedelta(hours=36)
         return self.filter(time__gte=start).order_by('-time')
 
 class Move(models.Model):

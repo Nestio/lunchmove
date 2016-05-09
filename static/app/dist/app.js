@@ -71,7 +71,7 @@
 	
 	var _Root2 = _interopRequireDefault(_Root);
 	
-	var _configureStore = __webpack_require__(602);
+	var _configureStore = __webpack_require__(603);
 	
 	var _configureStore2 = _interopRequireDefault(_configureStore);
 	
@@ -34735,13 +34735,18 @@
 	
 	var _Edit2 = _interopRequireDefault(_Edit);
 	
+	var _JoinMove = __webpack_require__(602);
+	
+	var _JoinMove2 = _interopRequireDefault(_JoinMove);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	exports.default = _react2.default.createElement(
 	  _reactRouter.Route,
 	  { path: '/', component: _Root2.default },
 	  _react2.default.createElement(_reactRouter.IndexRoute, { component: _List2.default }),
-	  _react2.default.createElement(_reactRouter.Route, { path: '/edit', component: _Edit2.default })
+	  _react2.default.createElement(_reactRouter.Route, { path: '/edit', component: _Edit2.default }),
+	  _react2.default.createElement(_reactRouter.Route, { path: '/move/:id/join', component: _JoinMove2.default })
 	);
 
 /***/ },
@@ -34758,7 +34763,7 @@
 	
 	var _reactRedux = __webpack_require__(521);
 	
-	var _moment = __webpack_require__(546);
+	var _moment = __webpack_require__(543);
 	
 	var _moment2 = _interopRequireDefault(_moment);
 	
@@ -34766,15 +34771,15 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _MoveList = __webpack_require__(543);
+	var _MoveList = __webpack_require__(545);
 	
 	var _MoveList2 = _interopRequireDefault(_MoveList);
 	
-	var _lodash = __webpack_require__(550);
+	var _lodash = __webpack_require__(549);
 	
-	var _actions = __webpack_require__(551);
+	var _actions = __webpack_require__(550);
 	
-	var _Loading = __webpack_require__(549);
+	var _Loading = __webpack_require__(553);
 	
 	var _Loading2 = _interopRequireDefault(_Loading);
 	
@@ -34895,245 +34900,6 @@
 
 /***/ },
 /* 543 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-	
-	exports.default = List;
-	
-	var _react = __webpack_require__(299);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	var _reactRouter = __webpack_require__(297);
-	
-	var _MoveListRow = __webpack_require__(544);
-	
-	var _MoveListRow2 = _interopRequireDefault(_MoveListRow);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function List(props) {
-	    var list = void 0;
-	    if (!props.spots.length) {
-	        list = _react2.default.createElement(
-	            'div',
-	            { className: 'col-md-12 text-center' },
-	            "No one's going anywhere, just quite yet."
-	        );
-	    } else {
-	        list = props.spots.map(function (spot, i) {
-	            return _react2.default.createElement(_MoveListRow2.default, _extends({}, spot, { key: i, updateMove: props.updateMove }));
-	        });
-	    }
-	
-	    var yourMove = void 0;
-	    if (!props.recentMove.id) {
-	        yourMove = _react2.default.createElement(
-	            'div',
-	            { className: 'container your-move' },
-	            _react2.default.createElement(
-	                'div',
-	                { className: 'row' },
-	                _react2.default.createElement(
-	                    'div',
-	                    { className: 'col-sm-12 text-center' },
-	                    _react2.default.createElement(
-	                        _reactRouter.Link,
-	                        { to: '/edit', className: 'btn btn-default btn-lg' },
-	                        'Where are you going?'
-	                    )
-	                )
-	            )
-	        );
-	    }
-	
-	    return _react2.default.createElement(
-	        'div',
-	        null,
-	        _react2.default.createElement(
-	            'div',
-	            { className: 'lunch-moves-list' },
-	            _react2.default.createElement(
-	                'div',
-	                { className: 'container moves-container' },
-	                list
-	            )
-	        ),
-	        yourMove
-	    );
-	}
-
-/***/ },
-/* 544 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-	
-	exports.default = MoveListRow;
-	
-	var _react = __webpack_require__(299);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	var _reactRouter = __webpack_require__(297);
-	
-	var _Move = __webpack_require__(545);
-	
-	var _Move2 = _interopRequireDefault(_Move);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function MoveListRow(_ref) {
-	    var name = _ref.name;
-	    var moves = _ref.moves;
-	    var hasOwnMove = _ref.hasOwnMove;
-	    var updateMove = _ref.updateMove;
-	    var id = _ref.id;
-	
-	    var moveItems = moves.map(function (move, i) {
-	        return _react2.default.createElement(_Move2.default, _extends({}, move, { key: i }));
-	    });
-	    var newMove = void 0;
-	    var onClick = function onClick() {
-	        var move = {
-	            spot: id,
-	            time: moves[moves.length - 1].time
-	        };
-	        updateMove(move);
-	        _reactRouter.browserHistory.push('/edit');
-	    };
-	
-	    if (!hasOwnMove) {
-	        newMove = _react2.default.createElement(
-	            'div',
-	            { className: 'move move-new', onClick: onClick },
-	            _react2.default.createElement(
-	                'div',
-	                { className: 'move-icon' },
-	                _react2.default.createElement('span', { className: 'glyphicon glyphicon-plus' })
-	            ),
-	            _react2.default.createElement(
-	                'div',
-	                { className: 'move-name' },
-	                _react2.default.createElement(
-	                    'span',
-	                    null,
-	                    'Go Here'
-	                )
-	            )
-	        );
-	    }
-	
-	    return _react2.default.createElement(
-	        'div',
-	        { className: 'row move-row' },
-	        _react2.default.createElement(
-	            'div',
-	            { className: 'spot-name col-md-12' },
-	            _react2.default.createElement(
-	                'span',
-	                null,
-	                name
-	            )
-	        ),
-	        _react2.default.createElement(
-	            'div',
-	            { className: 'spot-moves col-md-12' },
-	            moveItems,
-	            newMove
-	        )
-	    );
-	};
-
-/***/ },
-/* 545 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.default = Move;
-	
-	var _react = __webpack_require__(299);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	var _moment = __webpack_require__(546);
-	
-	var _moment2 = _interopRequireDefault(_moment);
-	
-	var _classnames = __webpack_require__(548);
-	
-	var _classnames2 = _interopRequireDefault(_classnames);
-	
-	var _reactRouter = __webpack_require__(297);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function Move(_ref) {
-	    var isOwnMove = _ref.isOwnMove;
-	    var time = _ref.time;
-	    var user = _ref.user;
-	
-	    var moveName = void 0;
-	    var deleteButton = void 0;
-	    var onClick = void 0;
-	
-	    if (isOwnMove) {
-	        moveName = _react2.default.createElement(
-	            'span',
-	            null,
-	            'You ',
-	            _react2.default.createElement('span', { className: 'glyphicon glyphicon-pencil' })
-	        );
-	        onClick = function onClick() {
-	            return _reactRouter.browserHistory.push('/edit');
-	        };
-	    } else {
-	        moveName = user;
-	    }
-	
-	    return _react2.default.createElement(
-	        'div',
-	        { className: (0, _classnames2.default)("move", { "own-move": isOwnMove }), onClick: onClick },
-	        _react2.default.createElement(
-	            'div',
-	            { className: 'move-time' },
-	            _react2.default.createElement(
-	                'span',
-	                null,
-	                (0, _moment2.default)(time).format('h:mm')
-	            )
-	        ),
-	        _react2.default.createElement(
-	            'div',
-	            { className: 'move-name' },
-	            _react2.default.createElement(
-	                'span',
-	                null,
-	                moveName
-	            )
-	        )
-	    );
-	};
-
-/***/ },
-/* 546 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(module) {//! moment.js
@@ -39176,10 +38942,10 @@
 	    return _moment;
 	
 	}));
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(547)(module)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(544)(module)))
 
 /***/ },
-/* 547 */
+/* 544 */
 /***/ function(module, exports) {
 
 	module.exports = function(module) {
@@ -39193,6 +38959,245 @@
 		return module;
 	}
 
+
+/***/ },
+/* 545 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+	
+	exports.default = List;
+	
+	var _react = __webpack_require__(299);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactRouter = __webpack_require__(297);
+	
+	var _MoveListRow = __webpack_require__(546);
+	
+	var _MoveListRow2 = _interopRequireDefault(_MoveListRow);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function List(props) {
+	    var list = void 0;
+	    if (!props.spots.length) {
+	        list = _react2.default.createElement(
+	            'div',
+	            { className: 'col-md-12 text-center' },
+	            "No one's going anywhere, just quite yet."
+	        );
+	    } else {
+	        list = props.spots.map(function (spot, i) {
+	            return _react2.default.createElement(_MoveListRow2.default, _extends({}, spot, { key: i, updateMove: props.updateMove }));
+	        });
+	    }
+	
+	    var yourMove = void 0;
+	    if (!props.recentMove.id) {
+	        yourMove = _react2.default.createElement(
+	            'div',
+	            { className: 'container your-move' },
+	            _react2.default.createElement(
+	                'div',
+	                { className: 'row' },
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'col-sm-12 text-center' },
+	                    _react2.default.createElement(
+	                        _reactRouter.Link,
+	                        { to: '/edit', className: 'btn btn-default btn-lg' },
+	                        'Where are you going?'
+	                    )
+	                )
+	            )
+	        );
+	    }
+	
+	    return _react2.default.createElement(
+	        'div',
+	        null,
+	        _react2.default.createElement(
+	            'div',
+	            { className: 'lunch-moves-list' },
+	            _react2.default.createElement(
+	                'div',
+	                { className: 'container moves-container' },
+	                list
+	            )
+	        ),
+	        yourMove
+	    );
+	}
+
+/***/ },
+/* 546 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+	
+	exports.default = MoveListRow;
+	
+	var _react = __webpack_require__(299);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactRouter = __webpack_require__(297);
+	
+	var _Move = __webpack_require__(547);
+	
+	var _Move2 = _interopRequireDefault(_Move);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function MoveListRow(_ref) {
+	    var name = _ref.name;
+	    var moves = _ref.moves;
+	    var hasOwnMove = _ref.hasOwnMove;
+	    var updateMove = _ref.updateMove;
+	    var id = _ref.id;
+	
+	    var moveItems = moves.map(function (move, i) {
+	        return _react2.default.createElement(_Move2.default, _extends({}, move, { key: i }));
+	    });
+	    var newMove = void 0;
+	    var onClick = function onClick() {
+	        var move = {
+	            spot: id,
+	            time: moves[moves.length - 1].time
+	        };
+	        updateMove(move);
+	        _reactRouter.browserHistory.push('/edit');
+	    };
+	
+	    if (!hasOwnMove) {
+	        newMove = _react2.default.createElement(
+	            'div',
+	            { className: 'move move-new', onClick: onClick },
+	            _react2.default.createElement(
+	                'div',
+	                { className: 'move-icon' },
+	                _react2.default.createElement('span', { className: 'glyphicon glyphicon-plus' })
+	            ),
+	            _react2.default.createElement(
+	                'div',
+	                { className: 'move-name' },
+	                _react2.default.createElement(
+	                    'span',
+	                    null,
+	                    'Go Here'
+	                )
+	            )
+	        );
+	    }
+	
+	    return _react2.default.createElement(
+	        'div',
+	        { className: 'row move-row' },
+	        _react2.default.createElement(
+	            'div',
+	            { className: 'spot-name col-md-12' },
+	            _react2.default.createElement(
+	                'span',
+	                null,
+	                name
+	            )
+	        ),
+	        _react2.default.createElement(
+	            'div',
+	            { className: 'spot-moves col-md-12' },
+	            moveItems,
+	            newMove
+	        )
+	    );
+	};
+
+/***/ },
+/* 547 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.default = Move;
+	
+	var _react = __webpack_require__(299);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _moment = __webpack_require__(543);
+	
+	var _moment2 = _interopRequireDefault(_moment);
+	
+	var _classnames = __webpack_require__(548);
+	
+	var _classnames2 = _interopRequireDefault(_classnames);
+	
+	var _reactRouter = __webpack_require__(297);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function Move(_ref) {
+	    var isOwnMove = _ref.isOwnMove;
+	    var time = _ref.time;
+	    var user = _ref.user;
+	
+	    var moveName = void 0;
+	    var deleteButton = void 0;
+	    var onClick = void 0;
+	
+	    if (isOwnMove) {
+	        moveName = _react2.default.createElement(
+	            'span',
+	            null,
+	            'You ',
+	            _react2.default.createElement('span', { className: 'glyphicon glyphicon-pencil' })
+	        );
+	        onClick = function onClick() {
+	            return _reactRouter.browserHistory.push('/edit');
+	        };
+	    } else {
+	        moveName = user;
+	    }
+	
+	    return _react2.default.createElement(
+	        'div',
+	        { className: (0, _classnames2.default)("move", { "own-move": isOwnMove }), onClick: onClick },
+	        _react2.default.createElement(
+	            'div',
+	            { className: 'move-time' },
+	            _react2.default.createElement(
+	                'span',
+	                null,
+	                (0, _moment2.default)(time).format('h:mm')
+	            )
+	        ),
+	        _react2.default.createElement(
+	            'div',
+	            { className: 'move-name' },
+	            _react2.default.createElement(
+	                'span',
+	                null,
+	                moveName
+	            )
+	        )
+	    );
+	};
 
 /***/ },
 /* 548 */
@@ -39250,35 +39255,6 @@
 
 /***/ },
 /* 549 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.default = LoadingView;
-	
-	var _react = __webpack_require__(299);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function LoadingView() {
-	    return _react2.default.createElement(
-	        "div",
-	        { className: "container" },
-	        _react2.default.createElement(
-	            "div",
-	            { className: "row loading-container" },
-	            _react2.default.createElement("div", { className: "sk-rotating-plane" })
-	        )
-	    );
-	}
-
-/***/ },
-/* 550 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(module, global) {/**
@@ -55309,10 +55285,10 @@
 	  }
 	}.call(this));
 	
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(547)(module), (function() { return this; }())))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(544)(module), (function() { return this; }())))
 
 /***/ },
-/* 551 */
+/* 550 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -55326,7 +55302,7 @@
 	exports.updateMove = updateMove;
 	exports.saveMove = saveMove;
 	
-	var _isomorphicFetch = __webpack_require__(552);
+	var _isomorphicFetch = __webpack_require__(551);
 	
 	var _isomorphicFetch2 = _interopRequireDefault(_isomorphicFetch);
 	
@@ -55415,19 +55391,19 @@
 	}
 
 /***/ },
-/* 552 */
+/* 551 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// the whatwg-fetch polyfill installs the fetch() function
 	// on the global object (window or self)
 	//
 	// Return that as the export for use in Webpack, Browserify etc.
-	__webpack_require__(553);
+	__webpack_require__(552);
 	module.exports = self.fetch.bind(self);
 
 
 /***/ },
-/* 553 */
+/* 552 */
 /***/ function(module, exports) {
 
 	(function(self) {
@@ -55822,6 +55798,35 @@
 
 
 /***/ },
+/* 553 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.default = LoadingView;
+	
+	var _react = __webpack_require__(299);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function LoadingView() {
+	    return _react2.default.createElement(
+	        "div",
+	        { className: "container" },
+	        _react2.default.createElement(
+	            "div",
+	            { className: "row loading-container" },
+	            _react2.default.createElement("div", { className: "sk-rotating-plane" })
+	        )
+	    );
+	}
+
+/***/ },
 /* 554 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -55839,7 +55844,7 @@
 	
 	var _reactRedux = __webpack_require__(521);
 	
-	var _actions = __webpack_require__(551);
+	var _actions = __webpack_require__(550);
 	
 	var _NameForm = __webpack_require__(555);
 	
@@ -59074,7 +59079,7 @@
 	
 	var _reduxForm = __webpack_require__(556);
 	
-	var _moment = __webpack_require__(546);
+	var _moment = __webpack_require__(543);
 	
 	var _moment2 = _interopRequireDefault(_moment);
 	
@@ -59084,7 +59089,7 @@
 	
 	var _reactRouter = __webpack_require__(297);
 	
-	var _Loading = __webpack_require__(549);
+	var _Loading = __webpack_require__(553);
 	
 	var _Loading2 = _interopRequireDefault(_Loading);
 	
@@ -59251,7 +59256,7 @@
 	});
 	exports.parseTimeInput = parseTimeInput;
 	
-	var _moment = __webpack_require__(546);
+	var _moment = __webpack_require__(543);
 	
 	var _moment2 = _interopRequireDefault(_moment);
 	
@@ -59296,17 +59301,132 @@
 	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(299);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactRedux = __webpack_require__(521);
+	
+	var _lodash = __webpack_require__(549);
+	
+	var _reactRouter = __webpack_require__(297);
+	
+	var _Loading = __webpack_require__(553);
+	
+	var _Loading2 = _interopRequireDefault(_Loading);
+	
+	var _actions = __webpack_require__(550);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	function mapStateToProps(state) {
+	    var recentMove = state.recentMove;
+	    var moves = state.moves;
+	
+	    return { recentMove: recentMove, moves: moves };
+	}
+	
+	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+	    return {
+	        updateMove: function updateMove(move) {
+	            return dispatch((0, _actions.updateMove)(move));
+	        },
+	        saveMove: function saveMove() {
+	            return dispatch((0, _actions.saveMove)());
+	        },
+	        fetchMoves: function fetchMoves() {
+	            return dispatch((0, _actions.fetchMoves)());
+	        }
+	    };
+	};
+	
+	var JoinMove = function (_Component) {
+	    _inherits(JoinMove, _Component);
+	
+	    function JoinMove(props) {
+	        _classCallCheck(this, JoinMove);
+	
+	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(JoinMove).call(this, props));
+	
+	        _this.state = {
+	            hasFetched: false
+	        };
+	        return _this;
+	    }
+	
+	    _createClass(JoinMove, [{
+	        key: 'componentDidMount',
+	        value: function componentDidMount() {
+	            var move = (0, _lodash.find)(this.props.moves.items, { id: +this.props.routeParams.id });
+	            if (!move && !this.props.moves.isFetching) {
+	                this.props.fetchMoves();
+	            }
+	        }
+	    }, {
+	        key: 'componentWillReceiveProps',
+	        value: function componentWillReceiveProps(nextProps) {
+	            if (this.props.moves.isFetching && !nextProps.moves.isFetching) {
+	                var move = (0, _lodash.find)(nextProps.moves.items, { id: +this.props.routeParams.id });
+	
+	                if (!move) {
+	                    _reactRouter.browserHistory.push('/edit');
+	                }
+	
+	                this.props.updateMove({
+	                    spot: move.spot,
+	                    time: move.time
+	                });
+	
+	                if (this.props.recentMove.user) {
+	                    this.props.saveMove().then(function () {
+	                        _reactRouter.browserHistory.push('/');
+	                    });
+	                } else {
+	                    _reactRouter.browserHistory.push('/edit');
+	                }
+	            }
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            return _react2.default.createElement(_Loading2.default, null);
+	        }
+	    }]);
+	
+	    return JoinMove;
+	}(_react.Component);
+	
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(JoinMove);
+
+/***/ },
+/* 603 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
 	exports.default = configureStore;
 	
 	var _redux = __webpack_require__(528);
 	
-	var _reduxThunk = __webpack_require__(603);
+	var _reduxThunk = __webpack_require__(604);
 	
 	var _reduxThunk2 = _interopRequireDefault(_reduxThunk);
 	
-	var _reducers = __webpack_require__(604);
+	var _reducers = __webpack_require__(605);
 	
 	var _reducers2 = _interopRequireDefault(_reducers);
 	
@@ -59317,7 +59437,7 @@
 	}
 
 /***/ },
-/* 603 */
+/* 604 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -59340,7 +59460,7 @@
 	}
 
 /***/ },
-/* 604 */
+/* 605 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -59355,15 +59475,15 @@
 	
 	var _reduxForm = __webpack_require__(556);
 	
-	var _moves = __webpack_require__(605);
+	var _moves = __webpack_require__(606);
 	
 	var _moves2 = _interopRequireDefault(_moves);
 	
-	var _recentMove = __webpack_require__(606);
+	var _recentMove = __webpack_require__(607);
 	
 	var _recentMove2 = _interopRequireDefault(_recentMove);
 	
-	var _spots = __webpack_require__(607);
+	var _spots = __webpack_require__(608);
 	
 	var _spots2 = _interopRequireDefault(_spots);
 	
@@ -59380,7 +59500,7 @@
 	exports.default = rootReducer;
 
 /***/ },
-/* 605 */
+/* 606 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -59390,7 +59510,7 @@
 	});
 	exports.default = moves;
 	
-	var _actions = __webpack_require__(551);
+	var _actions = __webpack_require__(550);
 	
 	var initialState = {
 	  isFetching: false,
@@ -59417,7 +59537,7 @@
 	}
 
 /***/ },
-/* 606 */
+/* 607 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -59427,7 +59547,7 @@
 	});
 	exports.default = recentMove;
 	
-	var _actions = __webpack_require__(551);
+	var _actions = __webpack_require__(550);
 	
 	var initialState = lunchmove.recent_move || {};
 	
@@ -59444,7 +59564,7 @@
 	}
 
 /***/ },
-/* 607 */
+/* 608 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -59454,7 +59574,7 @@
 	});
 	exports.default = spots;
 	
-	var _actions = __webpack_require__(551);
+	var _actions = __webpack_require__(550);
 	
 	var initialState = {
 	  isFetching: false,
