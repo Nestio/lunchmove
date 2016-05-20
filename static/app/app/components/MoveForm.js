@@ -3,7 +3,8 @@ import {reduxForm} from 'redux-form';
 import moment from 'moment';
 import classNames from 'classnames';
 import { Link, browserHistory } from 'react-router';
-
+import Select from 'react-select'
+import SpotField from './SpotField';
 
 import Loading from './Loading';
 import { parseTimeInput } from '../utils';
@@ -64,10 +65,7 @@ class MoveForm extends Component {
                         <p className="form-control-static">You are eating</p>
                     </div>
                     <div className="form-group">
-                        <select className="form-control spot-field" name="spot" {...spot}>
-                            <option value={null}></option>
-                            {options}
-                        </select>
+                        <SpotField items={this.props.spots.items} />
                     </div>
                     <div className="form-group">
                         <p className="form-control-static">at</p>
