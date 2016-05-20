@@ -40,6 +40,7 @@
     "react-redux": "^4.2.1",
     "react-router": "^2.4.0",
     "react-router-redux": "^4.0.4",
+    "react-typeahead": "^2.0.0-alpha.2",
     "redux": "^3.2.1",
     "redux-form": "^5.2.3",
     "redux-logger": "^2.6.1",
