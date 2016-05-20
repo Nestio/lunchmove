@@ -34,33 +34,39 @@ class JoinMove extends Component {
         };
     }
     
+    updateMove(){
+        let move = find(this.props.moves.items, {id: +this.props.routeParams.id});
+        
+        if (!move) {
+            browserHistory.push('/edit');
+        }
+        
+        this.props.updateMove({
+            spot: move.spot,
+            time: move.time
+        });
+        
+        if (this.props.recentMove.user) {
+            this.props.saveMove().then(() => {
+                browserHistory.push('/');
+            })
+        } else {
+            browserHistory.push('/edit');
+        }
+    }
+    
     componentDidMount(){
         let move = find(this.props.moves.items, {id: +this.props.routeParams.id});
-        if (!move && !this.props.moves.isFetching) {
+        if (!this.props.moves.haveFetched) {
             this.props.fetchMoves();
+        } else {
+            this.updateMove();
         }
     }
 
-    componentWillReceiveProps(nextProps){
-        if (this.props.moves.isFetching && !nextProps.moves.isFetching) {
-            let move = find(nextProps.moves.items, {id: +this.props.routeParams.id});
-            
-            if (!move) {
-                browserHistory.push('/edit');
-            }
-            
-            this.props.updateMove({
-                spot: move.spot,
-                time: move.time
-            });
-            
-            if (this.props.recentMove.user) {
-                this.props.saveMove().then(() => {
-                    browserHistory.push('/');
-                })
-            } else {
-                browserHistory.push('/edit');
-            }
+    componentDidUpdate(prevProps){
+        if (!prevProps.moves.haveFetched && this.props.moves.haveFetched) {
+            this.updateMove();
         }
     }
   

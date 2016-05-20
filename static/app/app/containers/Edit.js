@@ -27,7 +27,7 @@ const mapDispatchToProps = (dispatch) => {
 
 class Edit extends Component {
     componentDidMount(){
-        if (!this.props.spots.isFetching) {
+        if (!this.props.spots.haveFetched) {
             this.props.fetchSpots();
         }
     }

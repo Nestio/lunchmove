@@ -1,7 +1,7 @@
 import { REQUEST_SPOTS, RECEIVE_SPOTS } from '../actions'
 
 let initialState = {
-  isFetching: false,
+  haveFetched: false,
   items: []
 };
 
@@ -9,11 +9,11 @@ export default function spots(state = initialState, action) {
   switch (action.type) {
     case REQUEST_SPOTS:
       return Object.assign({}, state, {
-        isFetching: true
+        haveFetched: false
       })
     case RECEIVE_SPOTS:
       return Object.assign({}, state, {
-        isFetching: false,
+        haveFetched: true,
         items: action.spots
       })
     default:

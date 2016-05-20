@@ -6,7 +6,7 @@ import {
 
 
 let initialState = {
-    isFetching: false,
+    haveFetched: false,
     items: []
 };
 
@@ -26,11 +26,11 @@ export default function moves(state = initialState, action) {
     switch (action.type) {
         case REQUEST_MOVES:
             return Object.assign({}, state, {
-                isFetching: true
+                haveFetched: false
         })
         case RECEIVE_MOVES:
             return Object.assign({}, state, {
-                isFetching: false,
+                haveFetched: true,
                 items: action.moves
             })
         case UPDATE_MOVE:

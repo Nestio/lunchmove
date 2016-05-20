@@ -45,31 +45,31 @@ function groupMovesBySpots (state) {
 const mapStateToProps = (state) => {
     let spots = null;
     
-    if (!state.moves.isFetching && !state.spots.isFetching) {
+    if (state.moves.haveFetched && state.spots.haveFetched) {
         spots = groupMovesBySpots(state);
     }
     
     return {
         spots,
-        movesAreFetching: state.moves.isFetching,
-        spotsAreFetching: state.spots.isFetching,
+        movesHaveFetched: state.moves.haveFetched,
+        spotsHaveFetched: state.spots.haveFetched,
         recentMove: state.recentMove
     };
 }
 
 const mapDispatchToProps = (dispatch) => ({
-    fetchMoves: () => dispatch(fetchSpots()),
-    fetchSpots: () => dispatch(fetchMoves()),
+    fetchMoves: () => dispatch(fetchMoves()),
+    fetchSpots: () => dispatch(fetchSpots()),
     updateMove: (move) => dispatch(updateMove(move))
 });
 
 class List extends Component {
     componentWillMount () {
-        if (!this.props.movesAreFetching) {
+        if (!this.props.movesHaveFetched) {
             this.props.fetchMoves();
         }
         
-        if (!this.props.spotsAreFetching) {
+        if (!this.props.spotsHaveFetched) {
             this.props.fetchSpots();
         }
     }

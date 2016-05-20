@@ -34835,14 +34835,14 @@
 	var mapStateToProps = function mapStateToProps(state) {
 	    var spots = null;
 	
-	    if (!state.moves.isFetching && !state.spots.isFetching) {
+	    if (state.moves.haveFetched && state.spots.haveFetched) {
 	        spots = groupMovesBySpots(state);
 	    }
 	
 	    return {
 	        spots: spots,
-	        movesAreFetching: state.moves.isFetching,
-	        spotsAreFetching: state.spots.isFetching,
+	        movesHaveFetched: state.moves.haveFetched,
+	        spotsHaveFetched: state.spots.haveFetched,
 	        recentMove: state.recentMove
 	    };
 	};
@@ -34850,10 +34850,10 @@
 	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 	    return {
 	        fetchMoves: function fetchMoves() {
-	            return dispatch((0, _actions.fetchSpots)());
+	            return dispatch((0, _actions.fetchMoves)());
 	        },
 	        fetchSpots: function fetchSpots() {
-	            return dispatch((0, _actions.fetchMoves)());
+	            return dispatch((0, _actions.fetchSpots)());
 	        },
 	        updateMove: function updateMove(move) {
 	            return dispatch((0, _actions.updateMove)(move));
@@ -34873,11 +34873,11 @@
 	    _createClass(List, [{
 	        key: 'componentWillMount',
 	        value: function componentWillMount() {
-	            if (!this.props.movesAreFetching) {
+	            if (!this.props.movesHaveFetched) {
 	                this.props.fetchMoves();
 	            }
 	
-	            if (!this.props.spotsAreFetching) {
+	            if (!this.props.spotsHaveFetched) {
 	                this.props.fetchSpots();
 	            }
 	        }
@@ -55900,7 +55900,7 @@
 	    _createClass(Edit, [{
 	        key: 'componentDidMount',
 	        value: function componentDidMount() {
-	            if (!this.props.spots.isFetching) {
+	            if (!this.props.spots.haveFetched) {
 	                this.props.fetchSpots();
 	            }
 	        }
@@ -59372,35 +59372,42 @@
 	    }
 	
 	    _createClass(JoinMove, [{
-	        key: 'componentDidMount',
-	        value: function componentDidMount() {
+	        key: 'updateMove',
+	        value: function updateMove() {
 	            var move = (0, _lodash.find)(this.props.moves.items, { id: +this.props.routeParams.id });
-	            if (!move && !this.props.moves.isFetching) {
-	                this.props.fetchMoves();
+	
+	            if (!move) {
+	                _reactRouter.browserHistory.push('/edit');
+	            }
+	
+	            this.props.updateMove({
+	                spot: move.spot,
+	                time: move.time
+	            });
+	
+	            if (this.props.recentMove.user) {
+	                this.props.saveMove().then(function () {
+	                    _reactRouter.browserHistory.push('/');
+	                });
+	            } else {
+	                _reactRouter.browserHistory.push('/edit');
 	            }
 	        }
 	    }, {
-	        key: 'componentWillReceiveProps',
-	        value: function componentWillReceiveProps(nextProps) {
-	            if (this.props.moves.isFetching && !nextProps.moves.isFetching) {
-	                var move = (0, _lodash.find)(nextProps.moves.items, { id: +this.props.routeParams.id });
-	
-	                if (!move) {
-	                    _reactRouter.browserHistory.push('/edit');
-	                }
-	
-	                this.props.updateMove({
-	                    spot: move.spot,
-	                    time: move.time
-	                });
-	
-	                if (this.props.recentMove.user) {
-	                    this.props.saveMove().then(function () {
-	                        _reactRouter.browserHistory.push('/');
-	                    });
-	                } else {
-	                    _reactRouter.browserHistory.push('/edit');
-	                }
+	        key: 'componentDidMount',
+	        value: function componentDidMount() {
+	            var move = (0, _lodash.find)(this.props.moves.items, { id: +this.props.routeParams.id });
+	            if (!this.props.moves.haveFetched) {
+	                this.props.fetchMoves();
+	            } else {
+	                this.updateMove();
+	            }
+	        }
+	    }, {
+	        key: 'componentDidUpdate',
+	        value: function componentDidUpdate(prevProps) {
+	            if (!prevProps.moves.haveFetched && this.props.moves.haveFetched) {
+	                this.updateMove();
 	            }
 	        }
 	    }, {
@@ -59525,7 +59532,7 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var initialState = {
-	    isFetching: false,
+	    haveFetched: false,
 	    items: []
 	};
 	
@@ -59548,11 +59555,11 @@
 	    switch (action.type) {
 	        case _actions.REQUEST_MOVES:
 	            return Object.assign({}, state, {
-	                isFetching: true
+	                haveFetched: false
 	            });
 	        case _actions.RECEIVE_MOVES:
 	            return Object.assign({}, state, {
-	                isFetching: false,
+	                haveFetched: true,
 	                items: action.moves
 	            });
 	        case _actions.UPDATE_MOVE:
@@ -59603,7 +59610,7 @@
 	var _actions = __webpack_require__(550);
 	
 	var initialState = {
-	  isFetching: false,
+	  haveFetched: false,
 	  items: []
 	};
 	
@@ -59614,11 +59621,11 @@
 	  switch (action.type) {
 	    case _actions.REQUEST_SPOTS:
 	      return Object.assign({}, state, {
-	        isFetching: true
+	        haveFetched: false
 	      });
 	    case _actions.RECEIVE_SPOTS:
 	      return Object.assign({}, state, {
-	        isFetching: false,
+	        haveFetched: true,
 	        items: action.spots
 	      });
 	    default:
